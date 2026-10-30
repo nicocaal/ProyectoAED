@@ -1,0 +1,31 @@
+---
+title: "ProyectoAED"
+output: html_document
+---
+
+## Importación de los DataFrames
+
+```{r}
+library(readr)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(magrittr)
+library(lubridate)
+```
+
+```{r}
+tasa.desemp1524 <- read_tsv('data/tasa_desempleo15-24.tsv')
+str(tasa.desemp1524)
+head(tasa.desemp1524)
+tasa.desemp1524 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
+colnames(tasa.desemp1524)[1] <- 'country'
+```
+
+```{r}
+tasa.desemp2529 <- read_tsv('data/tasa_desempleo25-29.tsv')
+str(tasa.desemp2529)
+head(tasa.desemp2529)
+tasa.desemp2529 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
+colnames(tasa.desemp2529)[1] <- 'country'
+```
