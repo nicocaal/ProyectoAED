@@ -29,3 +29,11 @@ head(tasa.desemp1529)
 tempor.inv1529 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
 colnames(tempor.inv1529)[1] <- 'country'
 ```
+
+```{r}
+tempor.sup1539 <- read_tsv('data/temporalidad_estudios_superiores15-39.tsv')
+str(tempor.sup1539)
+head(tempor.sup1539)
+tempor.sup1539 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
+colnames(tempor.sup1539)[1] <- 'country'
+```
