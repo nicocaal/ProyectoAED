@@ -183,7 +183,7 @@ tempor.educ1539 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', '
 ```{r}
 indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
 age.mean <- indep.resid.total %>% group_by(year) %>% summarise(age.mean = mean(age, na.rm = TRUE), .groups = "drop")
-ggplot() + geom_line(data = indep.resid.total, mapping = aes(x = year, y = age, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, linetype = 2, na.rm = TRUE) +
+ggplot() + geom_line(data = indep.resid.total, mapping = aes(x = year, y = age, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
   scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(indep.resid.total$country))), unique(indep.resid.total$country)), "mean" = "black")) +
   labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
 ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
@@ -234,4 +234,13 @@ mean.df <- income.mean %>% left_join(housing.mean, by = 'year') %>% left_join(re
 
 ggplot(data = mean.df) + geom_line(aes(x = year, y = income.mean, color = 'income mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = housing.mean, color = 'housing price mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = rent.mean, color = 'rent mean'), linewidth = 1.15, na.rm = TRUE) + facet_grid(age~.) + labs(title = 'Evolución del salario y los precios de vivienda y alquiler promedios') + xlab('Year') + ylab('Relative prices (100 in 2015)')
 ggsave('results/viviendas_salarios_medios.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+overcr.mean <- hacinamiento1629 %>% group_by(year, birth) %>% summarise(mean = mean(rate, na.rm = TRUE), .groups = "drop") %>% ungroup() 
+
+ggplot() + geom_line(data=filter(hacinamiento1629, sex == 'T', country %in% mas.poblacion10), mapping = aes(x = year, y = rate, col = country), linewidth = 1, na.rm = TRUE) + geom_line(data=overcr.mean, mapping = aes(x=year, y = mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) + facet_grid(birth~.) +
+  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(hacinamiento1629$country))), unique(hacinamiento1629$country)), "mean" = "black")) +
+  labs(title = 'Evolución del porcentaje de jóvenes que viven hacinados', subtitle = 'En función de su país de nacimiento') + xlab('Year') + ylab('Rate')
+ggsave('results/hacinamiento.pdf', width = 14, height = 10, dpi = 300)
 ```
