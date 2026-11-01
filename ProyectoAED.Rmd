@@ -12,6 +12,29 @@ library(dplyr)
 library(tidyr)
 library(magrittr)
 library(lubridate)
+library(ggplot2)
+```
+
+```{r}
+poblacion <- read_tsv('data/poblacion_paises.tsv')
+str(poblacion)
+head(poblacion)
+
+colnames(poblacion)[1] <- 'country'
+poblacion %<>% mutate(country = sub("^.*,", "", country)) %>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x))))
+
+poblacion %<>% transmute(country, population = rowMeans(select(., -country), na.rm = TRUE))
+# Calculamos la media poblacional de cada pais desde el 2000 hasta hoy
+
+poblacion %<>% arrange(desc(population)) %>% filter(!(country %in% c('RU', 'UA', 'DE_TOT', 'TR', 'FX', 'BY', 'AZ')))
+# Ordenamos los paises de mayor a menor poblacion
+# Eliminamos algunos que no pertenecen politicamente a Europa
+
+mas.poblacion10 <- poblacion$country[1:10]
+# Nos quedamos con los nombres de los 10 primeros
+
+mas.poblacion5 <- poblacion$country[1:5]
+# Nos quedamos con los nombres de los 5 primeros
 ```
 
 ### 1. Autonomía residencial
@@ -32,10 +55,10 @@ vivir.padres1834 <- read_tsv('data/vivir_con_padres18-34.tsv')
 str(vivir.padres1834)
 head(vivir.padres1834)
 
-colnames(vivir.padres1834)[1] <- 'country'
-vivir.padres1834 %<>% mutate(country = sub(".*,", "", country))
+colnames(vivir.padres1834)[1] <- 'salary.country'
+vivir.padres1834 %<>% mutate(salary.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", salary.country)) %>% separate(salary.country, into = c('salary', 'country'), sep = ',') %>% mutate(salary = factor(salary, levels = c('SAL_TEMP', 'SAL_PERM'), labels = c('temporary', 'permanent')))
 
-vivir.padres1834 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
+vivir.padres1834 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2), names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
 ```
 
 ```{r}
@@ -142,4 +165,16 @@ colnames(tempor.educ1539)[1] <- 'sex.level.country'
 tempor.educ1539 %<>% mutate(sex.level.country = sub("^.*,([^,]*),([^,]*),([^,]*,[^,]*)$", "\\1,\\3", sex.level.country)) %>% separate(sex.level.country, into = c('sex', 'level', 'country'), sep = ',') %>% mutate(level = factor(level, levels = c('ED0-2', 'ED3_4', 'ED5-8'), labels = c('until.mid.sec', 'until.bac', 'university'), ordered = TRUE)) %>% mutate(sex = factor(sex))
 
 tempor.educ1539 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2, -3), names_to = 'year', values_to = 'thous.pers') %>% mutate(year = as.numeric(year))
+```
+
+## Análisis visual
+
+```{r}
+indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
+ggplot(data = indep.resid.total, mapping = aes(x = year, y = age)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE)
+```
+
+```{r}
+vivir.padres1834.total <- vivir.padres1834 %>% filter(country %in% mas.poblacion10, salary == 'permanent')
+ggplot(data = vivir.padres1834.total, mapping = aes(x = year, y = rate)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE)
 ```
