@@ -26,7 +26,7 @@ poblacion %<>% mutate(country = sub("^.*,", "", country)) %>% mutate(across(-1, 
 poblacion %<>% transmute(country, population = rowMeans(select(., -country), na.rm = TRUE))
 # Calculamos la media poblacional de cada pais desde el 2000 hasta hoy
 
-poblacion %<>% arrange(desc(population)) %>% filter(!(country %in% c('RU', 'UA', 'DE_TOT', 'TR', 'FX', 'BY', 'AZ')))
+poblacion %<>% arrange(desc(population)) %>% filter(!(country %in% c('RU', 'UA', 'DE_TOT', 'TR', 'FX', 'BY', 'AZ', 'UK')))
 # Ordenamos los paises de mayor a menor poblacion
 # Eliminamos algunos que no pertenecen politicamente a Europa
 
@@ -55,8 +55,8 @@ vivir.padres1834 <- read_tsv('data/vivir_con_padres18-34.tsv')
 str(vivir.padres1834)
 head(vivir.padres1834)
 
-colnames(vivir.padres1834)[1] <- 'salary.country'
-vivir.padres1834 %<>% mutate(salary.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", salary.country)) %>% separate(salary.country, into = c('salary', 'country'), sep = ',') %>% mutate(salary = factor(salary, levels = c('SAL_TEMP', 'SAL_PERM'), labels = c('temporary', 'permanent')))
+colnames(vivir.padres1834)[1] <- 'status.country'
+vivir.padres1834 %<>% mutate(status.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", status.country)) %>% separate(status.country, into = c('status', 'country'), sep = ',') %>% mutate(status = factor(status, levels = c('EMP_FT', 'EMP_PT', 'UNE', 'EDUC', 'INAC_OTH'), labels = c('full-time', 'part-time', 'unemployed', 'student', 'other')))
 
 vivir.padres1834 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2), names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
 ```
@@ -171,10 +171,12 @@ tempor.educ1539 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', '
 
 ```{r}
 indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
-ggplot(data = indep.resid.total, mapping = aes(x = year, y = age)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE)
+age.mean <- indep.resid.total %>% group_by(year) %>% summarise(age.mean = mean(age, na.rm = TRUE), .groups = "drop")
+ggplot(data = indep.resid.total, mapping = aes(x = year, y = age)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, linetype = 2, na.rm = TRUE) + scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(indep.resid.total$country))), unique(indep.resid.total$country)), "mean" = "black")) + labs(title = 'Evolución temporal de la edad de emancipación')
+ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 ```{r}
-vivir.padres1834.total <- vivir.padres1834 %>% filter(country %in% mas.poblacion10, salary == 'permanent')
-ggplot(data = vivir.padres1834.total, mapping = aes(x = year, y = rate)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE)
+ggplot(filter(vivir.padres1834.total, year %in% c(2005, 2010, 2015, 2020, 2025), country %in% mas.poblacion5), aes(x = "", y = rate, fill = status)) + geom_col(width = 1) + coord_polar(theta = "y") + facet_grid(country ~ year) + theme_void() + labs(title = 'Distribución de los jóvenes (18 a 34 años) que viven con sus padres', subtitle = 'Evolución temporal por filas de cada país por columnas')
+ggsave('results/vivir_con_padres.pdf', width = 14, height = 10, dpi = 300) 
 ```
