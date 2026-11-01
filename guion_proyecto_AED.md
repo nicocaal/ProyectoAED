@@ -12,7 +12,7 @@ Evolución del Estado de bienestar de los jóvenes europeos
 
 - Edad media de salida del hogar parental
 - Porcentaje de jóvenes que viven con sus padres
-- Coste de la vivienda en proporción a la renta
+- Coste de la vivienda en proporción al salario
 - Hacinamiento y dificultades para pagar el alquiler
 
 ¿Pueden los jóvenes iniciar una vida independiente en las mismas condiciones que antaño?
@@ -20,7 +20,7 @@ Evolución del Estado de bienestar de los jóvenes europeos
 ### 2. Seguridad económica
 
 - Tasa de desempleo juvenil
-- Temporalidad
+- Temporalidad involuntaria
 - Salario real (descontando la inflación)
 - Riesgo de pobreza
 
