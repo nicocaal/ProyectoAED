@@ -97,6 +97,17 @@ salarios %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %
 ```
 
 ```{r}
+ipca <- read_tsv('data/ipca.tsv')
+str(ipca)
+head(ipca)
+
+colnames(ipca)[1] <- 'country'
+ipca %<>% mutate(country = sub(".*,", "", country))
+
+ipca %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rel.value2025') %>% mutate(year = as.numeric(year))
+```
+
+```{r}
 hacinamiento1629 <- read_tsv('data/hacinamiento_nacimiento16-29.tsv')
 str(hacinamiento1629)
 head(hacinamiento1629)
@@ -172,11 +183,55 @@ tempor.educ1539 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', '
 ```{r}
 indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
 age.mean <- indep.resid.total %>% group_by(year) %>% summarise(age.mean = mean(age, na.rm = TRUE), .groups = "drop")
-ggplot(data = indep.resid.total, mapping = aes(x = year, y = age)) + geom_line(aes(color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, linetype = 2, na.rm = TRUE) + scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(indep.resid.total$country))), unique(indep.resid.total$country)), "mean" = "black")) + labs(title = 'Evolución temporal de la edad de emancipación')
+ggplot() + geom_line(data = indep.resid.total, mapping = aes(x = year, y = age, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, linetype = 2, na.rm = TRUE) +
+  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(indep.resid.total$country))), unique(indep.resid.total$country)), "mean" = "black")) +
+  labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
 ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 ```{r}
 ggplot(filter(vivir.padres1834.total, year %in% c(2005, 2010, 2015, 2020, 2025), country %in% mas.poblacion5), aes(x = "", y = rate, fill = status)) + geom_col(width = 1) + coord_polar(theta = "y") + facet_grid(country ~ year) + theme_void() + labs(title = 'Distribución de los jóvenes (18 a 34 años) que viven con sus padres', subtitle = 'Evolución temporal por filas de cada país por columnas')
 ggsave('results/vivir_con_padres.pdf', width = 14, height = 10, dpi = 300) 
+```
+
+```{r}
+salarios.final <- filter(salarios, country %in% mas.poblacion5) %>% pivot_wider(names_from = age, values_from = price.eur)
+ipca.final <- filter(ipca, country %in% mas.poblacion5)
+salarios.infl <- right_join(ipca.final, salarios.final)
+salarios.infl %<>% pivot_longer(cols = c(4,5), names_to = 'age', values_to = 'price.eur')
+# Hacemos join de los dataframes de salarios y de la inflacion anualizada (IPCA)
+salarios.infl %<>% group_by(age, country) %>% transmute(year, age, country, real.price.eur = price.eur*rel.value2025[year==2015]/rel.value2025) %>% ungroup()
+# Creamos una columna con los salarios reales tomando como referencia 2015
+salarios.infl %<>% group_by(age, country) %>% transmute(year, age, country, rel.price2015 = real.price.eur/real.price.eur[year == 2015]*100) %>% ungroup()
+# Convertimos los salarios a una variable con referencia = 100 en 2015
+# Lo hacemos para poder compararlos con la evolucion de vivienda y alquiler
+```
+
+```{r}
+ggplot() + 
+  geom_line(data = filter(salarios.infl, age == 'Y18-24', year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'income'), linewidth = 1, na.rm = TRUE) + 
+  geom_line(data = filter(precio.vivienda, country %in% mas.poblacion5, quadri == 'Q1'), mapping = aes(x = year, y = rel.price2015, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
+  geom_line(data = filter(precio.alquiler, country %in% mas.poblacion5, year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 3) + labs(title = 'Evolución del salario real (descontada inflación) de jóvenes (18-24 años)', subtitle = 'Junto con evolución del precio de la vivienda y del alquiler') + xlab('Year') + ylab('Relative prices (100 in 2015)')
+ggsave('results/viviendas_salarios18-24.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+ggplot() + 
+  geom_line(data = filter(salarios.infl, age == 'Y25-49', year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'income'), linewidth = 1, na.rm = TRUE) + 
+  geom_line(data = filter(precio.vivienda, country %in% mas.poblacion5, quadri == 'Q1'), mapping = aes(x = year, y = rel.price2015, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
+  geom_line(data = filter(precio.alquiler, country %in% mas.poblacion5, year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 3) + labs(title = 'Evolución del salario real (descontada inflación) de jóvenes (18-24 años)', subtitle = 'Junto con evolución del precio de la vivienda y del alquiler') + xlab('Year') + ylab('Relative prices (100 in 2015)')
+ggsave('results/viviendas_salarios25-49.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+income.mean <- salarios.infl %>% group_by(year, age) %>% summarise(income.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup()
+
+housing.mean <- precio.vivienda %>% group_by(year) %>% summarise(housing.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup()
+
+rent.mean <- precio.alquiler %>% group_by(year) %>% summarise(rent.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup() 
+
+mean.df <- income.mean %>% left_join(housing.mean, by = 'year') %>% left_join(rent.mean, by = 'year') %>% filter(year >= 2005)
+
+ggplot(data = mean.df) + geom_line(aes(x = year, y = income.mean, color = 'income mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = housing.mean, color = 'housing price mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = rent.mean, color = 'rent mean'), linewidth = 1.15, na.rm = TRUE) + facet_grid(age~.) + labs(title = 'Evolución del salario y los precios de vivienda y alquiler promedios') + xlab('Year') + ylab('Relative prices (100 in 2015)')
+ggsave('results/viviendas_salarios_medios.pdf', width = 14, height = 10, dpi = 300)
 ```
