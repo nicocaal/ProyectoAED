@@ -15,19 +15,39 @@ library(lubridate)
 ```
 
 ```{r}
-tasa.desemp1529 <- read_tsv('data/tasa_desempleo15-29.tsv')
-str(tasa.desemp1529)
-head(tasa.desemp1529)
-tasa.desemp1529 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
-colnames(tasa.desemp1529)[1] <- 'country'
+tasa.desemp1539 <- read_tsv('data/desempleo_nivel_educativo15-39.tsv')
+# Cargamos los datos
+str(tasa.desemp1539)
+head(tasa.desemp1539)
+# Los visualizamos para ver problemas
+
+colnames(tasa.desemp1539)[1] <- 'sex.level.country'
+# Renombramos la 1a columna, ya que solo nos interesan el sexo, nivel educativo y pais
+tasa.desemp1539 %<>% mutate(sex.level.country = sub("^.*,([^,]*),([^,]*),([^,]*,[^,]*)$", "\\1,\\3", sex.level.country)) %>% separate(sex.level.country, into = c('sex', 'level', 'country'), sep = ',') %>% mutate(level = factor(level, levels = c('ED0-2', 'ED3_4', 'ED5-8'), labels = c('until.mid.sec', 'until.bac', 'university'), ordered = TRUE)) %>% mutate(sex = factor(sex))
+# Quitamos la informacion de las instancias salvo sexo, nivel educativo y pais
+# Y separamos ambas columnas
+# Convertimos el sexo y el nivel educativo en factores
+
+tasa.desemp1539 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2, -3), names_to = 'year.quadri', values_to = 'rate')
+# Hacemos que las tasas sean exclusivamente numericas
+# Pasamos los años a formato tidy
+# Obtenemos una columna con los años y sus respectivos cuatrimestres
+
+tasa.desemp1539 %<>% separate(year.quadri, into = c('year', 'quadri'), sep = '-') %>% mutate(quadri = factor(quadri, ordered=TRUE)) %>% mutate(year = as.numeric(year))
+# Separamos en columnas de año y cuatrimestre
+# Pasamos los cuatrimestres a factor
+# Pasamos los años a numerico
 ```
 
 ```{r}
 tempor.inv1529 <- read_tsv('data/temporalidad_involuntaria15-29.tsv')
 str(tempor.inv1529)
-head(tasa.desemp1529)
-tempor.inv1529 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% mutate(across(1, ~ sub('.*,', '', .x))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
-colnames(tempor.inv1529)[1] <- 'country'
+head(tempor.inv1529)
+
+colnames(tempor.inv1529)[1] <- 'sex.country'
+tempor.inv1529 %<>% mutate(sex.country = sub("^.*,([^,]*),([^,]*,[^,]*),([^,]*)$", "\\1,\\3", sex.country)) %>% separate(sex.country, into = c('sex', 'country'), sep = ',') %>% mutate(sex = factor(sex))
+
+tempor.inv1529 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2), names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
 ```
 
 ```{r}
