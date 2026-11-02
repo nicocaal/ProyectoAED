@@ -1,6 +1,11 @@
 ---
 title: "ProyectoAED"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+header-includes:
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 ---
 
 ## Importación de los DataFrames
@@ -17,8 +22,8 @@ library(ggplot2)
 
 ```{r}
 poblacion <- read_tsv('data/poblacion_paises.tsv')
-str(poblacion)
-head(poblacion)
+#str(poblacion)
+#head(poblacion)
 
 colnames(poblacion)[1] <- 'country'
 poblacion %<>% mutate(country = sub("^.*,", "", country)) %>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x))))
@@ -41,8 +46,8 @@ mas.poblacion5 <- poblacion$country[1:5]
 
 ```{r}
 indep.resid <- read_tsv('data/edad_independencia_residencial.tsv')
-str(indep.resid)
-head(indep.resid)
+#str(indep.resid)
+#head(indep.resid)
 
 colnames(indep.resid)[1] <- 'sex.country'
 indep.resid %<>% mutate(sex.country = sub("^.*,([^,]*,[^,]*)$", "\\1", sex.country)) %>% separate(sex.country, into = c('sex', 'country'), sep = ',') %>% mutate(sex = factor(sex))
@@ -52,8 +57,8 @@ indep.resid %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))
 
 ```{r}
 vivir.padres1834 <- read_tsv('data/vivir_con_padres18-34.tsv')
-str(vivir.padres1834)
-head(vivir.padres1834)
+#str(vivir.padres1834)
+#head(vivir.padres1834)
 
 colnames(vivir.padres1834)[1] <- 'status.country'
 vivir.padres1834 %<>% mutate(status.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", status.country)) %>% separate(status.country, into = c('status', 'country'), sep = ',') %>% mutate(status = factor(status, levels = c('EMP_FT', 'EMP_PT', 'UNE', 'EDUC', 'INAC_OTH'), labels = c('full-time', 'part-time', 'unemployed', 'student', 'other')))
@@ -63,8 +68,8 @@ vivir.padres1834 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', 
 
 ```{r}
 precio.vivienda <- read_tsv('data/precio_vivienda.tsv')
-str(precio.vivienda)
-head(precio.vivienda)
+#str(precio.vivienda)
+#head(precio.vivienda)
 
 colnames(precio.vivienda)[1] <- 'country'
 precio.vivienda %<>% mutate(country = sub(".*,", "", country))
@@ -76,8 +81,8 @@ precio.vivienda %<>% separate(year.quadri, into = c('year', 'quadri'), sep = '-'
 
 ```{r}
 precio.alquiler <- read_tsv('data/precio_alquiler.tsv')
-str(precio.alquiler)
-head(precio.alquiler)
+#str(precio.alquiler)
+#head(precio.alquiler)
 
 colnames(precio.alquiler)[1] <- 'country'
 precio.alquiler %<>% mutate(country = sub(".*,", "", country))
@@ -87,8 +92,8 @@ precio.alquiler %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %
 
 ```{r}
 salarios <- read_tsv('data/salarios.tsv')
-str(salarios)
-head(salarios)
+#str(salarios)
+#head(salarios)
 
 colnames(salarios)[1] <- 'age.country'
 salarios %<>% mutate(age.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", age.country)) %>% separate(age.country, into = c('age', 'country'), sep = ',') %>% mutate(age = factor(age, ordered = TRUE))
@@ -98,8 +103,8 @@ salarios %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %
 
 ```{r}
 ipca <- read_tsv('data/ipca.tsv')
-str(ipca)
-head(ipca)
+#str(ipca)
+#head(ipca)
 
 colnames(ipca)[1] <- 'country'
 ipca %<>% mutate(country = sub(".*,", "", country))
@@ -109,8 +114,8 @@ ipca %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_lo
 
 ```{r}
 hacinamiento1629 <- read_tsv('data/hacinamiento_nacimiento16-29.tsv')
-str(hacinamiento1629)
-head(hacinamiento1629)
+#str(hacinamiento1629)
+#head(hacinamiento1629)
 
 colnames(hacinamiento1629)[1] <- 'birth.sex.country'
 hacinamiento1629 %<>% mutate(birth.sex.country = sub("^.*,([^,]*,[^,]*,)[^,]*,([^,]*)$", "\\1\\2", birth.sex.country)) %>% separate(birth.sex.country, into = c('birth', 'sex', 'country'), sep = ',') %>% mutate(birth = factor(birth, levels = c('EU28_FOR', 'NEU28_FOR', 'NAT'), labels = c('European', 'Foreigner', 'National'))) %>% mutate(sex = factor(sex))
@@ -120,8 +125,8 @@ hacinamiento1629 %<>% mutate(across(c(-1, -2, -3), ~ as.numeric(gsub('[^0-9.]', 
 
 ```{r}
 retr.pagos1629 <- read_tsv('data/retrasos_pagos_16-29.tsv')
-str(retr.pagos1629)
-head(retr.pagos1629)
+#str(retr.pagos1629)
+#head(retr.pagos1629)
 
 colnames(retr.pagos1629)[1] <- 'country'
 retr.pagos1629 %<>% mutate(country = sub("^.*,", "", country))
@@ -134,8 +139,8 @@ retr.pagos1629 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>
 ```{r}
 tasa.desemp1539 <- read_tsv('data/desempleo_nivel_educativo15-39.tsv')
 # Cargamos los datos
-str(tasa.desemp1539)
-head(tasa.desemp1539)
+#str(tasa.desemp1539)
+#head(tasa.desemp1539)
 # Los visualizamos para ver problemas
 
 colnames(tasa.desemp1539)[1] <- 'sex.level.country'
@@ -158,8 +163,8 @@ tasa.desemp1539 %<>% separate(year.quadri, into = c('year', 'quadri'), sep = '-'
 
 ```{r}
 tempor.inv1529 <- read_tsv('data/temporalidad_involuntaria15-29.tsv')
-str(tempor.inv1529)
-head(tempor.inv1529)
+#str(tempor.inv1529)
+#head(tempor.inv1529)
 
 colnames(tempor.inv1529)[1] <- 'sex.country'
 tempor.inv1529 %<>% mutate(sex.country = sub("^.*,([^,]*),([^,]*,[^,]*),([^,]*)$", "\\1,\\3", sex.country)) %>% separate(sex.country, into = c('sex', 'country'), sep = ',') %>% mutate(sex = factor(sex))
@@ -169,8 +174,8 @@ tempor.inv1529 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x
 
 ```{r}
 tempor.educ1539 <- read_tsv('data/temporalidad_nivel_educativo15-39.tsv')
-str(tempor.educ1539)
-head(tempor.educ1539)
+#str(tempor.educ1539)
+#head(tempor.educ1539)
 
 colnames(tempor.educ1539)[1] <- 'sex.level.country'
 tempor.educ1539 %<>% mutate(sex.level.country = sub("^.*,([^,]*),([^,]*),([^,]*,[^,]*)$", "\\1,\\3", sex.level.country)) %>% separate(sex.level.country, into = c('sex', 'level', 'country'), sep = ',') %>% mutate(level = factor(level, levels = c('ED0-2', 'ED3_4', 'ED5-8'), labels = c('until.mid.sec', 'until.bac', 'university'), ordered = TRUE)) %>% mutate(sex = factor(sex))
@@ -190,7 +195,7 @@ ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 ```{r}
-ggplot(filter(vivir.padres1834.total, year %in% c(2005, 2010, 2015, 2020, 2025), country %in% mas.poblacion5), aes(x = "", y = rate, fill = status)) + geom_col(width = 1) + coord_polar(theta = "y") + facet_grid(country ~ year) + theme_void() + labs(title = 'Distribución de los jóvenes (18 a 34 años) que viven con sus padres', subtitle = 'Evolución temporal por filas de cada país por columnas')
+ggplot(filter(vivir.padres1834, year %in% c(2005, 2010, 2015, 2020, 2025), country %in% mas.poblacion5), aes(x = "", y = rate, fill = status)) + geom_col(width = 1) + coord_polar(theta = "y") + facet_grid(country ~ year) + theme_void() + labs(title = 'Distribución de los jóvenes (18 a 34 años) que viven con sus padres', subtitle = 'Evolución temporal por filas de cada país por columnas')
 ggsave('results/vivir_con_padres.pdf', width = 14, height = 10, dpi = 300) 
 ```
 
