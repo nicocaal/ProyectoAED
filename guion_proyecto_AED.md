@@ -16,7 +16,9 @@ Cargamos los demás DataFrames asociados a cada variable de estudio, los limpiam
 
 - Coste de la vivienda en proporción al salario real
 
-- Hacinamiento y dificultades para pagar el alquiler
+- Dificultades para pagar el alquiler
+
+- Porcentaje de jóvenes que viven con sus padres
 
 Organizaremos todo en un único DataFrame.
 
@@ -24,9 +26,13 @@ Organizaremos todo en un único DataFrame.
 
 - Se realiza un primer estudio de las variables (tipo, valor máximo, valor más repetido, etc). Nacho
 
+- Análisis univariante
+
+- Análisis bivariante: correlación de la edad media de la salida del hogar con el precio de la vivienda.
+
+- Análisis bivariante: correlación de la diferencia entre el coste de la vivienda y los salarios reales con las dificultades de pagar el alquiler.
+
 - Visualización de los datos a partir de uno o más gráficos. Obtener conclusiones. Nico
 
-- Análisis de variables (univariante/bivariante). 
-
-- Estudio estadístico del aumento de alguna variable.
+- Estudio estadístico del aumento del coste de la vivienda y de la edad media de la salida del hogar.
 
