@@ -18,6 +18,7 @@ library(tidyr)
 library(magrittr)
 library(lubridate)
 library(ggplot2)
+library(GGally)
 ```
 
 ```{r}
@@ -142,6 +143,10 @@ jovenes.df <- indep.resid %>% full_join(salarios) %>% full_join(precio.alquiler)
 ```
 
 ## Análisis visual
+
+```{r}
+jovenes.df %>% filter(year == 2010) %>% select(c(-year, -country)) %>% ggpairs()
+```
 
 ```{r}
 indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
