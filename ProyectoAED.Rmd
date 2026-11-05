@@ -142,11 +142,9 @@ salarios %<>% group_by(country) %>% transmute(year, country, rel.income2015.1824
 jovenes.df <- indep.resid %>% full_join(salarios) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) %>% full_join(retr.pagos1629)
 ```
 
-## Análisis visual
+## Análisis bivariante
 
-```{r}
-jovenes.df %>% filter(year == 2010) %>% select(c(-year, -country)) %>% ggpairs()
-```
+## Análisis visual
 
 ```{r}
 indep.resid.total <- indep.resid %>% filter(sex == 'T' & country %in% mas.poblacion10)
