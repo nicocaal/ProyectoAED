@@ -142,6 +142,21 @@ salarios %<>% group_by(country) %>% transmute(year, country, rel.income2015.1824
 jovenes.df <- indep.resid %>% full_join(salarios) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) %>% full_join(retr.pagos1629)
 ```
 
+## Estudio de variables
+
+```{r}
+sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
+sumario.jovenes$type <- sapply(jovenes.df, function(x) class(x)[1])
+sumario.jovenes$levels <- sapply(jovenes.df, function(x) length(unique(x)))
+sumario.jovenes$topLevel <- sapply(jovenes.df, function(x) names(which.max(table(x))))
+sumario.jovenes$topCount <- sapply(jovenes.df, function(x) max(table(x)))
+sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
+sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
+sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
+
+sumario.jovenes
+```
+
 ## Análisis bivariante
 
 ## Análisis visual
