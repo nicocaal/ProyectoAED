@@ -148,6 +148,21 @@ jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler
 jovenes.df %<>% mutate(earn.prop.house = rel.earnings/rel.price.house*100, earn.prop.rent = rel.earnings/rel.price.rent*100)
 ```
 
+## Estudio de variables
+
+```{r}
+sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
+sumario.jovenes$type <- sapply(jovenes.df, function(x) class(x)[1])
+sumario.jovenes$levels <- sapply(jovenes.df, function(x) length(unique(x)))
+sumario.jovenes$topLevel <- sapply(jovenes.df, function(x) names(which.max(table(x))))
+sumario.jovenes$topCount <- sapply(jovenes.df, function(x) max(table(x)))
+sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
+sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
+sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
+
+sumario.jovenes
+```
+
 ## Análisis bivariante
 
 ```{r}

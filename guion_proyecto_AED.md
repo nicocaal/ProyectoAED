@@ -26,13 +26,13 @@ Organizaremos todo en un único DataFrame.
 
 - Se realiza un primer estudio de las variables (tipo, valor máximo, valor más repetido, etc). Nacho
 
-- Análisis univariante
+- Análisis univariante Nacho
 
-- Análisis bivariante: correlación de la edad media de la salida del hogar con el precio de la vivienda.
+- Análisis bivariante: correlación de la edad media de la salida del hogar con el precio de la vivienda. Nacho
 
-- Análisis bivariante: correlación de la diferencia entre el coste de la vivienda y los salarios reales con las dificultades de pagar el alquiler.
+- Análisis bivariante: correlación de la diferencia entre el coste de la vivienda y los salarios reales con las dificultades de pagar el alquiler. Nico
 
 - Visualización de los datos a partir de uno o más gráficos. Obtener conclusiones. Nico
 
-- Estudio estadístico del aumento del coste de la vivienda y de la edad media de la salida del hogar.
+- Estudio estadístico del aumento del coste de la vivienda y de la edad media de la salida del hogar. Nacho
 
