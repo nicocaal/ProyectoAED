@@ -55,17 +55,6 @@ indep.resid %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))
 ```
 
 ```{r}
-vivir.padres1834 <- read_tsv('data/vivir_con_padres18-34.tsv')
-#str(vivir.padres1834)
-#head(vivir.padres1834)
-
-colnames(vivir.padres1834)[1] <- 'status.country'
-vivir.padres1834 %<>% mutate(status.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", status.country)) %>% separate(status.country, into = c('status', 'country'), sep = ',') %>% mutate(status = factor(status, levels = c('EMP_FT', 'EMP_PT', 'UNE', 'EDUC', 'INAC_OTH'), labels = c('full-time', 'part-time', 'unemployed', 'student', 'other')))
-
-vivir.padres1834 %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2), names_to = 'year', values_to = 'rate') %>% mutate(year = as.numeric(year))
-```
-
-```{r}
 precio.vivienda <- read_tsv('data/precio_vivienda.tsv')
 #str(precio.vivienda)
 #head(precio.vivienda)
@@ -98,7 +87,8 @@ colnames(salarios)[1] <- 'age.country'
 salarios %<>% mutate(age.country = sub("^[^,]*,([^,]*,).*,([^,]*)$", "\\1\\2", age.country)) %>% separate(age.country, into = c('age', 'country'), sep = ',') %>% mutate(age = factor(age, ordered = TRUE))
 
 salarios %<>% mutate(across(c(-1, -2), ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = c(-1, -2), names_to = 'year', values_to = 'income') %>% mutate(year = as.numeric(year)) %>% filter(country %in% mas.poblacion10) %>% pivot_wider(names_from = age, values_from = income)
-colnames(salarios)[c(3,4)] <- c('price.1824', 'price.2549')
+colnames(salarios)[c(3,4)] <- c('income.1824', 'income.2549')
+salarios %<>% mutate(income = (income.1824+income.2549)/2) %>% select(c(-income.1824, -income.2549))
 ```
 
 ```{r}
@@ -127,11 +117,10 @@ retr.pagos1629 %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>
 
 ```{r}
 salarios %<>% left_join(ipca)
-salarios.infl %<>% pivot_longer(cols = c(4,5), names_to = 'age', values_to = 'price.eur')
 # Hacemos join de los dataframes de salarios y de la inflacion anualizada (IPCA)
-salarios %<>% group_by(country) %>% transmute(year, country, real.price1824 = price.1824*rel.value2025.ipca[year==2015]/rel.value2025.ipca, real.price2549 = price.2549*rel.value2025.ipca[year==2015]/rel.value2025.ipca) %>% ungroup()
+salarios %<>% group_by(country) %>% transmute(year, country, real.income = income*rel.value2025.ipca[year==2015]/rel.value2025.ipca) %>% ungroup()
 # Creamos una columna con los salarios reales a partir de la inflacion
-salarios %<>% group_by(country) %>% transmute(year, country, rel.income2015.1824 = real.price1824/real.price1824[year == 2015]*100, rel.income2015.2549 = real.price2549/real.price2549[year == 2015]*100) %>% ungroup()
+salarios %<>% group_by(country) %>% transmute(year, country, rel.income2015 = real.income/real.income[year == 2015]*100) %>% ungroup()
 # Convertimos los salarios a una variable con referencia = 100 en 2015
 # Lo hacemos para poder compararlos con la evolucion de vivienda y alquiler
 ```
@@ -140,6 +129,7 @@ salarios %<>% group_by(country) %>% transmute(year, country, rel.income2015.1824
 
 ```{r}
 jovenes.df <- indep.resid %>% full_join(salarios) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) %>% full_join(retr.pagos1629)
+jovenes.df %<>% mutate(income.prop.house = rel.income2015/rel.price2015.house*100, income.prop.rent = rel.income2015/rel.price2015.rent*100)
 ```
 
 ## Estudio de variables
@@ -159,6 +149,14 @@ sumario.jovenes
 
 ## Análisis bivariante
 
+```{r}
+ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) + 
+  geom_line(aes(x = year, y = rel.income2015, color = 'income'), linewidth = 1, na.rm = TRUE) + 
+  geom_line(aes(x = year, y = rel.price2015.house, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
+  geom_line(aes(x = year, y = rel.price2015.rent, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 4) + labs(title = 'Evolución porcentual del salario real de hogares jóvenes, precio de la vivienda y precio del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage (100% in 2015)')
+ggsave('results/viviendas_salarios.pdf', width = 14, height = 10, dpi = 300)
+```
+
 ## Análisis visual
 
 ```{r}
@@ -168,60 +166,4 @@ ggplot() + geom_line(data = indep.resid.total, mapping = aes(x = year, y = age, 
   scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(indep.resid.total$country))), unique(indep.resid.total$country)), "mean" = "black")) +
   labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
 ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-ggplot(filter(vivir.padres1834, year %in% c(2005, 2010, 2015, 2020, 2025), country %in% mas.poblacion5), aes(x = "", y = rate, fill = status)) + geom_col(width = 1) + coord_polar(theta = "y") + facet_grid(country ~ year) + theme_void() + labs(title = 'Distribución de los jóvenes (18 a 34 años) que viven con sus padres', subtitle = 'Evolución temporal por filas de cada país por columnas')
-ggsave('results/vivir_con_padres.pdf', width = 14, height = 10, dpi = 300) 
-```
-
-```{r}
-salarios.final <- filter(salarios, country %in% mas.poblacion5) %>% pivot_wider(names_from = age, values_from = price.eur)
-ipca.final <- filter(ipca, country %in% mas.poblacion5)
-salarios.infl <- right_join(ipca.final, salarios.final)
-salarios.infl %<>% pivot_longer(cols = c(4,5), names_to = 'age', values_to = 'price.eur')
-# Hacemos join de los dataframes de salarios y de la inflacion anualizada (IPCA)
-salarios.infl %<>% group_by(age, country) %>% transmute(year, age, country, real.price.eur = price.eur*rel.value2025[year==2015]/rel.value2025) %>% ungroup()
-# Creamos una columna con los salarios reales tomando como referencia 2015
-salarios.infl %<>% group_by(age, country) %>% transmute(year, age, country, rel.price2015 = real.price.eur/real.price.eur[year == 2015]*100) %>% ungroup()
-# Convertimos los salarios a una variable con referencia = 100 en 2015
-# Lo hacemos para poder compararlos con la evolucion de vivienda y alquiler
-```
-
-```{r}
-ggplot() + 
-  geom_line(data = filter(salarios.infl, age == 'Y18-24', year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'income'), linewidth = 1, na.rm = TRUE) + 
-  geom_line(data = filter(precio.vivienda, country %in% mas.poblacion5, quadri == 'Q1'), mapping = aes(x = year, y = rel.price2015, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
-  geom_line(data = filter(precio.alquiler, country %in% mas.poblacion5, year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 3) + labs(title = 'Evolución del salario real (descontada inflación) de jóvenes (18-24 años)', subtitle = 'Junto con evolución del precio de la vivienda y del alquiler') + xlab('Year') + ylab('Relative prices (100 in 2015)')
-ggsave('results/viviendas_salarios18-24.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-ggplot() + 
-  geom_line(data = filter(salarios.infl, age == 'Y25-49', year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'income'), linewidth = 1, na.rm = TRUE) + 
-  geom_line(data = filter(precio.vivienda, country %in% mas.poblacion5, quadri == 'Q1'), mapping = aes(x = year, y = rel.price2015, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
-  geom_line(data = filter(precio.alquiler, country %in% mas.poblacion5, year >= 2005), mapping = aes(x = year, y = rel.price2015, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 3) + labs(title = 'Evolución del salario real (descontada inflación) de jóvenes (18-24 años)', subtitle = 'Junto con evolución del precio de la vivienda y del alquiler') + xlab('Year') + ylab('Relative prices (100 in 2015)')
-ggsave('results/viviendas_salarios25-49.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-income.mean <- salarios.infl %>% group_by(year, age) %>% summarise(income.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup()
-
-housing.mean <- precio.vivienda %>% group_by(year) %>% summarise(housing.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup()
-
-rent.mean <- precio.alquiler %>% group_by(year) %>% summarise(rent.mean = mean(rel.price2015, na.rm = TRUE), .groups = "drop") %>% ungroup() 
-
-mean.df <- income.mean %>% left_join(housing.mean, by = 'year') %>% left_join(rent.mean, by = 'year') %>% filter(year >= 2005)
-
-ggplot(data = mean.df) + geom_line(aes(x = year, y = income.mean, color = 'income mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = housing.mean, color = 'housing price mean'), linewidth = 1.15, na.rm = TRUE) + geom_line(aes(x = year, y = rent.mean, color = 'rent mean'), linewidth = 1.15, na.rm = TRUE) + facet_grid(age~.) + labs(title = 'Evolución del salario y los precios de vivienda y alquiler promedios') + xlab('Year') + ylab('Relative prices (100 in 2015)')
-ggsave('results/viviendas_salarios_medios.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-overcr.mean <- hacinamiento1629 %>% group_by(year, birth) %>% summarise(mean = mean(rate, na.rm = TRUE), .groups = "drop") %>% ungroup() 
-
-ggplot() + geom_line(data=filter(hacinamiento1629, sex == 'T', country %in% mas.poblacion10), mapping = aes(x = year, y = rate, col = country), linewidth = 1, na.rm = TRUE) + geom_line(data=overcr.mean, mapping = aes(x=year, y = mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) + facet_grid(birth~.) +
-  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(hacinamiento1629$country))), unique(hacinamiento1629$country)), "mean" = "black")) +
-  labs(title = 'Evolución del porcentaje de jóvenes que viven hacinados', subtitle = 'En función de su país de nacimiento') + xlab('Year') + ylab('Rate')
-ggsave('results/hacinamiento.pdf', width = 14, height = 10, dpi = 300)
 ```
