@@ -223,8 +223,8 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 paises.excluir <- character(0)
 # Paises que se quieran dejar fuera del estudio (por ejemplo, uno con una serie muy corta que acorte la ventana comun). Grecia ya queda fuera porque no tiene serie de vivienda
 
-aumentos <- jovenes.df %>% filter(!country %in% paises.excluir) %>% group_by(country) %>% arrange(year, .by_group = TRUE) %>% mutate(earn.pct = earn.diff / (earnings - earn.diff) * 100, rent.pct = rent.diff / (price.rent - rent.diff) * 100, house.pct = house.diff / (price.house - house.diff) * 100) %>% ungroup() %>% select(country, year, earnings, price.rent, price.house, earn.pct, rent.pct, house.pct)
-# Aumento porcentual respecto al año anterior: la .diff dividida por el nivel del año anterior (nivel actual menos .diff)
+aumentos <- jovenes.df %>% filter(!country %in% paises.excluir) %>% select(country, year, earnings, price.rent, price.house, earn.pct = earn.diff, rent.pct = rent.diff, house.pct = house.diff)
+# Aumento porcentual: la propia .diff (variacion anual del indice, que vale 100 en el año base)
 
 vars.pct <- c('house.pct', 'rent.pct', 'earn.pct')
 # Variables del estudio: aumento porcentual de la vivienda, del alquiler y de los salarios
