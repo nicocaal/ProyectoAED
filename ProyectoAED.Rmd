@@ -156,6 +156,18 @@ sumario.jovenes
 
 ## Análisis univariante
 
+```{r}
+dim(jovenes.df)
+# Numero de registros y de variables
+
+vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year')
+vars.num
+# Variables cuantitativas continuas. 'country' es cualitativa nominal y 'year' es cuantitativa discreta (indice temporal)
+
+por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
+# Aplica una funcion a cada variable numerica y devuelve un vector sin nombres
+```
+
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
 ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
