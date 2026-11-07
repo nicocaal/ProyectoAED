@@ -205,6 +205,53 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 # Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
+### Media del aumento anual por país: salarios, alquiler y vivienda
+
+```{r}
+paises.excluir <- character(0)
+# Paises que se quieran dejar fuera del estudio (por ejemplo, uno con una serie muy corta que acorte la ventana comun). Grecia ya queda fuera porque no tiene serie de vivienda
+
+aumentos <- jovenes.df %>% filter(!country %in% paises.excluir) %>% group_by(country) %>% arrange(year, .by_group = TRUE) %>% mutate(earn.pct = earn.diff / (earnings - earn.diff) * 100, rent.pct = rent.diff / (price.rent - rent.diff) * 100, house.pct = house.diff / (price.house - house.diff) * 100) %>% ungroup() %>% select(country, year, earnings, price.rent, price.house, earn.pct, rent.pct, house.pct)
+# Aumento porcentual respecto al año anterior: la .diff dividida por el nivel del año anterior (nivel actual menos .diff)
+
+vars.pct <- c('house.pct', 'rent.pct', 'earn.pct')
+# Variables del estudio: aumento porcentual de la vivienda, del alquiler y de los salarios
+
+rango.paises <- aumentos %>% filter(!is.na(earnings) & !is.na(price.rent) & !is.na(price.house)) %>% group_by(country) %>% summarise(primero = min(year), ultimo = max(year), .groups = 'drop') %>% as.data.frame()
+rango.paises
+# Primer y ultimo año con las tres series disponibles en cada pais
+
+year.ini <- max(rango.paises$primero)
+year.fin <- min(rango.paises$ultimo)
+c(year.ini = year.ini, year.fin = year.fin)
+# Ventana comun: desde el ultimo de los primeros años hasta el primero de los ultimos
+
+aum.comun <- aumentos %>% filter(year > year.ini & year <= year.fin) %>% filter(if_all(all_of(vars.pct), ~ !is.na(.x)))
+# Variaciones anuales dentro de la ventana comun (la primera es la de year.ini + 1) y sin datos ausentes
+
+aum.comun %>% count(country) %>% as.data.frame()
+```
+
+```{r}
+medias.pais <- aum.comun %>% group_by(country) %>% summarise(n.years = n(), across(all_of(vars.pct), mean), .groups = 'drop') %>% mutate(earn.menos.house = earn.pct - house.pct, earn.menos.rent = earn.pct - rent.pct) %>% as.data.frame()
+medias.pais %>% mutate(across(-c(country, n.years), ~ round(.x, 2)))
+# Media anual de cada pais en la ventana comun y diferencias entre variables
+```
+
+```{r}
+pares <- list(c('earn.pct', 'house.pct'), c('earn.pct', 'rent.pct'))
+
+data.frame(par = sapply(pares, paste, collapse = ' vs '), paises.mayor = sapply(pares, function(p) sum(medias.pais[[p[1]]] > medias.pais[[p[2]]])), n.paises = nrow(medias.pais))
+# paises.mayor: numero de paises en los que la media de la primera variable es mayor que la de la segunda
+```
+
+```{r}
+medias.long <- medias.pais %>% pivot_longer(all_of(vars.pct), names_to = 'variable', values_to = 'media') %>% mutate(country = factor(country, levels = as.character(medias.pais$country[order(medias.pais$house.pct)])), variable = factor(variable, levels = vars.pct))
+
+ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variable)) + geom_point(size = 3) + geom_hline(yintercept = 0, linetype = 2) + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda')) + xlab('Country') + ylab('Mean annual increase (%)')
+ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
+```
+
 ## Análisis bivariante
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
