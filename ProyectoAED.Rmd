@@ -155,11 +155,6 @@ sumario.jovenes
 ```
 
 ## Análisis univariante
-<<<<<<< HEAD
-
-## Análisis bivariante
-=======
->>>>>>> 28f16e02c2e651eccbfec6e794863acf187d62e7
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
@@ -167,6 +162,47 @@ ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, c
   scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
   labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
 ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
+```
+
+### Datos ausentes
+
+```{r}
+cobertura.var <- data.frame(variable = vars.num)
+cobertura.var$year.min <- unname(sapply(vars.num, function(v) min(jovenes.df$year[!is.na(jovenes.df[[v]])])))
+cobertura.var$year.max <- unname(sapply(vars.num, function(v) max(jovenes.df$year[!is.na(jovenes.df[[v]])])))
+cobertura.var$n.obs <- unname(sapply(vars.num, function(v) sum(!is.na(jovenes.df[[v]]))))
+cobertura.var$n.paises <- unname(sapply(vars.num, function(v) length(unique(jovenes.df$country[!is.na(jovenes.df[[v]])]))))
+cobertura.var
+```
+
+```{r}
+cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
+
+ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + geom_text(aes(label = n.paises), size = 3) + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
+ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
+```
+
+### Estadísticos descriptivos de las variables numéricas
+
+```{r}
+mystats <- function(x, na.omit = TRUE) {
+  if (na.omit) x <- x[!is.na(x)]
+  m <- mean(x)
+  n <- length(x)
+  s <- sd(x)
+  skew <- sum((x - m)^3 / s^3) / n
+  kurt <- sum((x - m)^4 / s^4) / n - 3
+  return(c(n = n, mean = m, trimmed = mean(x, trim = 0.1), median = median(x), min = min(x), q1 = quantile(x, 0.25, names = FALSE), q3 = quantile(x, 0.75, names = FALSE), max = max(x), stdev = s, var = var(x), mad = mad(x), IQR = IQR(x), skew = skew, kurtosis = kurt))
+}
+# Funcion del Tema 6 (asimetria y curtosis en exceso), ampliada con media recortada (10%), cuartiles, rango intercuartilico y MAD
+
+estad <- sapply(jovenes.df[vars.num], mystats)
+
+t(round(estad[c('n', 'mean', 'trimmed', 'median', 'min', 'q1', 'q3', 'max'), ], 2))
+# Tendencia central y posicion
+
+t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
+# Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
 ## Análisis bivariante
