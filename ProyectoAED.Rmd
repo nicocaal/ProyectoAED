@@ -147,6 +147,8 @@ sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
 sumario.jovenes
 ```
 
+## Análisis univariante
+
 ## Análisis bivariante
 
 ```{r}
