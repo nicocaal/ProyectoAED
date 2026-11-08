@@ -1,47 +1,27 @@
 ---
 title: "Evolución del Estado de bienestar de los jóvenes europeos"
 author:
-  - name: "Ignacio Lacruz Mascarós"
-  - name: "Nicolás Camacho Albiñana"
-journal: notspecified
-type: article
-status: preprint   # sin franja lateral ni números de línea
-simplesummary: |
-  A Simple summary goes here.
+  - name: Ignacio Lacruz Mascarós
+  - name: Nicolás Camacho Albiñana
+simplesumm: |
+  Resumen sencillo para un público no especializado.
 abstract: |
-  A single paragraph of about 200 words maximum. For research articles, 
-  abstracts should give a pertinent overview of the work...
+  Resumen técnico del trabajo.
+journal: "water"
 bibliography: mybibfile.bib
-appendix: appendix.tex
-endnotes: false
-header-includes: |
-  % Parche Pandoc >= 3.1
-  \providecommand{\pandocbounded}[1]{#1}
-  % Quitar por completo "Correspondence"
-  \makeatletter
-  \@ifundefined{corres}{}{\renewcommand{\corres}[1]{}}
-  % Vaciar rótulos de la franja lateral (por si tu mdpi.cls los intentara mostrar)
-  \@ifundefined{TitleCitation}{}{\renewcommand{\TitleCitation}{}}
-  \@ifundefined{TitleCopyright}{}{\renewcommand{\TitleCopyright}{}}
-  \@ifundefined{TitleFootnote}{}{\renewcommand{\TitleFootnote}{}}
-  \@ifundefined{TitleNote}{}{\renewcommand{\TitleNote}{}}
-  \makeatother
-  % Anular cualquier margen lateral y ayudar a evitar líneas desbordadas
-  \setlength{\marginparwidth}{0pt}
-  \sloppy
-  \emergencystretch=2em
 output:
-  rticles::mdpi_article:
+  pdf_document:
+    template: template.tex
     latex_engine: pdflatex
-    extra_dependencies:
-      - longtable
-      - pdflscape
-editor_options:
-  markdown:
-    wrap: 72
+    citation_package: natbib
+    keep_tex: true
+    number_sections: false
+header-includes:
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 ---
 
-## Importación de los DataFrames
+# Importación de los DataFrames
 
 ```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 library(readr)
@@ -129,7 +109,7 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-## Datos ausentes
+# Datos ausentes
 
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
@@ -191,7 +171,7 @@ vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year'
 vars.num
 ```
 
-## Estudio de variables
+# Estudio de variables
 
 ```{r}
 sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
@@ -215,9 +195,9 @@ cobertura.var$n.paises <- unname(sapply(vars.num, function(v) length(unique(jove
 cobertura.var
 ```
 
-## Análisis univariante
+# Análisis univariante
 
-### Estadísticos descriptivos de las variables numéricas
+## Estadísticos descriptivos de las variables numéricas
 
 ```{r}
 mystats <- function(x, na.omit = TRUE) {
@@ -240,7 +220,7 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 # Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
-### Edad de emancipación
+## Edad de emancipación
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
@@ -256,7 +236,7 @@ media.edad
 # Media anual de cada pais de la edad de emancipación
 ```
 
-### Media del aumento anual por país: salarios, alquiler y vivienda
+## Media del aumento anual por país: salarios, alquiler y vivienda
 
 ```{r, echo = FALSE}
 paises.excluir <- character(0)
@@ -307,7 +287,7 @@ data.frame(par = sapply(pares, paste, collapse = ' vs '), paises.mayor = sapply(
 # paises.mayor: numero de paises en los que la media de la primera variable es mayor que la de la segunda
 ```
 
-## Análisis bivariante
+# Análisis bivariante
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 

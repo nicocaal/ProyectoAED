@@ -1,178 +1,14 @@
-%  LaTeX support: latex@mdpi.com
-%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+%% Plantilla pandoc simplificada para mdpi.cls (portada: titulo, autores, simple summary, abstract)
+\documentclass[water,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 
-%=================================================================
-% pandoc conditionals added to preserve backwards compatibility with previous versions of rticles
-
-\documentclass[notspecified,article,preprint,moreauthors,pdftex]{Definitions/mdpi}
-
-
-%% Some pieces required from the pandoc template
-\setlist[itemize]{leftmargin=*,labelsep=5.8mm}
-\setlist[enumerate]{leftmargin=*,labelsep=4.9mm}
-
-
-%--------------------
-% Class Options:
-%--------------------
-
-%---------
-% article
-%---------
-% The default type of manuscript is "article", but can be replaced by:
-% abstract, addendum, article, book, bookreview, briefreport, casereport, comment, commentary, communication, conferenceproceedings, correction, conferencereport, entry, expressionofconcern, extendedabstract, datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, obituary, opinion, projectreport, reply, retraction, review, perspective, protocol, shortnote, studyprotocol, systematicreview, supfile, technicalnote, viewpoint, guidelines, registeredreport, tutorial
-% supfile = supplementary materials
-
-%----------
-% submit
-%----------
-% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g., the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
-
-%------------------
-% moreauthors
-%------------------
-% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
-
-%---------
-% pdftex
-%---------
-% The option pdftex is for use with pdfLaTeX. Remove "pdftex" for (1) compiling with LaTeX & dvi2pdf (if eps figures are used) or for (2) compiling with XeLaTeX.
-
-%=================================================================
-% MDPI internal commands - do not modify
-\firstpage{1}
+% --- Compatibilidad con el codigo que genera pandoc/knitr ---
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
 \makeatletter
-\setcounter{page}{\@firstpage}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>.9\textheight.9\textheight\else\Gin@nat@height\fi}
 \makeatother
-\pubvolume{1}
-\issuenum{1}
-\articlenumber{0}
-\pubyear{2023}
-\copyrightyear{2023}
-%\externaleditor{Academic Editor: Firstname Lastname}
-\datereceived{ }
-\daterevised{ } % Comment out if no revised date
-\dateaccepted{ }
-\datepublished{ }
-%\datecorrected{} % For corrected papers: "Corrected: XXX" date in the original paper.
-%\dateretracted{} % For corrected papers: "Retracted: XXX" date in the original paper.
-\hreflink{https://doi.org/} % If needed use \linebreak
-%\doinum{}
-%\pdfoutput=1 % Uncommented for upload to arXiv.org
-
-%=================================================================
-% Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, float, amsmath, amssymb, lineno, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, colortbl, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, array, tabularx, pbox, ragged2e, tocloft, marginnote, marginfix, enotez, amsthm, natbib, hyperref, cleveref, scrextend, url, geometry, newfloat, caption, draftwatermark, seqsplit
-% cleveref: load \crefname definitions after \begin{document}
-
-%=================================================================
-% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
-%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
-
-%=================================================================
-% Full title of the paper (Capitalized)
-\Title{Evolución del Estado de bienestar de los jóvenes europeos}
-
-% MDPI internal command: Title for citation in the left column
-\TitleCitation{Evolución del Estado de bienestar de los jóvenes
-europeos}
-
-% Author Orchid ID: enter ID or remove command
-%\newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{} behind the author's name
-%\newcommand{\orcidauthorB}{0000-0000-0000-000X} % Add \orcidB{} behind the author's name
-
-
-% Authors, for the paper (add full first names)
-\Author{Ignacio Lacruz Mascarós$^{}$, Nicolás Camacho Albiñana$^{}$}
-
-
-%\longauthorlist{yes}
-
-
-% MDPI internal command: Authors, for metadata in PDF
-\AuthorNames{Ignacio Lacruz Mascarós, Nicolás Camacho Albiñana}
-
-% MDPI internal command: Authors, for citation in the left column
-
-% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
-\address{%
-}
-
-% Contact information of the corresponding author
-\corres{Correspondence: }
-
-% Current address and/or shared authorship
-
-
-
-
-
-
-
-
-% The commands \thirdnote{} till \eighthnote{} are available for further notes
-
-% Simple summary
-\simplesumm{A Simple summary goes here.}
-
-%\conference{} % An extended version of a conference paper
-
-% Abstract (Do not insert blank lines, i.e. \\)
-\abstract{A single paragraph of about 200 words maximum. For research
-articles, abstracts should give a pertinent overview of the
-work\ldots{}}
-
-
-% Keywords
-
-% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
-%\PACS{J0101}
-%\MSC{}
-%\JEL{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Diversity
-%\LSID{\url{http://}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Applied Sciences
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Data
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Toxins
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Encyclopedia
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Advances in Respiratory Medicine
-%\addhighlights{yes}
-%\renewcommand{\addhighlights}{%
-
-%\noindent This is an obligatory section in “Advances in Respiratory Medicine”, whose goal is to increase the discoverability and readability of the article via search engines and other scholars. Highlights should not be a copy of the abstract, but a simple text allowing the reader to quickly and simplified find out what the article is about and what can be cited from it. Each of these parts should be devoted up to 2~bullet points.\vspace{3pt}\\
-%\textbf{What are the main findings?}
-% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
-% \item First bullet.
-% \item Second bullet.
-% \end{itemize}\vspace{3pt}
-%\textbf{What is the implication of the main finding?}
-% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
-% \item First bullet.
-% \item Second bullet.
-% \end{itemize}
-%}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Pandoc syntax highlighting
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -213,39 +49,25 @@ work\ldots{}}
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 
-% tightlist command for lists without linebreak
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+%% Titulo y autores
+\Title{Evolución del Estado de bienestar de los jóvenes europeos}
+\Author{Ignacio Lacruz Mascarós, Nicolás Camacho Albiñana}
 
+%% Simple summary y abstract
+\simplesumm{Resumen sencillo para un público no especializado.}
+\abstract{Resumen técnico del trabajo.}
 
-
-% Parche Pandoc >= 3.1
-\providecommand{\pandocbounded}[1]{#1}
-% Quitar por completo "Correspondence"
-\makeatletter
-\@ifundefined{corres}{}{\renewcommand{\corres}[1]{}}
-% Vaciar rótulos de la franja lateral (por si tu mdpi.cls los intentara mostrar)
-\@ifundefined{TitleCitation}{}{\renewcommand{\TitleCitation}{}}
-\@ifundefined{TitleCopyright}{}{\renewcommand{\TitleCopyright}{}}
-\@ifundefined{TitleFootnote}{}{\renewcommand{\TitleFootnote}{}}
-\@ifundefined{TitleNote}{}{\renewcommand{\TitleNote}{}}
-\makeatother
-% Anular cualquier margen lateral y ayudar a evitar líneas desbordadas
-\setlength{\marginparwidth}{0pt}
-\sloppy
-\emergencystretch=2em
-
-\usepackage{longtable}
-\usepackage{pdflscape}
+%% Referencias
+\reftitle{References}
+\externalbibliography{yes}
 
 \begin{document}
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Importación de los
+\section{Importación de los
 DataFrames}\label{importaciuxf3n-de-los-dataframes}
 
 \begin{Shaded}
@@ -346,7 +168,7 @@ DataFrames}\label{importaciuxf3n-de-los-dataframes}
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Datos ausentes}\label{datos-ausentes}
+\section{Datos ausentes}\label{datos-ausentes}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -463,7 +285,7 @@ DataFrames}\label{importaciuxf3n-de-los-dataframes}
 ##  [9] "house.diff"      "rent.diff"
 \end{verbatim}
 
-\subsection{Estudio de variables}\label{estudio-de-variables}
+\section{Estudio de variables}\label{estudio-de-variables}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -534,9 +356,9 @@ DataFrames}\label{importaciuxf3n-de-los-dataframes}
 ## 10       rent.diff     2011     2025   135        9
 \end{verbatim}
 
-\subsection{Análisis univariante}\label{anuxe1lisis-univariante}
+\section{Análisis univariante}\label{anuxe1lisis-univariante}
 
-\subsubsection{Estadísticos descriptivos de las variables
+\subsection{Estadísticos descriptivos de las variables
 numéricas}\label{estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 
 \begin{Shaded}
@@ -600,7 +422,7 @@ numéricas}\label{estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
+\subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -646,7 +468,7 @@ numéricas}\label{estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{Media del aumento anual por país: salarios, alquiler y
+\subsection{Media del aumento anual por país: salarios, alquiler y
 vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda}
 
 \begin{verbatim}
@@ -737,7 +559,7 @@ vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Análisis bivariante}\label{anuxe1lisis-bivariante}
+\section{Análisis bivariante}\label{anuxe1lisis-bivariante}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -891,63 +713,8 @@ vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda
 \end{Shaded}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\vspace{6pt}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% optional
-
-% Only for the journal Methods and Protocols:
-% If you wish to submit a video article, please do so with any other supplementary material.
-% \supplementary{The following supporting information can be downloaded at: \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title. A supporting video article is available at doi: link.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional
-
-%% Only for journal Encyclopedia
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional
-\input{"appendix.tex"}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{adjustwidth}{-\extralength}{0cm}
-
-%\printendnotes[custom] % Un-comment to print a list of endnotes
-
-
-\reftitle{References}
 \bibliography{mybibfile.bib}
 
-% If authors have biography, please use the format below
-%\section*{Short Biography of Authors}
-%\bio
-%{\raisebox{-0.35cm}{\includegraphics[width=3.5cm,height=5.3cm,clip,keepaspectratio]{Definitions/author1.pdf}}}
-%{\textbf{Firstname Lastname} Biography of first author}
-%
-%\bio
-%{\raisebox{-0.35cm}{\includegraphics[width=3.5cm,height=5.3cm,clip,keepaspectratio]{Definitions/author2.jpg}}}
-%{\textbf{Firstname Lastname} Biography of second author}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% for journal Sci
-%\reviewreports{\\
-%Reviewer 1 comments and authors’ response\\
-%Reviewer 2 comments and authors’ response\\
-%Reviewer 3 comments and authors’ response
-%}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\PublishersNote{}
-\end{adjustwidth}
 
 
 \end{document}

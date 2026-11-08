@@ -1,0 +1,63 @@
+%% Plantilla pandoc simplificada para mdpi.cls (portada: titulo, autores, simple summary, abstract)
+\documentclass[$if(journal)$$journal$$else$water$endif$,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+
+% --- Compatibilidad con el codigo que genera pandoc/knitr ---
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
+$if(tables)$
+\usepackage{longtable}
+$endif$
+$if(graphics)$
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>.9\textheight.9\textheight\else\Gin@nat@height\fi}
+\makeatother
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+$endif$
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+%% Titulo y autores
+\Title{$title$}
+\Author{$for(author)$$if(author.name)$$author.name$$else$$author$$endif$$sep$, $endfor$}
+
+%% Simple summary y abstract
+$if(simplesumm)$
+\simplesumm{$simplesumm$}
+$endif$
+$if(abstract)$
+\abstract{$abstract$}
+$endif$
+
+%% Referencias
+\reftitle{$if(reftitle)$$reftitle$$else$References$endif$}
+\externalbibliography{yes}
+
+\begin{document}
+
+$for(include-before)$
+$include-before$
+$endfor$
+
+$body$
+
+$if(natbib)$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$endif$
+
+$if(appendix)$
+\appendixtitles{no}
+\appendixsections{multiple}
+\appendix
+\input{$appendix$}
+$endif$
+
+$for(include-after)$
+$include-after$
+$endfor$
+
+\end{document}
