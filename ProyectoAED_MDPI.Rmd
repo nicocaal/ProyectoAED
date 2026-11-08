@@ -221,7 +221,11 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-Una vez cargados todos los datos que se desea estudiar, procederemos a crear el conjunto que los engloba. A continuación exploraremos las variables que conforman este conjunto y determinaremos cuál es la mejor forma para llevar a cabo el análisis.
+Los DataFrames a partir de los cuales se trabaja constan de una primera columna donde hay información relativa al país, al sexo, a la edad y otros parámetros que se han tenido en cuenta en la recopilación (por ejemplo país de nacimiento, grupo social, etc.). Por tanto, el primer paso es seleccionar solamente la información relativa al país, para lo que usamos funciones de manipulación de strings y expresiones regulares para seleccionar la parte de la cadena de texto que nos interesa.
+
+Una vez hecho esto, nos damos cuenta de que las columnas corresponden a los años de estudio, por lo que convertimos el DataFrame a formato tidy, creando una nueva variable (columna) llamada año, en la que cada instancia corresponde a un año distinto para cada país distinto. Las observaciones, por tanto, se disponen en una nueva variable (columna).
+
+Una vez cargados todos los datos que se desea estudiar, procedemos a crear un DataFrame conjunto que los engloba. A continuación exploramos las variables que conforman este DataFrame y determinamos cuál es la mejor forma para llevar a cabo el análisis.
 
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
@@ -271,6 +275,18 @@ ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 ## Transformación de variables
+
+Inicialmente, limitamos nuestro análisis temporal al periodo comprendido entre 2010 y 2025, ya que antes de este año la cobertura temporal de ciertas variables es demasiado pobre y, además, nos interesa estudiar solamente la evolución de las variables en los años inmediatamente anteriores, ya que remontarse demasiado en el pasado no es relevante en este proyecto.
+
+Como nuestro estudio se centra en la comparación de los precios de la vivienda/alquiler con el poder adquisitivo de los jóvenes, necesitamos establecer una escala que nos permita compararlos. De este modo, aplicamos a las variables earnings (salarios), price.rent (precio del alquiler) y price.house (precio de la vivienda) la siguiente transformación:
+
+$$ x = \frac{x}{x(t_0 = 2010)} \cdot 100 $$ Esto nos permite estudiar la evolución porcentual de las variables, ya que en el año de inicio $t_0 = 2010$ establecemos como referencia el $100\%$ y, por tanto, los valores posteriores se pueden interpretar como evoluciones en base a un porcentaje de $100\%$ .
+
+Para enriquecer nuestro estudio, creamos 4 nuevas variables age.diff, earn.diff, house.diff y rent.diff, que son la diferencia de cada valor con su valor correspondiente al año anterior. En el caso de las 3 variables porcentuales, esto representa el aumento porcentual anual (por ejemplo, un aumento de un $3\%$ al año), lo cual es útil en el posterior análisis estadístico.
+
+Finalmente, creamos 2 nuevas variables earn.prop.house y earn.prop.rent, que representan de manera porcentual el cociente entre el salario y el precio de la vivienda/alquiler:
+
+$$ \text{earn.prop.}x = \frac{\text{earnings}}{x} \cdot 100 $$
 
 ```{r}
 # Limitamos el estudio desde el 2010 hasta el 2025
