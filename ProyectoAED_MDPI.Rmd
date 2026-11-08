@@ -356,6 +356,10 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 # Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
+Lo primero que uno piensa en hacer para sacar conclusiones es calcular una serie de estadísticos básicos para todas las variables númericas (sin contar obviamente los años). Sin embargo, para nuestro conjunto de datos hay que tener en cuenta también un matiz importante.
+
+Si intentáramos calcular por ejemplo la media y la desviación típica para cada variable del conjunto de datos en formato tidy, llegaríamos a resultados que carecen de sentido. Esto es porque estaríamos agrupando todos los valores muestreados para cada país. Lo que se debería hacer es calcular una media y una desviación estándar para todos los valores de cada país de forma separada, y compararlas entre sí. En la siguiente tabla recogemos estos resultados para los 5 países más poblados del conjunto.
+
 ```{r}
 # Estadisticos de cada variable calculados por pais (5 paises mas poblados)
 nm <- names(mystats(c(0, 1)))
@@ -385,7 +389,15 @@ tabla <- paste(c(lin[1:(i.mid - 2)], cab, cmr, lin[i.mid - 1], cuerpo[!es.diff],
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Media y desviación típica (SD) por país de las variables numéricas (5 países más poblados).}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{3pt}\n\\resizebox{\\ifdim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{%\n', tabla, '}\n\\end{table}\n'))
 ```
 
+En este caso es interesante notar la gran diferencia en las edades medias de emancipación para los distintos países. En Francia y Alemania esta es mucho menor que en España y en Italia, por ejemplo. Esto también se alinea con las recientes manifestaciones a lo largo del país español, todas relacionadas con la situación actual de la vivienda.
+
+También podemos destacar unas altas desviaciones estándar en general para los salarios y para los precios de la vivienda. Aquí hay mucha más variabilidad incluso dentro de los mismos países.
+
+Para completar nuestro análisis y poder contestar a nuestra hemos decidido a continuación estudiar con más profundidad el aumento porcentual de los salarios, el precio del alquiler y de la vivienda, muestreado por las variables acabadas en .diff. Así, podremos comparar las medias de cada uno de estos aumentos y así poder ver cuál es mayor.
+
 ## Media del aumento anual por país: salarios, alquiler y vivienda
+
+Mostramos primero en la siguiente tabla las medias de los aumentos comentados para los 10 países más poblados, así como la diferencia entre la media del aumento de los salarios y la media de los aumentos de los precios de la vivienda y el alquiler.
 
 ```{r, echo = FALSE, results='hide'}
 paises.excluir <- character(0)
@@ -426,6 +438,10 @@ tab.med <- knitr::kable(tab.med, format = 'latex', booktabs = TRUE, linesep = ''
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Media anual del aumento (\\%) de los precios de la vivienda, del alquiler y de los salarios en ', year.ini, '-', year.fin, ', y diferencia entre salarios y precios (p.p.). Los salarios crecen más que la vivienda en ', n.house, ' de ', n.pais, ' países y más que el alquiler en ', n.rent, ' de ', n.pais, '.}\n\\centering\\footnotesize\n', paste(tab.med, collapse = '\n'), '\n\\end{table}\n'))
 ```
 
+Fijémonos en que hay 4 países para los cuales ambas diferencias son negativas, y que entre estos podemos encontrar a España y Francia. De hecho, todos estos países (Países Bajos, Bélgica, España y Francia) los podemos encontrar al oesta/la parte central de Europa, mientras que los países que presentan ambas diferencias positivas se situan más hacia el este.
+
+Podemos estudiar la distribución de estos aumentos anuales en forma de histogramas. En este caso para poder visualizarlo nos quedamos con un subconjunto de los países: España y Francia por estar más presentes en la actualidad y Polonia como caso diferente para poder comparar.
+
 ```{r, fig.height=5.5}
 # Histogramas de los incrementos anuales (los mismos de antes, bins = 30) de salarios, vivienda y alquiler en tres paises
 paises.hist <- c('ES', 'FR', 'PL')
@@ -434,6 +450,10 @@ hist.df <- jovenes.df %>% filter(country %in% paises.hist) %>% select(country, e
 
 ggplot(hist.df, aes(x = aumento)) + geom_histogram(bins = 30, na.rm = TRUE) + facet_grid(country ~ variable, scales = 'free_x') + xlab('Annual percentage increase (%)') + ylab('Frequency') + labs(title = 'Histograma de los incrementos anuales', subtitle = 'Salarios, precio de la vivienda y alquiler en España, Francia y Polonia')
 ```
+
+En general podemos identificar como las distribuciones son bastante similares en España y Francia, pero en Polonia encontramos valores muy separados.
+
+Para finalizar con este análisis en la siguiente gráfica podemos visualizar los aumentos medios para cada uno de los 10 países más poblados, así como las diferencias previamente discutidas.
 
 ```{r}
 # Figura compacta: a la izquierda, media anual del aumento de la vivienda, el alquiler y los salarios; a la derecha, diferencia entre salarios y precios (p.p. = puntos porcentuales)
@@ -449,6 +469,8 @@ medias.fig <- bind_rows(
 ggplot(medias.fig, aes(x = valor, y = country, color = variable, shape = variable, group = variable)) + geom_vline(xintercept = 0, linetype = 2) + geom_point(size = 2.2, position = position_dodge(width = 0.6)) + facet_wrap(~panel, scales = 'free_x') + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda'), x = NULL, y = NULL, color = NULL, shape = NULL) + theme(legend.position = 'bottom')
 ggsave('results/univ_aumentos_medias.pdf', width = 6.5, height = 3.5, dpi = 300)
 ```
+
+Destacan aquí los puntos referentes a Rumania, como casos aislados que no representan fielmente la media europea. En general, podemos entender el descontento general de los jóvenes europeos viendo como la mayoría de estas diferencias entre salarios y precio del alquiler y la vivienda quedan en la parte negativa.
 
 ## Edad de emancipación
 
