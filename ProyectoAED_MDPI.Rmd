@@ -259,6 +259,8 @@ tab.sumario <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep =
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables del conjunto de datos.}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{4pt}\n', paste(tab.sumario, collapse = '\n'), '\n\\end{table}\n'))
 ```
 
+En esta tabla podemos notar, por ejemplo, que los valores de 'Top Level' (valor más repetido) para las variables country y year son DE ("Deutschland", representa Alemania, el primer país que aparece) y 2000 (el primer año que se muestrea). Esto es debido a que como todos los países y años aparecen el mismo número de veces, la función empleada devuelve el primero para cada caso. Pero lo verdaderamente interesante viene analizando las dos columnas de valores perdidos (NA), Miss. freq y Miss. frac. En estas podemos ver como en especial para las variables relacionadas con el salario encontramos un gran porcentaje de estos valores. Vamos a investigar más a fondo.
+
 ```{r, results='hide'}
 dim(jovenes.df)
 # Numero de registros y de variables
@@ -282,6 +284,8 @@ if (!dir.exists('results')){
 } 
 ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
+
+Así pues, gracias a esta gráfica podemos comprobar como en general las variables no estan muestreadas para los 10 países más poblados hasta 2010. Esto será importante para tratar nuestro conjunto.
 
 ## Transformación de variables
 
