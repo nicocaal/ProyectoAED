@@ -124,7 +124,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 6, fig.height = 4, out.width = '100%',
+knitr::opts_chunk$set(fig.width = 6.5, fig.height = 4, out.width = '100%',
                       echo = FALSE, message = FALSE, warning = FALSE)
 # Tamaño por defecto de las figuras: 6.5 x 4.5 pulgadas, ajustadas al ancho del texto de la plantilla MDPI
 ```
@@ -221,16 +221,16 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-## Exploración de variables
-
-Con todos los datos cargados, procederemos a crear el DataFrame
+Una vez cargados todos los datos que se desea estudiar, procederemos a crear el conjunto que los engloba. A continuación exploraremos las variables que conforman este conjunto y determinaremos cuál es la mejor forma para llevar a cabo el análisis.
 
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
 jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) 
 ```
 
-Ahora estamos listos para proceder con la exploración de los datos.
+## Exploración de variables
+
+Empezaremos la exploración con una tabla que resume las características más importantes de todas las variables del conjunto.
 
 ```{r}
 sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
@@ -242,7 +242,13 @@ sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
 sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
 sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
 
-sumario.jovenes
+# Tabla compacta para el documento: tipografia pequena y ancho ajustado al contenido, dentro de un entorno table de la plantilla
+tab.df <- sumario.jovenes
+num <- suppressWarnings(as.numeric(tab.df$topLevel))
+tab.df$topLevel <- ifelse(is.na(num), tab.df$topLevel, format(round(num, 2), trim = TRUE, drop0trailing = TRUE))
+# Solo para mostrar: topLevel (cadena de texto) se redondea a 2 decimales cuando es numerico; sumario.jovenes no se modifica
+tab.sumario <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep = '', digits = 3, align = c('l', 'l', 'r', 'r', 'r', 'r', 'r', 'r'), col.names = c('Variable', 'Type', 'Levels', 'Top level', 'Top count', 'Top frac.', 'Miss. freq.', 'Miss. frac.'))
+knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables del conjunto de datos.}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{4pt}\n', paste(tab.sumario, collapse = '\n'), '\n\\end{table}\n'))
 ```
 
 ```{r}

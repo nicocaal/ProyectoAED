@@ -243,28 +243,33 @@ datos}\label{metodologuxeda-preparaciuxf3n-del-conjunto-de-datos}
 \subsection{Importación de los
 DataFrames}\label{importaciuxf3n-de-los-dataframes}
 
+Una vez cargados todos los datos que se desea estudiar, procederemos a
+crear el conjunto que los engloba. A continuación exploraremos las
+variables que conforman este conjunto y determinaremos cuál es la mejor
+forma para llevar a cabo el análisis.
+
 \subsection{Exploración de variables}\label{exploraciuxf3n-de-variables}
 
-Con todos los datos cargados, procederemos a crear el DataFrame
+Emepzaremos la exploración con una tabla que resume las características
+más importantes de todas las variables del conjunto.
 
-Ahora estamos listos para proceder con la exploración de los datos.
+\begin{table}[H]
+\caption{Resumen de las variables del conjunto de datos.}
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
 
-\begin{verbatim}
-##              variable    type levels topLevel topCount     topFrac missFreq
-## 1             country  factor     10       DE       27 0.100371747        0
-## 2                year numeric     27     2000       10 0.037174721        0
-## 3           age.indep numeric     68     23.7       13 0.048327138       23
-## 4            earnings numeric    189 236.7828        1 0.003717472       81
-## 5  rel.price2015.rent numeric    241      100       10 0.037174721       10
-## 6 rel.price2015.house numeric    177     95.2        2 0.007434944       89
-##     missFrac
-## 1 0.00000000
-## 2 0.00000000
-## 3 0.08550186
-## 4 0.30111524
-## 5 0.03717472
-## 6 0.33085502
-\end{verbatim}
+\begin{tabular}{llrrrrrr}
+\toprule
+Variable & Type & Levels & Top level & Top count & Top frac. & Miss. freq. & Miss. frac.\\
+\midrule
+country & factor & 10 & DE & 27 & 0.100 & 0 & 0.000\\
+year & numeric & 27 & 2000 & 10 & 0.037 & 0 & 0.000\\
+age.indep & numeric & 68 & 23.7 & 13 & 0.048 & 23 & 0.086\\
+earnings & numeric & 189 & 236.78 & 1 & 0.004 & 81 & 0.301\\
+rel.price2015.rent & numeric & 241 & 100 & 10 & 0.037 & 10 & 0.037\\
+rel.price2015.house & numeric & 177 & 95.2 & 2 & 0.007 & 89 & 0.331\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{verbatim}
 ## [1] 269   6
