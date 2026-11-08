@@ -362,22 +362,6 @@ tabla <- paste(c(lin[1:(i.mid - 1)], bloques, lin[i.bot:length(lin)]), collapse 
 knitr::asis_output(paste0('\\begin{table}[htbp]\n\\caption{Estadísticos descriptivos por país (5 países más poblados).}\n\\centering\\scriptsize\\setlength{\\tabcolsep}{2pt}\n\\resizebox{\\ifdim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{%\n', tabla, '}\n\\end{table}\n'))
 ```
 
-## Edad de emancipación
-
-```{r, message=FALSE, warning=FALSE}
-age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
-ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
-  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
-  labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
-ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-media.edad <- jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.pct = round(mean(age.diff, na.rm = TRUE),2), total.dif = age.indep[length(age.indep)]-age.indep[1], .groups = 'drop') %>% as.data.frame()
-media.edad
-# Media anual de cada pais de la edad de emancipación
-```
-
 ## Media del aumento anual por país: salarios, alquiler y vivienda
 
 ```{r, echo = FALSE, results='hide'}
@@ -405,24 +389,6 @@ aum.comun %>% count(country) %>% as.data.frame()
 ```
 
 ```{r}
-medias.pais <- aum.comun %>% group_by(country) %>% summarise(n.years = n(), across(all_of(vars.pct), mean), .groups = 'drop') %>% mutate(earn.menos.house = earn.pct - house.pct, earn.menos.rent = earn.pct - rent.pct) %>% as.data.frame()
-# Media anual de cada pais en la ventana comun y diferencias entre variables
-
-# Figura compacta: a la izquierda, media anual del aumento de la vivienda, el alquiler y los salarios; a la derecha, diferencia entre salarios y precios (p.p. = puntos porcentuales)
-orden <- as.character(medias.pais$country[order(medias.pais$house.pct)])
-etq <- c(house.pct = 'House prices', rent.pct = 'Rents', earn.pct = 'Earnings')
-pan <- c('Mean annual increase (%)', 'Earnings minus prices (p.p.)')
-
-medias.fig <- bind_rows(
-  medias.pais %>% select(country, house.pct, rent.pct, earn.pct) %>% pivot_longer(-country, names_to = 'variable', values_to = 'valor') %>% mutate(panel = pan[1]),
-  medias.pais %>% transmute(country, house.pct = earn.menos.house, rent.pct = earn.menos.rent) %>% pivot_longer(-country, names_to = 'variable', values_to = 'valor') %>% mutate(panel = pan[2])
-) %>% mutate(country = factor(country, levels = orden), variable = factor(variable, levels = names(etq), labels = etq), panel = factor(panel, levels = pan))
-
-ggplot(medias.fig, aes(x = valor, y = country, color = variable, shape = variable, group = variable)) + geom_vline(xintercept = 0, linetype = 2) + geom_point(size = 2.2, position = position_dodge(width = 0.6)) + facet_wrap(~panel, scales = 'free_x') + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda'), x = NULL, y = NULL, color = NULL, shape = NULL) + theme(legend.position = 'bottom')
-ggsave('results/univ_aumentos_medias.pdf', width = 6.5, height = 3.5, dpi = 300)
-```
-
-```{r}
 # Tabla con los valores de la figura (mismo orden: de mayor a menor aumento de la vivienda)
 n.pais <- nrow(medias.pais)
 n.house <- sum(medias.pais$earn.menos.house > 0)
@@ -441,6 +407,40 @@ paises.hist <- c('ES', 'FR', 'PL')
 hist.df <- jovenes.df %>% filter(country %in% paises.hist) %>% select(country, earn.diff, house.diff, rent.diff) %>% pivot_longer(-country, names_to = 'variable', values_to = 'aumento') %>% mutate(country = factor(country, levels = paises.hist), variable = factor(variable, levels = c('earn.diff', 'house.diff', 'rent.diff'), labels = c('Earnings', 'House prices', 'Rents')))
 
 ggplot(hist.df, aes(x = aumento)) + geom_histogram(bins = 30, na.rm = TRUE) + facet_grid(country ~ variable, scales = 'free_x') + xlab('Annual percentage increase (%)') + ylab('Frequency') + labs(title = 'Histograma de los incrementos anuales', subtitle = 'Salarios, precio de la vivienda y alquiler en España, Francia y Polonia')
+```
+
+```{r}
+medias.pais <- aum.comun %>% group_by(country) %>% summarise(n.years = n(), across(all_of(vars.pct), mean), .groups = 'drop') %>% mutate(earn.menos.house = earn.pct - house.pct, earn.menos.rent = earn.pct - rent.pct) %>% as.data.frame()
+# Media anual de cada pais en la ventana comun y diferencias entre variables
+
+# Figura compacta: a la izquierda, media anual del aumento de la vivienda, el alquiler y los salarios; a la derecha, diferencia entre salarios y precios (p.p. = puntos porcentuales)
+orden <- as.character(medias.pais$country[order(medias.pais$house.pct)])
+etq <- c(house.pct = 'House prices', rent.pct = 'Rents', earn.pct = 'Earnings')
+pan <- c('Mean annual increase (%)', 'Earnings minus prices (p.p.)')
+
+medias.fig <- bind_rows(
+  medias.pais %>% select(country, house.pct, rent.pct, earn.pct) %>% pivot_longer(-country, names_to = 'variable', values_to = 'valor') %>% mutate(panel = pan[1]),
+  medias.pais %>% transmute(country, house.pct = earn.menos.house, rent.pct = earn.menos.rent) %>% pivot_longer(-country, names_to = 'variable', values_to = 'valor') %>% mutate(panel = pan[2])
+) %>% mutate(country = factor(country, levels = orden), variable = factor(variable, levels = names(etq), labels = etq), panel = factor(panel, levels = pan))
+
+ggplot(medias.fig, aes(x = valor, y = country, color = variable, shape = variable, group = variable)) + geom_vline(xintercept = 0, linetype = 2) + geom_point(size = 2.2, position = position_dodge(width = 0.6)) + facet_wrap(~panel, scales = 'free_x') + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda'), x = NULL, y = NULL, color = NULL, shape = NULL) + theme(legend.position = 'bottom')
+ggsave('results/univ_aumentos_medias.pdf', width = 6.5, height = 3.5, dpi = 300)
+```
+
+## Edad de emancipación
+
+```{r, message=FALSE, warning=FALSE}
+age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
+ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
+  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
+  labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
+ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+media.edad <- jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.pct = round(mean(age.diff, na.rm = TRUE),2), total.dif = age.indep[length(age.indep)]-age.indep[1], .groups = 'drop') %>% as.data.frame()
+media.edad
+# Media anual de cada pais de la edad de emancipación
 ```
 
 ## Análisis bivariante: estudio de la correlación entre el aumento porcentual de los salarios y de los precios de alquiler y vivienda
