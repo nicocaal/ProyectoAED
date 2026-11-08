@@ -118,6 +118,8 @@ Con todos los datos cargados, procederemos a crear el DataFrame
 jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) 
 ```
 
+Ahora estamos listos para proceder con la exploración de los datos.
+
 ```{r}
 dim(jovenes.df)
 # Numero de registros y de variables
