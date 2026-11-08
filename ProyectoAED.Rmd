@@ -1,11 +1,44 @@
 ---
-title: "ProyectoAED"
+title: "Evolución del Estado de bienestar de los jóvenes europeos"
+author:
+  - name: "Ignacio Lacruz Mascarós"
+  - name: "Nicolás Camacho Albiñana"
+journal: notspecified
+type: article
+status: preprint   # sin franja lateral ni números de línea
+simplesummary: |
+  A Simple summary goes here.
+abstract: |
+  A single paragraph of about 200 words maximum. For research articles, 
+  abstracts should give a pertinent overview of the work...
+bibliography: mybibfile.bib
+appendix: appendix.tex
+endnotes: false
+header-includes: |
+  % Parche Pandoc >= 3.1
+  \providecommand{\pandocbounded}[1]{#1}
+  % Quitar por completo "Correspondence"
+  \makeatletter
+  \@ifundefined{corres}{}{\renewcommand{\corres}[1]{}}
+  % Vaciar rótulos de la franja lateral (por si tu mdpi.cls los intentara mostrar)
+  \@ifundefined{TitleCitation}{}{\renewcommand{\TitleCitation}{}}
+  \@ifundefined{TitleCopyright}{}{\renewcommand{\TitleCopyright}{}}
+  \@ifundefined{TitleFootnote}{}{\renewcommand{\TitleFootnote}{}}
+  \@ifundefined{TitleNote}{}{\renewcommand{\TitleNote}{}}
+  \makeatother
+  % Anular cualquier margen lateral y ayudar a evitar líneas desbordadas
+  \setlength{\marginparwidth}{0pt}
+  \sloppy
+  \emergencystretch=2em
 output:
-  pdf_document: default
-  html_document: default
-header-includes:
-  - \usepackage{fvextra}
-  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+  rticles::mdpi_article:
+    latex_engine: pdflatex
+    extra_dependencies:
+      - longtable
+      - pdflscape
+editor_options:
+  markdown:
+    wrap: 72
 ---
 
 ## Importación de los DataFrames
@@ -96,47 +129,66 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
-ipca <- read_tsv('data/ipca.tsv')
-
-colnames(ipca)[1] <- 'country'
-ipca %<>% mutate(country = sub(".*,", "", country))
-
-ipca %<>% mutate(across(-1, ~ as.numeric(gsub('[^0-9.]', '', .x)))) %>% pivot_longer(cols = -1, names_to = 'year', values_to = 'rel.value2025.ipca') %>% mutate(year = as.numeric(year)) %>% mutate(country = factor(country, levels = mas.poblacion10, labels = mas.poblacion10))
-```
-
-## Transformaciones de variables
+## Datos ausentes
 
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
-jovenes.df <- indep.resid %>% full_join(salarios2) %>% left_join(ipca) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) 
+jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) 
+```
+
+```{r}
+dim(jovenes.df)
+# Numero de registros y de variables
+
+vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year')
+vars.num
+# Variables cuantitativas continuas. 'country' es cualitativa nominal y 'year' es cuantitativa discreta (indice temporal)
+
+por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
+# Aplica una funcion a cada variable numerica y devuelve un vector sin nombres
+
+```
+
+```{r}
+cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
+
+ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + geom_text(aes(label = n.paises), size = 3) + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
+ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+# Limitamos el estudio desde el 2010 hasta el 2025
+jovenes.df %<>% filter(year >= 2010 & year <= 2025)
 
 # Obtenemos el primer año en el que comienzan las medidas de salarios y precios
 # Tomamos este año como valor de referencia para poder compararlos luego mas facilmente
-year.start <- jovenes.df %>% group_by(country) %>% arrange(year) %>% select(c(country, year, rel.price2015.rent, rel.price2015.house, earnings)) %>%  filter(if_all(everything(), ~ !is.na(.x))) %>% slice(1) %>% ungroup() %>% transmute(country, year.start = year) 
+year.start <- jovenes.df %>% group_by(country) %>% arrange(year) %>% select(c(country, year, rel.price2015.rent, rel.price2015.house, earnings)) %>%  filter(if_all(everything(), ~ !is.na(.x))) %>% slice(1) %>% ungroup() %>% transmute(country, year.start = year)
 
 jovenes.df <- full_join(jovenes.df, year.start)
 
-# Obtenemos el aumento real de los salarios, descontando la inflacion
-jovenes.df %<>% group_by(country) %>% mutate(real.earnings = earnings*rel.value2025.ipca[year==unique(year.start)]/rel.value2025.ipca) %>% ungroup() %>% select(-rel.value2025.ipca)
-
 # Ahora tomamos, para cada variable, un valor de 100 en el año de referencia, asi las podremos comparar mejor graficamente
-jovenes.df %<>% group_by(country) %>% mutate(earnings = earnings/earnings[year == unique(year.start)]*100, real.earnings = real.earnings/real.earnings[year == unique(year.start)]*100, price.rent = rel.price2015.rent/rel.price2015.rent[year == unique(year.start)]*100, price.house = rel.price2015.house/rel.price2015.house[year == unique(year.start)]*100) %>% select(c(-year.start, -rel.price2015.rent, -rel.price2015.house)) %>% ungroup()
+jovenes.df %<>% group_by(country) %>% mutate(earnings = earnings/earnings[year == unique(year.start)]*100, price.rent = rel.price2015.rent/rel.price2015.rent[year == unique(year.start)]*100, price.house = rel.price2015.house/rel.price2015.house[year == unique(year.start)]*100) %>% select(c(-year.start, -rel.price2015.rent, -rel.price2015.house)) %>% ungroup()
 
-# Calculamos los salarios reales en proporcion al precio de la vivienda y a los alquileres, respectivamente
-jovenes.df %<>% mutate(earn.prop.house = real.earnings/price.house*100, earn.prop.rent = real.earnings/price.rent*100)
+# Calculamos los salarios en proporcion al precio de la vivienda y a los alquileres, respectivamente
+jovenes.df %<>% mutate(earn.prop.house = earnings/price.house*100, earn.prop.rent = earnings/price.rent*100)
 
 # Calculamos el aumento porcentual de los salarios, alquileres y precio de la vivienda para cada año
 jovenes.df %<>%
   group_by(country) %>%
   arrange(year, .by_group = TRUE) %>%
   mutate(
+    age.diff = age.indep - lag(age.indep),
     earn.diff = earnings - lag(earnings),
-    real.earn.diff = real.earnings - lag(real.earnings),
     house.diff = price.house - lag(price.house),
-    rent.diff = price.rent - lag(price.rent),
+    rent.diff = price.rent - lag(price.rent)
   ) %>%
   ungroup()
+```
+
+```{r}
+# Calculamos ahora cuales son las variables cuantitativas continuas tras las transformaciones
+vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year')
+vars.num
 ```
 
 ## Estudio de variables
@@ -154,30 +206,6 @@ sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
 sumario.jovenes
 ```
 
-## Análisis univariante
-
-```{r}
-dim(jovenes.df)
-# Numero de registros y de variables
-
-vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year')
-vars.num
-# Variables cuantitativas continuas. 'country' es cualitativa nominal y 'year' es cuantitativa discreta (indice temporal)
-
-por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
-# Aplica una funcion a cada variable numerica y devuelve un vector sin nombres
-```
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
-age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
-ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
-  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
-  labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
-ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
-```
-
-### Datos ausentes
-
 ```{r}
 cobertura.var <- data.frame(variable = vars.num)
 cobertura.var$year.min <- unname(sapply(vars.num, function(v) min(jovenes.df$year[!is.na(jovenes.df[[v]])])))
@@ -187,12 +215,7 @@ cobertura.var$n.paises <- unname(sapply(vars.num, function(v) length(unique(jove
 cobertura.var
 ```
 
-```{r}
-cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
-
-ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + geom_text(aes(label = n.paises), size = 3) + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
-ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
-```
+## Análisis univariante
 
 ### Estadísticos descriptivos de las variables numéricas
 
@@ -217,9 +240,25 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 # Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
-### Media del aumento anual por país: salarios, alquiler y vivienda
+### Edad de emancipación
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
+ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
+  scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
+  labs(title = 'Evolución temporal de la edad de emancipación') + xlab('Year') + ylab('Age')
+ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
+```
 
 ```{r}
+media.edad <- jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.pct = round(mean(age.diff, na.rm = TRUE),2), total.dif = age.indep[length(age.indep)]-age.indep[1], .groups = 'drop') %>% as.data.frame()
+media.edad
+# Media anual de cada pais de la edad de emancipación
+```
+
+### Media del aumento anual por país: salarios, alquiler y vivienda
+
+```{r, echo = FALSE}
 paises.excluir <- character(0)
 # Paises que se quieran dejar fuera del estudio (por ejemplo, uno con una serie muy corta que acorte la ventana comun). Grecia ya queda fuera porque no tiene serie de vivienda
 
@@ -230,7 +269,6 @@ vars.pct <- c('house.pct', 'rent.pct', 'earn.pct')
 # Variables del estudio: aumento porcentual de la vivienda, del alquiler y de los salarios
 
 rango.paises <- aumentos %>% filter(!is.na(earnings) & !is.na(price.rent) & !is.na(price.house)) %>% group_by(country) %>% summarise(primero = min(year), ultimo = max(year), .groups = 'drop') %>% as.data.frame()
-rango.paises
 # Primer y ultimo año con las tres series disponibles en cada pais
 
 year.ini <- max(rango.paises$primero)
@@ -242,6 +280,18 @@ aum.comun <- aumentos %>% filter(year > year.ini & year <= year.fin) %>% filter(
 # Variaciones anuales dentro de la ventana comun (la primera es la de year.ini + 1) y sin datos ausentes
 
 aum.comun %>% count(country) %>% as.data.frame()
+```
+
+```{r}
+jovenes.df %>% filter(country %in% mas.poblacion5) %>% ggplot(aes(x=earn.diff)) +  geom_histogram(bins = 30, na.rm = TRUE) + facet_wrap(~country, nrow = 3)+ xlab('Earnings percentage increase (%)') + ylab('Frequency') + labs(title = 'Histograma de los incrementos anuales de los salarios', subtitle = 'Por países')
+```
+
+```{r}
+jovenes.df %>% filter(country %in% mas.poblacion5) %>% ggplot(aes(x=house.diff)) +  geom_histogram(bins = 30, na.rm = TRUE) + facet_wrap(~country, nrow = 3)+ xlab('House price percentage increase (%)') + ylab('Frequency') + labs(title = 'Histograma de los incrementos anuales del precio de la vivienda', subtitle = 'Por países')
+```
+
+```{r}
+jovenes.df %>% filter(country %in% mas.poblacion5) %>% ggplot(aes(x=rent.diff)) +  geom_histogram(bins = 30, na.rm = TRUE) + facet_wrap(~country, nrow = 3)+ xlab('Rent percentage increase (%)') + ylab('Frequency') + labs(title = 'Histograma de los incrementos anuales del alquiler', subtitle = 'Por países')
 ```
 
 ```{r}
@@ -257,44 +307,52 @@ data.frame(par = sapply(pares, paste, collapse = ' vs '), paises.mayor = sapply(
 # paises.mayor: numero de paises en los que la media de la primera variable es mayor que la de la segunda
 ```
 
-```{r}
-medias.long <- medias.pais %>% pivot_longer(all_of(vars.pct), names_to = 'variable', values_to = 'media') %>% mutate(country = factor(country, levels = as.character(medias.pais$country[order(medias.pais$house.pct)])), variable = factor(variable, levels = vars.pct))
-
-ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variable)) + geom_point(size = 3) + geom_hline(yintercept = 0, linetype = 2) + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda')) + xlab('Country') + ylab('Mean annual increase (%)')
-ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
-```
-
 ## Análisis bivariante
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
-jovenes.df %>% filter(country != 'EL', year >= 2005 & year <= 2025) %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
-   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4) + ylab('Earnings percentage increase (%)') + xlab('Housing price percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio de la vivienda', subtitle = 'En función de países')
+jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
+   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Housing price percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio de la vivienda', subtitle = 'En función de países')
 ```
 
 ```{r}
-jovenes.df %>% filter(country != 'EL', year >= 2005 & year <= 2025) %>% group_by(country) %>% summarise(cor.pearson = cor(real.earnings, price.house, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(real.earnings, price.house, method = 'spearman', use = 'complete.obs'))
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, house.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, house.diff, method = 'spearman', use = 'complete.obs'))
+```
+
+```{r}
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ house.diff)[[1]][2])
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
-jovenes.df %>% filter(country != 'EL', year >= 2005 & year <= 2025) %>% ggplot(aes(x = rent.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
-  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4) + ylab('Earnings percentage increase (%)') + xlab('Rent percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio del alquiler', subtitle = 'En función de países')
+jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = rent.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
+  geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Rent percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio del alquiler', subtitle = 'En función de países')
 ```
 
 ```{r}
-jovenes.df %>% filter(country != 'EL', year >= 2005 & year <= 2025) %>% group_by(country) %>% summarise(cor.pearson = cor(real.earnings, price.rent, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(real.earnings, price.rent, method = 'spearman', use = 'complete.obs'))
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, rent.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, rent.diff, method = 'spearman', use = 'complete.obs'))
+```
+
+```{r}
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ rent.diff)[[1]][2])
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) + 
-  geom_line(aes(x = year, y = real.earnings, color = 'earnings'), linewidth = 1, na.rm = TRUE) + 
+  geom_line(aes(x = year, y = earnings, color = 'earnings'), linewidth = 1, na.rm = TRUE) + 
   geom_line(aes(x = year, y = price.house, color = 'house buying'), linewidth = 1, linetype = 2, na.rm = TRUE) + 
-  geom_line(aes(x = year, y = price.rent, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 4) + labs(title = 'Evolución porcentual del salario real de los jóvenes, precio de la vivienda y precio del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
+  geom_line(aes(x = year, y = price.rent, color = 'rent'), linewidth = 1, linetype = 3, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free_y') + labs(title = 'Evolución porcentual del salario de los jóvenes, precio de la vivienda y precio del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
 ggsave('results/viviendas_salarios.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) + 
   geom_line(aes(x = year, y = earn.prop.house, color = 'by house prices'), linewidth = 1, na.rm = TRUE) + 
-  geom_line(aes(x = year, y = earn.prop.rent, color = 'by rent'), linewidth = 1, na.rm = TRUE) + facet_wrap(.~country, nrow = 4) + labs(title = 'Evolución del salario real en proporción al precio de la vivienda y del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
+  geom_line(aes(x = year, y = earn.prop.rent, color = 'by rent'), linewidth = 1, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free_y') + labs(title = 'Evolución del salario real en proporción al precio de la vivienda y del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
 ggsave('results/proporcion_salario.pdf', width = 14, height = 10, dpi = 300)
+```
+
+```{r}
+medias.long <- medias.pais %>% pivot_longer(all_of(vars.pct), names_to = 'variable', values_to = 'media') %>% mutate(country = factor(country, levels = as.character(medias.pais$country[order(medias.pais$house.pct)])), variable = factor(variable, levels = vars.pct))
+
+ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variable)) + geom_point(size = 3) + geom_hline(yintercept = 0, linetype = 2) + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda')) + xlab('Country') + ylab('Mean annual increase (%)')
+ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
 ```
