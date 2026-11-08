@@ -242,11 +242,11 @@ sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
 sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
 sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
 
-# Tabla compacta para el documento: tipografia pequena y ancho ajustado al contenido, dentro de un entorno table de la plantilla
+
 tab.df <- sumario.jovenes
 num <- suppressWarnings(as.numeric(tab.df$topLevel))
 tab.df$topLevel <- ifelse(is.na(num), tab.df$topLevel, format(round(num, 2), trim = TRUE, drop0trailing = TRUE))
-# Solo para mostrar: topLevel (cadena de texto) se redondea a 2 decimales cuando es numerico; sumario.jovenes no se modifica
+
 tab.sumario <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep = '', digits = 3, align = c('l', 'l', 'r', 'r', 'r', 'r', 'r', 'r'), col.names = c('Variable', 'Type', 'Levels', 'Top level', 'Top count', 'Top frac.', 'Miss. freq.', 'Miss. frac.'))
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables del conjunto de datos.}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{4pt}\n', paste(tab.sumario, collapse = '\n'), '\n\\end{table}\n'))
 ```
@@ -313,7 +313,7 @@ Con el conjunto de datos preparado, procederemos a analizarlo aplicando distinto
 
 ## Análisis univariante: estadísticos descriptivos de las variables numéricas
 
-```{r}
+```{r, results='hide'}
 mystats <- function(x, na.omit = TRUE) {
   if (na.omit) x <- x[!is.na(x)]
   m <- mean(x)
@@ -334,9 +334,37 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 # Dispersion y forma (skew > 0: cola larga a la derecha; kurtosis > 0: colas mas pesadas que la normal)
 ```
 
+```{r}
+# Estadisticos descriptivos por pais (5 paises mas poblados) en una tabla compacta
+nm <- names(mystats(c(0, 1)))
+mystats.pais <- function(x) if (all(is.na(x))) setNames(rep(NA_real_, length(nm)), nm) else mystats(x)
+
+# Una fila por variable para cada pais (mismas medidas que mystats)
+estad.pais <- lapply(mas.poblacion5, function(p) {
+  res <- t(sapply(jovenes.df[jovenes.df$country == p, vars.num], mystats.pais))
+  data.frame(variable = vars.num, res, row.names = NULL)
+})
+estad.pais <- do.call(rbind, estad.pais)
+estad.pais$n <- as.integer(estad.pais$n)
+
+tab.est <- knitr::kable(estad.pais, format = 'latex', booktabs = TRUE, linesep = '', digits = 2, align = c('l', rep('r', 14)), col.names = c('Variable', 'n', 'Mean', 'Trim.', 'Median', 'Min', 'Q1', 'Q3', 'Max', 'SD', 'Var', 'MAD', 'IQR', 'Skew', 'Kurt.'))
+
+# Se inserta una fila de cabecera con el nombre de cada pais antes de su bloque de variables
+lin <- unlist(strsplit(paste(tab.est, collapse = '\n'), '\n'))
+i.mid <- grep('^\\\\midrule', lin)[1]
+i.bot <- grep('^\\\\bottomrule', lin)
+cuerpo <- lin[(i.mid + 1):(i.bot - 1)]
+nv <- length(vars.num)
+bloques <- unlist(lapply(seq_along(mas.poblacion5), function(k) c(sprintf('\\midrule\\multicolumn{15}{l}{\\textbf{%s}}\\\\', mas.poblacion5[k]), cuerpo[((k - 1) * nv + 1):(k * nv)])))
+tabla <- paste(c(lin[1:(i.mid - 1)], bloques, lin[i.bot:length(lin)]), collapse = '\n')
+
+# Letra pequena y reduccion automatica al ancho del texto si la tabla es mas ancha
+knitr::asis_output(paste0('\\begin{table}[htbp]\n\\caption{Estadísticos descriptivos por país (5 países más poblados).}\n\\centering\\scriptsize\\setlength{\\tabcolsep}{2pt}\n\\resizebox{\\ifdim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{%\n', tabla, '}\n\\end{table}\n'))
+```
+
 ## Edad de emancipación
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
 ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
   scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +

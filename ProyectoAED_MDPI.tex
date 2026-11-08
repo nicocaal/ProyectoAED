@@ -177,47 +177,6 @@ Tel.: +XX-000-00-0000.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Pandoc syntax highlighting
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % tightlist command for lists without linebreak
 \providecommand{\tightlist}{%
@@ -250,7 +209,7 @@ forma para llevar a cabo el análisis.
 
 \subsection{Exploración de variables}\label{exploraciuxf3n-de-variables}
 
-Emepzaremos la exploración con una tabla que resume las características
+Empezaremos la exploración con una tabla que resume las características
 más importantes de todas las variables del conjunto.
 
 \begin{table}[H]
@@ -302,52 +261,76 @@ dichos análisis.
 variables
 numéricas}\label{anuxe1lisis-univariante-estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 
-\begin{verbatim}
-##                   n   mean trimmed median    min     q1     q3    max
-## age.indep       160  26.77   26.74  27.00  23.00  23.90  29.00  30.90
-## earnings        135 121.47  109.75 103.22  64.26  95.58 118.49 431.60
-## price.rent      144 115.02  111.73 108.71  99.46 104.36 118.98 190.88
-## price.house     144 116.87  111.63 106.05  71.00  94.69 130.36 247.48
-## earn.prop.house 135 106.72   98.67 100.00  63.85  83.69 112.76 330.68
-## earn.prop.rent  135 103.76   96.97  97.48  64.35  86.01 105.86 258.22
-## age.diff        150   0.02    0.02   0.00  -1.80  -0.10   0.20   1.80
-## earn.diff       126   6.04    3.72   4.08 -26.02  -3.03  10.20  64.47
-## house.diff      135   4.20    3.71   3.47 -13.68   0.46   6.87  43.17
-## rent.diff       135   2.86    2.23   1.81  -1.30   1.15   3.17  19.45
-\end{verbatim}
+\begin{table}[htbp]
+\caption{Estadísticos descriptivos por país (5 países más poblados).}
+\centering\scriptsize\setlength{\tabcolsep}{2pt}
+\resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
 
-\begin{verbatim}
-##                 stdev     var   mad   IQR  skew kurtosis
-## age.indep        2.49    6.21  3.56  5.10 -0.03    -1.48
-## earnings        55.57 3087.57 15.46 22.91  3.03    10.57
-## price.rent      17.18  295.04  8.92 14.62  2.06     4.55
-## price.house     34.21 1170.42 22.36 35.67  1.48     2.01
-## earn.prop.house 42.96 1845.74 22.56 29.07  3.11    10.71
-## earn.prop.rent  33.83 1144.40 15.12 19.85  2.74     8.00
-## age.diff         0.35    0.12  0.30  0.30 -0.18     8.67
-## earn.diff       16.95  287.13  9.41 13.24  1.68     3.61
-## house.diff       7.66   58.70  4.87  6.41  1.35     5.13
-## rent.diff        3.31   10.96  1.31  2.02  2.63     8.27
-\end{verbatim}
+\begin{tabular}{lrrrrrrrrrrrrrr}
+\toprule
+Variable & n & Mean & Trim. & Median & Min & Q1 & Q3 & Max & SD & Var & MAD & IQR & Skew & Kurt.\\
+\midrule\multicolumn{15}{l}{\textbf{DE}}\\
+age.indep & 16 & 23.86 & 23.85 & 23.80 & 23.70 & 23.78 & 23.92 & 24.10 & 0.14 & 0.02 & 0.15 & 0.15 & 0.47 & -1.13\\
+earnings & 13 & 127.28 & 123.74 & 112.03 & 95.93 & 104.13 & 118.65 & 197.60 & 36.31 & 1318.26 & 11.71 & 14.52 & 1.05 & -0.76\\
+price.rent & 16 & 111.25 & 111.02 & 110.61 & 100.00 & 104.93 & 116.68 & 125.69 & 7.99 & 63.76 & 9.25 & 11.75 & 0.26 & -1.29\\
+price.house & 16 & 142.52 & 141.62 & 138.07 & 100.00 & 112.26 & 175.81 & 197.71 & 33.32 & 1110.24 & 44.57 & 63.55 & 0.21 & -1.61\\
+earn.prop.house & 13 & 95.04 & 95.04 & 97.06 & 76.63 & 83.85 & 100.56 & 113.42 & 12.08 & 145.82 & 14.05 & 16.72 & -0.03 & -1.42\\
+earn.prop.rent & 13 & 116.30 & 113.91 & 105.54 & 88.91 & 100.44 & 109.24 & 170.05 & 27.25 & 742.53 & 7.55 & 8.79 & 1.04 & -0.74\\
+age.diff & 15 & 0.00 & 0.00 & 0.00 & -0.20 & -0.10 & 0.05 & 0.20 & 0.13 & 0.02 & 0.15 & 0.15 & 0.41 & -1.11\\
+earn.diff & 12 & 7.38 & 3.39 & 5.23 & -9.52 & -7.76 & 11.58 & 64.18 & 20.11 & 404.59 & 15.13 & 19.34 & 1.72 & 2.44\\
+house.diff & 15 & 5.49 & 5.64 & 6.63 & -12.53 & 3.37 & 8.67 & 21.45 & 8.36 & 69.94 & 4.29 & 5.30 & -0.47 & 0.14\\
+rent.diff & 15 & 1.71 & 1.69 & 1.60 & 1.17 & 1.28 & 1.87 & 2.56 & 0.48 & 0.23 & 0.47 & 0.59 & 0.70 & -0.98\\
+\midrule\multicolumn{15}{l}{\textbf{FR}}\\
+age.indep & 16 & 23.69 & 23.69 & 23.70 & 23.40 & 23.58 & 23.80 & 24.10 & 0.19 & 0.04 & 0.15 & 0.22 & 0.51 & -0.67\\
+earnings & 15 & 97.72 & 97.84 & 99.06 & 86.11 & 93.07 & 101.76 & 107.79 & 6.31 & 39.77 & 6.68 & 8.68 & -0.31 & -1.07\\
+price.rent & 16 & 107.06 & 106.89 & 106.64 & 100.00 & 105.25 & 108.42 & 116.53 & 4.26 & 18.15 & 2.82 & 3.17 & 0.48 & -0.24\\
+price.house & 16 & 114.58 & 114.03 & 108.82 & 100.00 & 105.76 & 125.86 & 136.89 & 12.41 & 153.92 & 8.64 & 20.10 & 0.57 & -1.39\\
+earn.prop.house & 15 & 86.89 & 87.19 & 85.47 & 68.84 & 81.94 & 95.13 & 101.03 & 9.77 & 95.43 & 10.34 & 13.19 & -0.11 & -1.12\\
+earn.prop.rent & 15 & 91.94 & 91.68 & 92.02 & 80.83 & 87.10 & 97.70 & 106.52 & 7.24 & 52.44 & 8.59 & 10.60 & 0.27 & -0.99\\
+age.diff & 15 & 0.02 & 0.02 & 0.00 & -0.40 & -0.15 & 0.25 & 0.40 & 0.26 & 0.07 & 0.30 & 0.40 & -0.16 & -1.40\\
+earn.diff & 14 & 0.34 & 1.01 & 1.46 & -15.34 & -3.05 & 5.36 & 8.04 & 6.79 & 46.06 & 6.59 & 8.41 & -0.73 & -0.46\\
+house.diff & 15 & 2.06 & 2.22 & 2.90 & -6.58 & -0.59 & 4.68 & 8.67 & 4.06 & 16.45 & 3.87 & 5.27 & -0.31 & -0.72\\
+rent.diff & 15 & 1.10 & 1.09 & 0.91 & -0.28 & 0.43 & 1.62 & 2.64 & 0.89 & 0.80 & 0.85 & 1.19 & 0.43 & -1.12\\
+\midrule\multicolumn{15}{l}{\textbf{IT}}\\
+age.indep & 16 & 30.01 & 30.01 & 30.10 & 29.70 & 29.90 & 30.10 & 30.20 & 0.16 & 0.03 & 0.15 & 0.20 & -0.72 & -0.87\\
+earnings & 11 & 95.54 & 95.38 & 96.59 & 86.86 & 91.24 & 99.59 & 105.64 & 5.87 & 34.40 & 5.05 & 8.35 & -0.09 & -1.23\\
+price.rent & 16 & 106.70 & 106.36 & 105.78 & 100.00 & 105.02 & 106.83 & 118.28 & 4.40 & 19.34 & 1.17 & 1.81 & 1.10 & 0.93\\
+price.house & 16 & 90.97 & 90.71 & 90.50 & 83.65 & 85.30 & 95.21 & 101.88 & 6.38 & 40.73 & 7.81 & 9.91 & 0.45 & -1.37\\
+earn.prop.house & 11 & 105.68 & 105.98 & 104.86 & 94.90 & 102.01 & 110.93 & 113.80 & 6.01 & 36.11 & 7.20 & 8.92 & -0.10 & -1.28\\
+earn.prop.rent & 11 & 91.44 & 91.02 & 90.69 & 82.69 & 86.17 & 94.76 & 103.89 & 6.81 & 46.41 & 6.80 & 8.59 & 0.29 & -1.18\\
+age.diff & 15 & 0.03 & 0.05 & 0.00 & -0.30 & 0.00 & 0.10 & 0.20 & 0.11 & 0.01 & 0.15 & 0.10 & -1.49 & 2.76\\
+earn.diff & 10 & -0.34 & 0.37 & 1.35 & -13.12 & -2.04 & 3.19 & 6.76 & 6.32 & 39.95 & 4.68 & 5.23 & -0.82 & -0.72\\
+house.diff & 15 & -0.20 & 0.01 & 0.60 & -7.28 & -0.68 & 1.46 & 4.11 & 3.14 & 9.89 & 1.52 & 2.14 & -0.78 & -0.27\\
+rent.diff & 15 & 1.22 & 1.09 & 0.42 & -0.32 & 0.21 & 1.94 & 4.41 & 1.41 & 1.99 & 1.09 & 1.73 & 0.88 & -0.51\\
+\midrule\multicolumn{15}{l}{\textbf{ES}}\\
+age.indep & 16 & 29.46 & 29.46 & 29.45 & 28.40 & 28.98 & 30.05 & 30.50 & 0.67 & 0.45 & 0.82 & 1.07 & 0.02 & -1.39\\
+earnings & 16 & 87.16 & 87.02 & 86.37 & 64.26 & 73.06 & 99.70 & 112.05 & 14.62 & 213.73 & 19.81 & 26.64 & 0.16 & -1.39\\
+price.rent & 16 & 103.34 & 102.92 & 101.51 & 99.46 & 100.64 & 104.83 & 113.10 & 4.10 & 16.80 & 2.67 & 4.19 & 1.06 & -0.13\\
+price.house & 16 & 92.06 & 90.98 & 93.15 & 71.00 & 79.68 & 100.93 & 128.28 & 16.35 & 267.18 & 17.06 & 21.25 & 0.47 & -0.69\\
+earn.prop.house & 16 & 95.85 & 94.92 & 93.82 & 73.74 & 84.99 & 102.48 & 131.01 & 15.13 & 228.82 & 13.10 & 17.49 & 0.64 & -0.32\\
+earn.prop.rent & 16 & 84.15 & 84.32 & 84.36 & 64.35 & 72.34 & 93.96 & 101.46 & 12.34 & 152.31 & 17.77 & 21.62 & 0.01 & -1.59\\
+age.diff & 15 & 0.12 & 0.14 & 0.20 & -0.40 & -0.05 & 0.25 & 0.40 & 0.22 & 0.05 & 0.15 & 0.30 & -0.72 & -0.35\\
+earn.diff & 15 & 0.60 & -0.20 & -1.13 & -11.57 & -7.14 & 6.41 & 23.13 & 10.51 & 110.43 & 9.77 & 13.55 & 0.66 & -0.80\\
+house.diff & 15 & 1.89 & 2.15 & 3.68 & -13.68 & -0.13 & 5.47 & 14.04 & 7.03 & 49.49 & 4.12 & 5.60 & -0.69 & -0.05\\
+rent.diff & 15 & 0.87 & 0.90 & 1.06 & -1.30 & 0.16 & 1.48 & 2.67 & 1.11 & 1.24 & 0.96 & 1.32 & -0.18 & -0.94\\
+\midrule\multicolumn{15}{l}{\textbf{PL}}\\
+age.indep & 16 & 27.84 & 27.88 & 28.10 & 26.70 & 27.50 & 28.30 & 28.50 & 0.60 & 0.36 & 0.52 & 0.80 & -0.65 & -1.11\\
+earnings & 16 & 149.82 & 143.71 & 131.95 & 100.00 & 115.57 & 174.63 & 285.25 & 49.57 & 2457.47 & 36.19 & 59.06 & 1.27 & 0.95\\
+price.rent & 16 & 129.74 & 127.50 & 116.87 & 100.00 & 108.13 & 141.46 & 190.88 & 30.02 & 901.12 & 18.74 & 33.32 & 0.89 & -0.79\\
+price.house & 16 & 122.78 & 119.13 & 102.94 & 92.88 & 97.99 & 139.53 & 203.82 & 36.26 & 1314.48 & 14.54 & 41.54 & 1.04 & -0.38\\
+earn.prop.house & 16 & 121.51 & 121.73 & 119.99 & 100.00 & 115.40 & 129.90 & 139.95 & 10.83 & 117.34 & 12.20 & 14.51 & -0.13 & -0.99\\
+earn.prop.rent & 16 & 113.84 & 112.78 & 113.36 & 93.10 & 102.81 & 120.18 & 149.44 & 13.70 & 187.58 & 12.99 & 17.37 & 0.82 & 0.48\\
+age.diff & 15 & -0.09 & -0.08 & -0.10 & -1.00 & -0.30 & 0.10 & 0.70 & 0.44 & 0.19 & 0.30 & 0.40 & 0.00 & -0.41\\
+earn.diff & 15 & 12.35 & 10.96 & 4.85 & -21.56 & 2.64 & 23.79 & 64.29 & 20.83 & 433.69 & 8.32 & 21.15 & 0.85 & 0.40\\
+house.diff & 15 & 6.92 & 6.17 & 5.88 & -5.54 & 1.06 & 10.83 & 29.18 & 8.89 & 79.03 & 7.38 & 9.77 & 0.87 & 0.22\\
+rent.diff & 15 & 6.06 & 5.39 & 4.29 & 1.32 & 2.09 & 7.36 & 19.45 & 5.68 & 32.30 & 3.91 & 5.27 & 1.33 & 0.50\\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{age.mean }\OtherTok{\textless{}{-}}\NormalTok{ jovenes.df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(year) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{summarise}\NormalTok{(}\AttributeTok{age.mean =} \FunctionTok{mean}\NormalTok{(age.indep, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ jovenes.df, }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ year, }\AttributeTok{y =}\NormalTok{ age.indep, }\AttributeTok{color =}\NormalTok{ country), }\AttributeTok{linewidth =} \FloatTok{1.15}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ age.mean, }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ year, }\AttributeTok{y =}\NormalTok{ age.mean, }\AttributeTok{color =} \StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{), }\AttributeTok{linewidth =} \FloatTok{1.15}\NormalTok{, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\FunctionTok{setNames}\NormalTok{(scales}\SpecialCharTok{::}\FunctionTok{hue\_pal}\NormalTok{()(}\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(jovenes.df}\SpecialCharTok{$}\NormalTok{country))), }\FunctionTok{unique}\NormalTok{(jovenes.df}\SpecialCharTok{$}\NormalTok{country)), }\StringTok{"mean"} \OtherTok{=} \StringTok{"black"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Evolución temporal de la edad de emancipación\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{xlab}\NormalTok{(}\StringTok{\textquotesingle{}Year\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Age\textquotesingle{}}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-14-1}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggsave}\NormalTok{(}\StringTok{\textquotesingle{}results/edad\_emancipacion.pdf\textquotesingle{}}\NormalTok{, }\AttributeTok{width =} \DecValTok{14}\NormalTok{, }\AttributeTok{height =} \DecValTok{10}\NormalTok{, }\AttributeTok{dpi =} \DecValTok{300}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-15-1}
 
 \begin{verbatim}
 ##    country n.years media media.pct total.dif
@@ -384,11 +367,11 @@ vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda
 ## 9      CZ 10
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1}
-
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1}
 
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1}
+
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-20-1}
 
 \begin{verbatim}
 ##   country n.years house.pct rent.pct earn.pct earn.menos.house earn.menos.rent
@@ -409,13 +392,13 @@ vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda
 ## 2  earn.pct vs rent.pct            4        9
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-22-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-23-1}
 
 \subsection{Análisis bivariante: estudio de la correlación entre el
 aumento porcentual de los salarios y de los precios de alquiler y
 vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aumento-porcentual-de-los-salarios-y-de-los-precios-de-alquiler-y-vivienda}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-23-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1}
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -447,7 +430,7 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ      0.00674
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-26-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1}
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -479,9 +462,9 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ       1.63
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-29-1}
-
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-30-1}
+
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-31-1}
 
 \section{Conclusiones}\label{conclusiones}
 
