@@ -230,15 +230,6 @@ rel.price2015.house & numeric & 177 & 95.2 & 2 & 0.007 & 89 & 0.331\\
 \end{tabular}
 \end{table}
 
-\begin{verbatim}
-## [1] 269   6
-\end{verbatim}
-
-\begin{verbatim}
-## [1] "age.indep"           "earnings"            "rel.price2015.rent" 
-## [4] "rel.price2015.house"
-\end{verbatim}
-
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1}
 
 \subsection{Transformación de
@@ -261,95 +252,32 @@ dichos análisis.
 variables
 numéricas}\label{anuxe1lisis-univariante-estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 
-\begin{table}[htbp]
-\caption{Estadísticos descriptivos por país (5 países más poblados).}
-\centering\scriptsize\setlength{\tabcolsep}{2pt}
+\begin{table}[H]
+\caption{Media y desviación típica (SD) por país de las variables numéricas (5 países más poblados).}
+\centering\footnotesize\setlength{\tabcolsep}{3pt}
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{%
 
-\begin{tabular}{lrrrrrrrrrrrrrr}
+\begin{tabular}{lrrrrrrrrrr}
 \toprule
-Variable & n & Mean & Trim. & Median & Min & Q1 & Q3 & Max & SD & Var & MAD & IQR & Skew & Kurt.\\
-\midrule\multicolumn{15}{l}{\textbf{DE}}\\
-age.indep & 16 & 23.86 & 23.85 & 23.80 & 23.70 & 23.78 & 23.92 & 24.10 & 0.14 & 0.02 & 0.15 & 0.15 & 0.47 & -1.13\\
-earnings & 13 & 127.28 & 123.74 & 112.03 & 95.93 & 104.13 & 118.65 & 197.60 & 36.31 & 1318.26 & 11.71 & 14.52 & 1.05 & -0.76\\
-price.rent & 16 & 111.25 & 111.02 & 110.61 & 100.00 & 104.93 & 116.68 & 125.69 & 7.99 & 63.76 & 9.25 & 11.75 & 0.26 & -1.29\\
-price.house & 16 & 142.52 & 141.62 & 138.07 & 100.00 & 112.26 & 175.81 & 197.71 & 33.32 & 1110.24 & 44.57 & 63.55 & 0.21 & -1.61\\
-earn.prop.house & 13 & 95.04 & 95.04 & 97.06 & 76.63 & 83.85 & 100.56 & 113.42 & 12.08 & 145.82 & 14.05 & 16.72 & -0.03 & -1.42\\
-earn.prop.rent & 13 & 116.30 & 113.91 & 105.54 & 88.91 & 100.44 & 109.24 & 170.05 & 27.25 & 742.53 & 7.55 & 8.79 & 1.04 & -0.74\\
-age.diff & 15 & 0.00 & 0.00 & 0.00 & -0.20 & -0.10 & 0.05 & 0.20 & 0.13 & 0.02 & 0.15 & 0.15 & 0.41 & -1.11\\
-earn.diff & 12 & 7.38 & 3.39 & 5.23 & -9.52 & -7.76 & 11.58 & 64.18 & 20.11 & 404.59 & 15.13 & 19.34 & 1.72 & 2.44\\
-house.diff & 15 & 5.49 & 5.64 & 6.63 & -12.53 & 3.37 & 8.67 & 21.45 & 8.36 & 69.94 & 4.29 & 5.30 & -0.47 & 0.14\\
-rent.diff & 15 & 1.71 & 1.69 & 1.60 & 1.17 & 1.28 & 1.87 & 2.56 & 0.48 & 0.23 & 0.47 & 0.59 & 0.70 & -0.98\\
-\midrule\multicolumn{15}{l}{\textbf{FR}}\\
-age.indep & 16 & 23.69 & 23.69 & 23.70 & 23.40 & 23.58 & 23.80 & 24.10 & 0.19 & 0.04 & 0.15 & 0.22 & 0.51 & -0.67\\
-earnings & 15 & 97.72 & 97.84 & 99.06 & 86.11 & 93.07 & 101.76 & 107.79 & 6.31 & 39.77 & 6.68 & 8.68 & -0.31 & -1.07\\
-price.rent & 16 & 107.06 & 106.89 & 106.64 & 100.00 & 105.25 & 108.42 & 116.53 & 4.26 & 18.15 & 2.82 & 3.17 & 0.48 & -0.24\\
-price.house & 16 & 114.58 & 114.03 & 108.82 & 100.00 & 105.76 & 125.86 & 136.89 & 12.41 & 153.92 & 8.64 & 20.10 & 0.57 & -1.39\\
-earn.prop.house & 15 & 86.89 & 87.19 & 85.47 & 68.84 & 81.94 & 95.13 & 101.03 & 9.77 & 95.43 & 10.34 & 13.19 & -0.11 & -1.12\\
-earn.prop.rent & 15 & 91.94 & 91.68 & 92.02 & 80.83 & 87.10 & 97.70 & 106.52 & 7.24 & 52.44 & 8.59 & 10.60 & 0.27 & -0.99\\
-age.diff & 15 & 0.02 & 0.02 & 0.00 & -0.40 & -0.15 & 0.25 & 0.40 & 0.26 & 0.07 & 0.30 & 0.40 & -0.16 & -1.40\\
-earn.diff & 14 & 0.34 & 1.01 & 1.46 & -15.34 & -3.05 & 5.36 & 8.04 & 6.79 & 46.06 & 6.59 & 8.41 & -0.73 & -0.46\\
-house.diff & 15 & 2.06 & 2.22 & 2.90 & -6.58 & -0.59 & 4.68 & 8.67 & 4.06 & 16.45 & 3.87 & 5.27 & -0.31 & -0.72\\
-rent.diff & 15 & 1.10 & 1.09 & 0.91 & -0.28 & 0.43 & 1.62 & 2.64 & 0.89 & 0.80 & 0.85 & 1.19 & 0.43 & -1.12\\
-\midrule\multicolumn{15}{l}{\textbf{IT}}\\
-age.indep & 16 & 30.01 & 30.01 & 30.10 & 29.70 & 29.90 & 30.10 & 30.20 & 0.16 & 0.03 & 0.15 & 0.20 & -0.72 & -0.87\\
-earnings & 11 & 95.54 & 95.38 & 96.59 & 86.86 & 91.24 & 99.59 & 105.64 & 5.87 & 34.40 & 5.05 & 8.35 & -0.09 & -1.23\\
-price.rent & 16 & 106.70 & 106.36 & 105.78 & 100.00 & 105.02 & 106.83 & 118.28 & 4.40 & 19.34 & 1.17 & 1.81 & 1.10 & 0.93\\
-price.house & 16 & 90.97 & 90.71 & 90.50 & 83.65 & 85.30 & 95.21 & 101.88 & 6.38 & 40.73 & 7.81 & 9.91 & 0.45 & -1.37\\
-earn.prop.house & 11 & 105.68 & 105.98 & 104.86 & 94.90 & 102.01 & 110.93 & 113.80 & 6.01 & 36.11 & 7.20 & 8.92 & -0.10 & -1.28\\
-earn.prop.rent & 11 & 91.44 & 91.02 & 90.69 & 82.69 & 86.17 & 94.76 & 103.89 & 6.81 & 46.41 & 6.80 & 8.59 & 0.29 & -1.18\\
-age.diff & 15 & 0.03 & 0.05 & 0.00 & -0.30 & 0.00 & 0.10 & 0.20 & 0.11 & 0.01 & 0.15 & 0.10 & -1.49 & 2.76\\
-earn.diff & 10 & -0.34 & 0.37 & 1.35 & -13.12 & -2.04 & 3.19 & 6.76 & 6.32 & 39.95 & 4.68 & 5.23 & -0.82 & -0.72\\
-house.diff & 15 & -0.20 & 0.01 & 0.60 & -7.28 & -0.68 & 1.46 & 4.11 & 3.14 & 9.89 & 1.52 & 2.14 & -0.78 & -0.27\\
-rent.diff & 15 & 1.22 & 1.09 & 0.42 & -0.32 & 0.21 & 1.94 & 4.41 & 1.41 & 1.99 & 1.09 & 1.73 & 0.88 & -0.51\\
-\midrule\multicolumn{15}{l}{\textbf{ES}}\\
-age.indep & 16 & 29.46 & 29.46 & 29.45 & 28.40 & 28.98 & 30.05 & 30.50 & 0.67 & 0.45 & 0.82 & 1.07 & 0.02 & -1.39\\
-earnings & 16 & 87.16 & 87.02 & 86.37 & 64.26 & 73.06 & 99.70 & 112.05 & 14.62 & 213.73 & 19.81 & 26.64 & 0.16 & -1.39\\
-price.rent & 16 & 103.34 & 102.92 & 101.51 & 99.46 & 100.64 & 104.83 & 113.10 & 4.10 & 16.80 & 2.67 & 4.19 & 1.06 & -0.13\\
-price.house & 16 & 92.06 & 90.98 & 93.15 & 71.00 & 79.68 & 100.93 & 128.28 & 16.35 & 267.18 & 17.06 & 21.25 & 0.47 & -0.69\\
-earn.prop.house & 16 & 95.85 & 94.92 & 93.82 & 73.74 & 84.99 & 102.48 & 131.01 & 15.13 & 228.82 & 13.10 & 17.49 & 0.64 & -0.32\\
-earn.prop.rent & 16 & 84.15 & 84.32 & 84.36 & 64.35 & 72.34 & 93.96 & 101.46 & 12.34 & 152.31 & 17.77 & 21.62 & 0.01 & -1.59\\
-age.diff & 15 & 0.12 & 0.14 & 0.20 & -0.40 & -0.05 & 0.25 & 0.40 & 0.22 & 0.05 & 0.15 & 0.30 & -0.72 & -0.35\\
-earn.diff & 15 & 0.60 & -0.20 & -1.13 & -11.57 & -7.14 & 6.41 & 23.13 & 10.51 & 110.43 & 9.77 & 13.55 & 0.66 & -0.80\\
-house.diff & 15 & 1.89 & 2.15 & 3.68 & -13.68 & -0.13 & 5.47 & 14.04 & 7.03 & 49.49 & 4.12 & 5.60 & -0.69 & -0.05\\
-rent.diff & 15 & 0.87 & 0.90 & 1.06 & -1.30 & 0.16 & 1.48 & 2.67 & 1.11 & 1.24 & 0.96 & 1.32 & -0.18 & -0.94\\
-\midrule\multicolumn{15}{l}{\textbf{PL}}\\
-age.indep & 16 & 27.84 & 27.88 & 28.10 & 26.70 & 27.50 & 28.30 & 28.50 & 0.60 & 0.36 & 0.52 & 0.80 & -0.65 & -1.11\\
-earnings & 16 & 149.82 & 143.71 & 131.95 & 100.00 & 115.57 & 174.63 & 285.25 & 49.57 & 2457.47 & 36.19 & 59.06 & 1.27 & 0.95\\
-price.rent & 16 & 129.74 & 127.50 & 116.87 & 100.00 & 108.13 & 141.46 & 190.88 & 30.02 & 901.12 & 18.74 & 33.32 & 0.89 & -0.79\\
-price.house & 16 & 122.78 & 119.13 & 102.94 & 92.88 & 97.99 & 139.53 & 203.82 & 36.26 & 1314.48 & 14.54 & 41.54 & 1.04 & -0.38\\
-earn.prop.house & 16 & 121.51 & 121.73 & 119.99 & 100.00 & 115.40 & 129.90 & 139.95 & 10.83 & 117.34 & 12.20 & 14.51 & -0.13 & -0.99\\
-earn.prop.rent & 16 & 113.84 & 112.78 & 113.36 & 93.10 & 102.81 & 120.18 & 149.44 & 13.70 & 187.58 & 12.99 & 17.37 & 0.82 & 0.48\\
-age.diff & 15 & -0.09 & -0.08 & -0.10 & -1.00 & -0.30 & 0.10 & 0.70 & 0.44 & 0.19 & 0.30 & 0.40 & 0.00 & -0.41\\
-earn.diff & 15 & 12.35 & 10.96 & 4.85 & -21.56 & 2.64 & 23.79 & 64.29 & 20.83 & 433.69 & 8.32 & 21.15 & 0.85 & 0.40\\
-house.diff & 15 & 6.92 & 6.17 & 5.88 & -5.54 & 1.06 & 10.83 & 29.18 & 8.89 & 79.03 & 7.38 & 9.77 & 0.87 & 0.22\\
-rent.diff & 15 & 6.06 & 5.39 & 4.29 & 1.32 & 2.09 & 7.36 & 19.45 & 5.68 & 32.30 & 3.91 & 5.27 & 1.33 & 0.50\\
+ & \multicolumn{2}{c}{DE} & \multicolumn{2}{c}{FR} & \multicolumn{2}{c}{IT} & \multicolumn{2}{c}{ES} & \multicolumn{2}{c}{PL} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}\cmidrule(lr){10-11}
+Variable & Mean & SD & Mean & SD & Mean & SD & Mean & SD & Mean & SD\\
+age.indep & 23.86 & 0.14 & 23.69 & 0.19 & 30.01 & 0.16 & 29.46 & 0.67 & 27.84 & 0.60\\
+earnings & 127.28 & 36.31 & 97.72 & 6.31 & 95.54 & 5.87 & 87.16 & 14.62 & 149.82 & 49.57\\
+price.rent & 111.25 & 7.99 & 107.06 & 4.26 & 106.70 & 4.40 & 103.34 & 4.10 & 129.74 & 30.02\\
+price.house & 142.52 & 33.32 & 114.58 & 12.41 & 90.97 & 6.38 & 92.06 & 16.35 & 122.78 & 36.26\\
+earn.prop.house & 95.04 & 12.08 & 86.89 & 9.77 & 105.68 & 6.01 & 95.85 & 15.13 & 121.51 & 10.83\\
+earn.prop.rent & 116.30 & 27.25 & 91.94 & 7.24 & 91.44 & 6.81 & 84.15 & 12.34 & 113.84 & 13.70\\
+age.diff & 0.00 & 0.13 & 0.02 & 0.26 & 0.03 & 0.11 & 0.12 & 0.22 & -0.09 & 0.44\\
+earn.diff & 7.38 & 20.11 & 0.34 & 6.79 & -0.34 & 6.32 & 0.60 & 10.51 & 12.35 & 20.83\\
+house.diff & 5.49 & 8.36 & 2.06 & 4.06 & -0.20 & 3.14 & 1.89 & 7.03 & 6.92 & 8.89\\
+rent.diff & 1.71 & 0.48 & 1.10 & 0.89 & 1.22 & 1.41 & 0.87 & 1.11 & 6.06 & 5.68\\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
-
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-15-1}
-
-\begin{verbatim}
-##    country n.years media media.pct total.dif
-## 1       DE      16 23.86      0.00       0.0
-## 2       FR      16 23.69      0.02       0.3
-## 3       IT      16 30.01      0.03       0.5
-## 4       ES      16 29.46      0.12       1.8
-## 5       PL      16 27.84     -0.09      -1.4
-## 6       RO      16 28.02     -0.05      -0.8
-## 7       NL      16 23.51      0.01       0.1
-## 8       BE      16 25.41      0.05       0.8
-## 9       EL      16 29.62      0.17       2.6
-## 10      CZ      16 26.29     -0.08      -1.2
-\end{verbatim}
-
 \subsection{Media del aumento anual por país: salarios, alquiler y
 vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda}
-
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1}
 
 \begin{table}[H]
 \caption{Media anual del aumento (\%) de los precios de la vivienda, del alquiler y de los salarios en 2010-2020, y diferencia entre salarios y precios (p.p.). Los salarios crecen más que la vivienda en 4 de 9 países y más que el alquiler en 4 de 9.}
@@ -372,38 +300,33 @@ IT & -1.49 & 0.65 & -0.34 & 1.15 & -0.99\\
 \end{tabular}
 \end{table}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-20-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-22-1}
+\subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
 
-\begin{verbatim}
-##   country n.years house.pct rent.pct earn.pct earn.menos.house earn.menos.rent
-## 1      DE      10      6.12     1.47     8.28             2.16            6.81
-## 2      FR      10      1.78     0.73    -0.09            -1.87           -0.83
-## 3      IT      10     -1.49     0.65    -0.34             1.15           -0.99
-## 4      ES      10     -0.53     0.39    -1.13            -0.60           -1.52
-## 5      PL      10      2.59     3.15     6.69             4.10            3.53
-## 6      RO      10      0.46     1.76    13.49            13.04           11.73
-## 7      NL      10      2.47     2.99     0.13            -2.35           -2.87
-## 8      BE      10      2.79     1.44     0.31            -2.48           -1.13
-## 9      CZ      10      5.65     2.66     4.36            -1.29            1.70
-\end{verbatim}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1}
 
 \begin{verbatim}
-##                     par paises.mayor n.paises
-## 1 earn.pct vs house.pct            4        9
-## 2  earn.pct vs rent.pct            4        9
+##    country n.years media media.pct total.dif
+## 1       DE      16 23.86      0.00       0.0
+## 2       FR      16 23.69      0.02       0.3
+## 3       IT      16 30.01      0.03       0.5
+## 4       ES      16 29.46      0.12       1.8
+## 5       PL      16 27.84     -0.09      -1.4
+## 6       RO      16 28.02     -0.05      -0.8
+## 7       NL      16 23.51      0.01       0.1
+## 8       BE      16 25.41      0.05       0.8
+## 9       EL      16 29.62      0.17       2.6
+## 10      CZ      16 26.29     -0.08      -1.2
 \end{verbatim}
-
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-25-1}
 
 \subsection{Análisis bivariante: estudio de la correlación entre el
 aumento porcentual de los salarios y de los precios de alquiler y
 vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aumento-porcentual-de-los-salarios-y-de-los-precios-de-alquiler-y-vivienda}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-26-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1}
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -435,7 +358,7 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ      0.00674
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-29-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1}
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -467,9 +390,9 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ       1.63
 \end{verbatim}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-32-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-33-1}
+\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-28-1}
 
 \section{Conclusiones}\label{conclusiones}
 

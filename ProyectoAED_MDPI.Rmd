@@ -124,7 +124,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 6.5, fig.height = 4, out.width = '100%',
+knitr::opts_chunk$set(fig.width = 6.5, fig.height = 3.5, out.width = '100%',
                       echo = FALSE, message = FALSE, warning = FALSE)
 # Tamaño por defecto de las figuras: 6.5 x 4.5 pulgadas, ajustadas al ancho del texto de la plantilla MDPI
 ```
@@ -251,7 +251,7 @@ tab.sumario <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep =
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables del conjunto de datos.}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{4pt}\n', paste(tab.sumario, collapse = '\n'), '\n\\end{table}\n'))
 ```
 
-```{r}
+```{r, results='hide'}
 dim(jovenes.df)
 # Numero de registros y de variables
 
@@ -266,7 +266,7 @@ por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
 ```{r}
 cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
 
-ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + geom_text(aes(label = n.paises), size = 3) + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
+ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
 ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
 
@@ -335,31 +335,32 @@ t(round(estad[c('stdev', 'var', 'mad', 'IQR', 'skew', 'kurtosis'), ], 2))
 ```
 
 ```{r}
-# Estadisticos descriptivos por pais (5 paises mas poblados) en una tabla compacta
+# Estadisticos de cada variable calculados por pais (5 paises mas poblados)
 nm <- names(mystats(c(0, 1)))
 mystats.pais <- function(x) if (all(is.na(x))) setNames(rep(NA_real_, length(nm)), nm) else mystats(x)
+estad.pais <- lapply(mas.poblacion5, function(p) t(sapply(jovenes.df[jovenes.df$country == p, vars.num], mystats.pais)))
+names(estad.pais) <- mas.poblacion5
+# estad.pais[[pais]]: una fila por variable y una columna por estadistico (n, mean, trimmed, median, ..., kurtosis)
 
-# Una fila por variable para cada pais (mismas medidas que mystats)
-estad.pais <- lapply(mas.poblacion5, function(p) {
-  res <- t(sapply(jovenes.df[jovenes.df$country == p, vars.num], mystats.pais))
-  data.frame(variable = vars.num, res, row.names = NULL)
-})
-estad.pais <- do.call(rbind, estad.pais)
-estad.pais$n <- as.integer(estad.pais$n)
+# Tabla compacta: media y desviacion tipica (SD) de cada variable en cada pais
+nc <- length(mas.poblacion5)
+mat <- do.call(cbind, lapply(mas.poblacion5, function(p) round(estad.pais[[p]][, c('mean', 'stdev')], 2)))
+tab.df <- data.frame(variable = vars.num, mat, check.names = FALSE, row.names = NULL)
 
-tab.est <- knitr::kable(estad.pais, format = 'latex', booktabs = TRUE, linesep = '', digits = 2, align = c('l', rep('r', 14)), col.names = c('Variable', 'n', 'Mean', 'Trim.', 'Median', 'Min', 'Q1', 'Q3', 'Max', 'SD', 'Var', 'MAD', 'IQR', 'Skew', 'Kurt.'))
+tab.k <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep = '', digits = 2, align = c('l', rep('r', 2 * nc)), col.names = c('Variable', rep(c('Mean', 'SD'), nc)))
 
-# Se inserta una fila de cabecera con el nombre de cada pais antes de su bloque de variables
-lin <- unlist(strsplit(paste(tab.est, collapse = '\n'), '\n'))
+# Cabecera con el nombre de cada pais sobre sus dos columnas, y dos bloques: niveles y variaciones anuales (variables .diff)
+lin <- unlist(strsplit(paste(tab.k, collapse = '\n'), '\n'))
 i.mid <- grep('^\\\\midrule', lin)[1]
 i.bot <- grep('^\\\\bottomrule', lin)
 cuerpo <- lin[(i.mid + 1):(i.bot - 1)]
-nv <- length(vars.num)
-bloques <- unlist(lapply(seq_along(mas.poblacion5), function(k) c(sprintf('\\midrule\\multicolumn{15}{l}{\\textbf{%s}}\\\\', mas.poblacion5[k]), cuerpo[((k - 1) * nv + 1):(k * nv)])))
-tabla <- paste(c(lin[1:(i.mid - 1)], bloques, lin[i.bot:length(lin)]), collapse = '\n')
+es.diff <- grepl('\\.diff$', vars.num)
+cab <- paste0(' & ', paste0('\\multicolumn{2}{c}{', mas.poblacion5, '}', collapse = ' & '), ' \\\\')
+cmr <- paste0('\\cmidrule(lr){', seq(2, by = 2, length.out = nc), '-', seq(3, by = 2, length.out = nc), '}', collapse = '')
+bloque <- function(titulo) paste0('\\midrule\\multicolumn{', 2 * nc + 1, '}{l}{\\textit{', titulo, '}}\\\\')
+tabla <- paste(c(lin[1:(i.mid - 2)], cab, cmr, lin[i.mid - 1], cuerpo[!es.diff], cuerpo[es.diff], lin[i.bot:length(lin)]), collapse = '\n')
 
-# Letra pequena y reduccion automatica al ancho del texto si la tabla es mas ancha
-knitr::asis_output(paste0('\\begin{table}[htbp]\n\\caption{Estadísticos descriptivos por país (5 países más poblados).}\n\\centering\\scriptsize\\setlength{\\tabcolsep}{2pt}\n\\resizebox{\\ifdim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{%\n', tabla, '}\n\\end{table}\n'))
+knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Media y desviación típica (SD) por país de las variables numéricas (5 países más poblados).}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{3pt}\n\\resizebox{\\ifdim\\width>\\linewidth\\linewidth\\else\\width\\fi}{!}{%\n', tabla, '}\n\\end{table}\n'))
 ```
 
 ## Media del aumento anual por país: salarios, alquiler y vivienda
