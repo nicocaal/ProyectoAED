@@ -389,6 +389,9 @@ aum.comun %>% count(country) %>% as.data.frame()
 ```
 
 ```{r}
+medias.pais <- aum.comun %>% group_by(country) %>% summarise(n.years = n(), across(all_of(vars.pct), mean), .groups = 'drop') %>% mutate(earn.menos.house = earn.pct - house.pct, earn.menos.rent = earn.pct - rent.pct) %>% as.data.frame()
+# Media anual de cada pais en la ventana comun y diferencias entre variables
+
 # Tabla con los valores de la figura (mismo orden: de mayor a menor aumento de la vivienda)
 n.pais <- nrow(medias.pais)
 n.house <- sum(medias.pais$earn.menos.house > 0)
@@ -410,9 +413,6 @@ ggplot(hist.df, aes(x = aumento)) + geom_histogram(bins = 30, na.rm = TRUE) + fa
 ```
 
 ```{r}
-medias.pais <- aum.comun %>% group_by(country) %>% summarise(n.years = n(), across(all_of(vars.pct), mean), .groups = 'drop') %>% mutate(earn.menos.house = earn.pct - house.pct, earn.menos.rent = earn.pct - rent.pct) %>% as.data.frame()
-# Media anual de cada pais en la ventana comun y diferencias entre variables
-
 # Figura compacta: a la izquierda, media anual del aumento de la vivienda, el alquiler y los salarios; a la derecha, diferencia entre salarios y precios (p.p. = puntos porcentuales)
 orden <- as.character(medias.pais$country[order(medias.pais$house.pct)])
 etq <- c(house.pct = 'House prices', rent.pct = 'Rents', earn.pct = 'Earnings')
