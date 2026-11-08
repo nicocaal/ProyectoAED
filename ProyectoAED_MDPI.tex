@@ -202,10 +202,24 @@ datos}\label{metodologuxeda-preparaciuxf3n-del-conjunto-de-datos}
 \subsection{Importación de los
 DataFrames}\label{importaciuxf3n-de-los-dataframes}
 
-Una vez cargados todos los datos que se desea estudiar, procederemos a
-crear el conjunto que los engloba. A continuación exploraremos las
-variables que conforman este conjunto y determinaremos cuál es la mejor
-forma para llevar a cabo el análisis.
+Los DataFrames a partir de los cuales se trabaja constan de una primera
+columna donde hay información relativa al país, al sexo, a la edad y
+otros parámetros que se han tenido en cuenta en la recopilación (por
+ejemplo país de nacimiento, grupo social, etc.). Por tanto, el primer
+paso es seleccionar solamente la información relativa al país, para lo
+que usamos funciones de manipulación de strings y expresiones regulares
+para seleccionar la parte de la cadena de texto que nos interesa.
+
+Una vez hecho esto, nos damos cuenta de que las columnas corresponden a
+los años de estudio, por lo que convertimos el DataFrame a formato tidy,
+creando una nueva variable (columna) llamada año, en la que cada
+instancia corresponde a un año distinto para cada país distinto. Las
+observaciones, por tanto, se disponen en una nueva variable (columna).
+
+Una vez cargados todos los datos que se desea estudiar, procedemos a
+crear un DataFrame conjunto que los engloba. A continuación exploramos
+las variables que conforman este DataFrame y determinamos cuál es la
+mejor forma para llevar a cabo el análisis.
 
 \subsection{Exploración de variables}\label{exploraciuxf3n-de-variables}
 
@@ -235,10 +249,36 @@ rel.price2015.house & numeric & 177 & 95.2 & 2 & 0.007 & 89 & 0.331\\
 \subsection{Transformación de
 variables}\label{transformaciuxf3n-de-variables}
 
+Inicialmente, limitamos nuestro análisis temporal al periodo comprendido
+entre 2010 y 2025, ya que antes de este año la cobertura temporal de
+ciertas variables es demasiado pobre y, además, nos interesa estudiar
+solamente la evolución de las variables en los años inmediatamente
+anteriores, ya que remontarse demasiado en el pasado no es relevante en
+este proyecto.
+
+Como nuestro estudio se centra en la comparación de los precios de la
+vivienda/alquiler con el poder adquisitivo de los jóvenes, necesitamos
+establecer una escala que nos permita compararlos. De este modo,
+aplicamos a las variables earnings (salarios), price.rent (precio del
+alquiler) y price.house (precio de la vivienda) la siguiente
+transformación:
+
+\[ x = \frac{x}{x(t_0 = 2010)} \cdot 100 \] Esto nos permite estudiar la
+evolución porcentual de las variables, ya que en el año de inicio
+\(t_0 = 2010\) establecemos como referencia el \(100\%\) y, por tanto,
+los valores posteriores se pueden interpretar como evoluciones en base a
+un porcentaje de \(100\%\) .
+
+Para enriquecer nuestro estudio, creamos 4 nuevas variables age.diff,
+earn.diff, house.diff y rent.diff, que son la diferencia de cada valor
+con su valor correspondiente al año anterior. En el caso de las 3
+variables porcentuales, esto representa el aumento porcentual anual (por
+ejemplo, un aumento de un \(3\%\) al año), lo cual es útil en el
+posterior análisis estadístico.
+
 \begin{verbatim}
-##  [1] "age.indep"       "earnings"        "price.rent"      "price.house"    
-##  [5] "earn.prop.house" "earn.prop.rent"  "age.diff"        "earn.diff"      
-##  [9] "house.diff"      "rent.diff"
+## [1] "age.indep"   "earnings"    "price.rent"  "price.house" "age.diff"   
+## [6] "earn.diff"   "house.diff"  "rent.diff"
 \end{verbatim}
 
 \section{Resultados}\label{resultados}
@@ -266,8 +306,6 @@ age.indep & 23.86 & 0.14 & 23.69 & 0.19 & 30.01 & 0.16 & 29.46 & 0.67 & 27.84 & 
 earnings & 127.28 & 36.31 & 97.72 & 6.31 & 95.54 & 5.87 & 87.16 & 14.62 & 149.82 & 49.57\\
 price.rent & 111.25 & 7.99 & 107.06 & 4.26 & 106.70 & 4.40 & 103.34 & 4.10 & 129.74 & 30.02\\
 price.house & 142.52 & 33.32 & 114.58 & 12.41 & 90.97 & 6.38 & 92.06 & 16.35 & 122.78 & 36.26\\
-earn.prop.house & 95.04 & 12.08 & 86.89 & 9.77 & 105.68 & 6.01 & 95.85 & 15.13 & 121.51 & 10.83\\
-earn.prop.rent & 116.30 & 27.25 & 91.94 & 7.24 & 91.44 & 6.81 & 84.15 & 12.34 & 113.84 & 13.70\\
 age.diff & 0.00 & 0.13 & 0.02 & 0.26 & 0.03 & 0.11 & 0.12 & 0.22 & -0.09 & 0.44\\
 earn.diff & 7.38 & 20.11 & 0.34 & 6.79 & -0.34 & 6.32 & 0.60 & 10.51 & 12.35 & 20.83\\
 house.diff & 5.49 & 8.36 & 2.06 & 4.06 & -0.20 & 3.14 & 1.89 & 7.03 & 6.92 & 8.89\\
@@ -306,27 +344,70 @@ IT & -1.49 & 0.65 & -0.34 & 1.15 & -0.99\\
 
 \subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
 
+A continuación se muestra la evolución temporal de la edad de
+emancipación por países, así como la evolución de la media de todos
+ellos:
+
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1}
 
+En la siguiente tabla observamos por países la edad de emancipación
+media en estos 15 años, el aumento anual medio (en años) y la diferencia
+total en la edad de emancipación en todo este tiempo.
+
 \begin{verbatim}
-##    country n.years media media.pct total.dif
-## 1       DE      16 23.86      0.00       0.0
-## 2       FR      16 23.69      0.02       0.3
-## 3       IT      16 30.01      0.03       0.5
-## 4       ES      16 29.46      0.12       1.8
-## 5       PL      16 27.84     -0.09      -1.4
-## 6       RO      16 28.02     -0.05      -0.8
-## 7       NL      16 23.51      0.01       0.1
-## 8       BE      16 25.41      0.05       0.8
-## 9       EL      16 29.62      0.17       2.6
-## 10      CZ      16 26.29     -0.08      -1.2
+##    country n.years media media.diff total.dif
+## 1       DE      16 23.86       0.00       0.0
+## 2       FR      16 23.69       0.02       0.3
+## 3       IT      16 30.01       0.03       0.5
+## 4       ES      16 29.46       0.12       1.8
+## 5       PL      16 27.84      -0.09      -1.4
+## 6       RO      16 28.02      -0.05      -0.8
+## 7       NL      16 23.51       0.01       0.1
+## 8       BE      16 25.41       0.05       0.8
+## 9       EL      16 29.62       0.17       2.6
+## 10      CZ      16 26.29      -0.08      -1.2
 \end{verbatim}
+
+Comprobamos que, concordantemente con la gráfica, hay diferentes
+comportamientos:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  En España, Italia y Grecia, las edades de emancipación promedio son
+  las más altas y no han hecho sino aumentar, ya que observamos
+  diferencias totales positivas (de 2.6 años en Grecia por ejemplo) y
+  aumentos anuales positivos (0.12 años en España al año).
+\item
+  En Polonia y Rumanía, las edades de emancipación comenzaron siendo
+  comparables a las del grupo anterior pero han caído en los últimos
+  años, ya que las diferencias totales y las medias son negativas en
+  este caso.
+\item
+  En Países Bajos, Francia y Alemania, la situación se ha mantenido
+  constante, con valores próximos a 0.
+\item
+  En República Checa la edad de emancipación ha caído 1.2 años.
+\item
+  En Bélgica ha subido 0.8 años.
+\end{enumerate}
 
 \subsection{Análisis bivariante: estudio de la correlación entre el
 aumento porcentual de los salarios y de los precios de alquiler y
 vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aumento-porcentual-de-los-salarios-y-de-los-precios-de-alquiler-y-vivienda}
 
+En la siguiente gráfica se muestra la relación entre los aumentos
+porcentuales anuales de los salarios y del precio de la vivienda.
+Visualmente se aprecia que la tendencia es positiva:
+
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1}
+
+A continuación calculamos las correlaciones de forma numérica para cada
+país, mediante los métodos de Pearson y Spearman. El caso de Polonia es
+aquel con la mayor correlación, mientras que en el caso de República
+Checa, es casi nula. En casi la totalidad de los casos, la correlación
+es muy baja, lo que indica que la conexión intrínseca entre subidas
+salariales y subidas en el precio de la vivienda es muy débil.
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -343,6 +424,13 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ          0.00748        0.104
 \end{verbatim}
 
+A continuación, calculamos el valor numérico de la pendiente de la
+regresión lineal mostrada en la figura: salvo en el caso de Rumanía y
+Polonia, donde los aumentos en el salario son en promedio superiores a
+los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la
+situación contraria, lo que muestra que los aumentos en el precio de la
+vivienda son en promedio más grandes.
+
 \begin{verbatim}
 ## # A tibble: 9 x 2
 ##   country   slope
@@ -358,7 +446,17 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ      0.00674
 \end{verbatim}
 
+Ahora repetimos el mismo análisis bivariante con los aumentos salariales
+frente a los aumentos del alquiler. Vemos que las tendencias son en
+general positivas, como en el caso de la vivienda, salvo para Italia,
+donde salarios y alquileres están ligeramente correlacionados de manera
+negativa.
+
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1}
+
+Las correlaciones ahora son algo mayores que en el caso anterior, pero
+aun así no son significativas, por lo que no podemos deducir una
+relación intrínseca entre ambos aumentos.
 
 \begin{verbatim}
 ## # A tibble: 9 x 3
@@ -375,6 +473,11 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ           0.470        0.479
 \end{verbatim}
 
+En el estudio de las pendientes, como ya se ha comentado, hay valores
+positivos en la mayoría de casos y además son mayores que en el caso de
+la vivienda, luego los aumentos salariales han sido mayores que los del
+alquiler (salvo en Italia y Polonia).
+
 \begin{verbatim}
 ## # A tibble: 9 x 2
 ##   country  slope
@@ -390,9 +493,56 @@ vivienda}\label{anuxe1lisis-bivariante-estudio-de-la-correlaciuxf3n-entre-el-aum
 ## 9 CZ       1.63
 \end{verbatim}
 
+En las siguientes gráficas se muestra, de forma superpuesta y para cada
+país, la evolución temporal de los salarios, el precio de la vivienda y
+los alquileres. Visualmente apreciamos diferentes casuísticas:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  En Polonia y Rumanía, los salarios han aumentado por encima de los
+  precios de la vivienda y del alquiler.
+\item
+  En Italia, los salarios han aumentado por encima del precio de la
+  vivienda pero no del alquiler.
+\item
+  En República Checa, los salarios han aumentado por encima del alquiler
+  pero no de la vivienda.
+\item
+  En el resto de países, los salarios están por debajo de ambos precios.
+\end{enumerate}
+
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-28-1}
+En la siguiente tabla vemos los aumentos totales de los 3 índices
+durante los últimos 15 años, así como las diferencias entre ellos
+(earn.m.house, earn.m.rent). Los resultados numéricos son coherentes con
+los gráficos: salvo en Polonia y Rumanía, en los demás países al menos 1
+de las diferencias es negativa, lo que indica que el poder adquisitivo
+ha caído con respecto al precio de la vivienda, del alquiler o de ambos.
+
+\begin{verbatim}
+##   country earn.total.dif house.total.dif rent.total.dif earn.m.house
+## 1      DE      88.594636        97.71084      18.123667    -9.116207
+## 2      FR       4.794068        30.31244      13.880629   -25.518367
+## 3      IT      -3.405396       -14.89726       6.512605    11.491864
+## 4      ES       8.966765        28.28162      13.101045   -19.314858
+## 5      PL     185.250507       103.82409      90.879121    81.426415
+## 6      RO     331.595266        30.51723      67.140263   301.078038
+## 7      NL      39.035604        88.29587      50.646778   -49.260267
+## 8      BE      20.058451        58.78371      39.381620   -38.725258
+## 9      CZ      85.798963       147.47899      64.961068   -61.680029
+##   earn.m.rent
+## 1   70.470969
+## 2   -9.086561
+## 3   -9.918001
+## 4   -4.134280
+## 5   94.371386
+## 6  264.455003
+## 7  -11.611173
+## 8  -19.323169
+## 9   20.837895
+\end{verbatim}
 
 \section{Conclusiones}\label{conclusiones}
 
