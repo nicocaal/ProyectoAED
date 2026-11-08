@@ -131,6 +131,10 @@ knitr::opts_chunk$set(fig.width = 6.5, fig.height = 3.5, out.width = '100%',
 
 # Introducción
 
+En los últimos meses, la situación de los jóvenes europeos ha vuelto al foco público. Las protestas en España y en Francia reflejan un malestar juvenil evidente que ha suscitado nuestro interés. En especial las protestas relacionadas con la emancipación de los jóvenes y la situación actual de la vivienda. En la misma localidad de Burjassot, donde estudiamos, fue desahuciado hace unas pocas semanas un investigador de la Universitat de València. Por esto hemos decidido conocer más sobre este tema.
+
+El foco de nuestra investigación será entonces el aumento de la dificultad de independizarse de los jóvenes. Nuestra pregunta principal será: ¿cómo ha empeorado la situación de la vivienda para los adultos jóvenes?. Así pues, emplearemos un conjunto de datos y aplicaremos una serie de métodos de análisis para poder responder con fundamentos y así entender mejor cuál es la situación real en la que se encuentran los jóvenes.
+
 # Metodología: preparación del conjunto de datos
 
 ## Importación de los DataFrames
@@ -267,6 +271,11 @@ por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
 cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
 
 ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
+
+
+if (!dir.exists('results')){
+  dir.create('results')
+} 
 ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
 
