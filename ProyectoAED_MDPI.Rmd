@@ -225,7 +225,11 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-Una vez cargados todos los datos que se desea estudiar, procederemos a crear el conjunto que los engloba. A continuación exploraremos las variables que conforman este conjunto y determinaremos cuál es la mejor forma para llevar a cabo el análisis.
+Los DataFrames a partir de los cuales se trabaja constan de una primera columna donde hay información relativa al país, al sexo, a la edad y otros parámetros que se han tenido en cuenta en la recopilación (por ejemplo país de nacimiento, grupo social, etc.). Por tanto, el primer paso es seleccionar solamente la información relativa al país, para lo que usamos funciones de manipulación de strings y expresiones regulares para seleccionar la parte de la cadena de texto que nos interesa.
+
+Una vez hecho esto, nos damos cuenta de que las columnas corresponden a los años de estudio, por lo que convertimos el DataFrame a formato tidy, creando una nueva variable (columna) llamada año, en la que cada instancia corresponde a un año distinto para cada país distinto. Las observaciones, por tanto, se disponen en una nueva variable (columna).
+
+Una vez cargados todos los datos que se desea estudiar, procedemos a crear un DataFrame conjunto que los engloba. A continuación exploramos las variables que conforman este DataFrame y determinamos cuál es la mejor forma para llevar a cabo el análisis.
 
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
@@ -281,6 +285,14 @@ ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 
 ## Transformación de variables
 
+Inicialmente, limitamos nuestro análisis temporal al periodo comprendido entre 2010 y 2025, ya que antes de este año la cobertura temporal de ciertas variables es demasiado pobre y, además, nos interesa estudiar solamente la evolución de las variables en los años inmediatamente anteriores, ya que remontarse demasiado en el pasado no es relevante en este proyecto.
+
+Como nuestro estudio se centra en la comparación de los precios de la vivienda/alquiler con el poder adquisitivo de los jóvenes, necesitamos establecer una escala que nos permita compararlos. De este modo, aplicamos a las variables earnings (salarios), price.rent (precio del alquiler) y price.house (precio de la vivienda) la siguiente transformación:
+
+$$ x = \frac{x}{x(t_0 = 2010)} \cdot 100 $$ Esto nos permite estudiar la evolución porcentual de las variables, ya que en el año de inicio $t_0 = 2010$ establecemos como referencia el $100\%$ y, por tanto, los valores posteriores se pueden interpretar como evoluciones en base a un porcentaje de $100\%$ .
+
+Para enriquecer nuestro estudio, creamos 4 nuevas variables age.diff, earn.diff, house.diff y rent.diff, que son la diferencia de cada valor con su valor correspondiente al año anterior. En el caso de las 3 variables porcentuales, esto representa el aumento porcentual anual (por ejemplo, un aumento de un $3\%$ al año), lo cual es útil en el posterior análisis estadístico.
+
 ```{r}
 # Limitamos el estudio desde el 2010 hasta el 2025
 jovenes.df %<>% filter(year >= 2010 & year <= 2025)
@@ -293,9 +305,6 @@ jovenes.df <- full_join(jovenes.df, year.start)
 
 # Ahora tomamos, para cada variable, un valor de 100 en el año de referencia, asi las podremos comparar mejor graficamente
 jovenes.df %<>% group_by(country) %>% mutate(earnings = earnings/earnings[year == unique(year.start)]*100, price.rent = rel.price2015.rent/rel.price2015.rent[year == unique(year.start)]*100, price.house = rel.price2015.house/rel.price2015.house[year == unique(year.start)]*100) %>% select(c(-year.start, -rel.price2015.rent, -rel.price2015.house)) %>% ungroup()
-
-# Calculamos los salarios en proporcion al precio de la vivienda y a los alquileres, respectivamente
-jovenes.df %<>% mutate(earn.prop.house = earnings/price.house*100, earn.prop.rent = earnings/price.rent*100)
 
 # Calculamos el aumento porcentual de los salarios, alquileres y precio de la vivienda para cada año
 jovenes.df %<>%
@@ -439,6 +448,8 @@ ggsave('results/univ_aumentos_medias.pdf', width = 6.5, height = 3.5, dpi = 300)
 
 ## Edad de emancipación
 
+A continuación se muestra la evolución temporal de la edad de emancipación por países, así como la evolución de la media de todos ellos:
+
 ```{r, message=FALSE, warning=FALSE}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
 ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
@@ -447,39 +458,75 @@ ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, c
 ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
 ```
 
+En la siguiente tabla observamos por países la edad de emancipación media en estos 15 años, el aumento anual medio (en años) y la diferencia total en la edad de emancipación en todo este tiempo.
+
 ```{r}
-media.edad <- jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.pct = round(mean(age.diff, na.rm = TRUE),2), total.dif = age.indep[length(age.indep)]-age.indep[1], .groups = 'drop') %>% as.data.frame()
+media.edad <- jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.diff = round(mean(age.diff, na.rm = TRUE),2), total.dif = age.indep[length(age.indep)]-age.indep[1], .groups = 'drop') %>% as.data.frame()
 media.edad
 # Media anual de cada pais de la edad de emancipación
 ```
 
+Comprobamos que, concordantemente con la gráfica, hay diferentes comportamientos:
+
+1.  En España, Italia y Grecia, las edades de emancipación promedio son las más altas y no han hecho sino aumentar, ya que observamos diferencias totales positivas (de 2.6 años en Grecia por ejemplo) y aumentos anuales positivos (0.12 años en España al año).
+
+2.  En Polonia y Rumanía, las edades de emancipación comenzaron siendo comparables a las del grupo anterior pero han caído en los últimos años, ya que las diferencias totales y las medias son negativas en este caso.
+
+3.  En Países Bajos, Francia y Alemania, la situación se ha mantenido constante, con valores próximos a 0.
+
+4.  En República Checa la edad de emancipación ha caído 1.2 años.
+
+5.  En Bélgica ha subido 0.8 años.
+
 ## Análisis bivariante: estudio de la correlación entre el aumento porcentual de los salarios y de los precios de alquiler y vivienda
+
+En la siguiente gráfica se muestra la relación entre los aumentos porcentuales anuales de los salarios y del precio de la vivienda. Visualmente se aprecia que la tendencia es positiva:
 
 ```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
    geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Housing price percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio de la vivienda', subtitle = 'En función de países')
 ```
 
+A continuación calculamos las correlaciones de forma numérica para cada país, mediante los métodos de Pearson y Spearman. El caso de Polonia es aquel con la mayor correlación, mientras que en el caso de República Checa, es casi nula. En casi la totalidad de los casos, la correlación es muy baja, lo que indica que la conexión intrínseca entre subidas salariales y subidas en el precio de la vivienda es muy débil.
+
 ```{r}
 jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, house.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, house.diff, method = 'spearman', use = 'complete.obs'))
 ```
 
+A continuación, calculamos el valor numérico de la pendiente de la regresión lineal mostrada en la figura: salvo en el caso de Rumanía y Polonia, donde los aumentos en el salario son en promedio superiores a los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la situación contraria, lo que muestra que los aumentos en el precio de la vivienda son en promedio más grandes.
+
 ```{r}
 jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ house.diff)[[1]][2])
 ```
+
+Ahora repetimos el mismo análisis bivariante con los aumentos salariales frente a los aumentos del alquiler. Vemos que las tendencias son en general positivas, como en el caso de la vivienda, salvo para Italia, donde salarios y alquileres están ligeramente correlacionados de manera negativa.
 
 ```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = rent.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Rent percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio del alquiler', subtitle = 'En función de países')
 ```
 
+Las correlaciones ahora son algo mayores que en el caso anterior, pero aun así no son significativas, por lo que no podemos deducir una relación intrínseca entre ambos aumentos.
+
 ```{r}
 jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, rent.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, rent.diff, method = 'spearman', use = 'complete.obs'))
 ```
 
+En el estudio de las pendientes, como ya se ha comentado, hay valores positivos en la mayoría de casos y además son mayores que en el caso de la vivienda, luego los aumentos salariales han sido mayores que los del alquiler (salvo en Italia y Polonia).
+
 ```{r}
 jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ rent.diff)[[1]][2])
 ```
+
+En las siguientes gráficas se muestra, de forma superpuesta y para cada país, la evolución temporal de los salarios, el precio de la vivienda y los alquileres. Visualmente apreciamos diferentes casuísticas:
+
+1.  En Polonia y Rumanía, los salarios han aumentado por encima de los precios de la vivienda y del alquiler.
+
+2.  En Italia, los salarios han aumentado por encima del precio de la vivienda pero no del alquiler.
+
+3.  En República Checa, los salarios han aumentado por encima del alquiler pero no de la vivienda.
+
+4.  En el resto de países, los salarios están por debajo de ambos precios.
 
 ```{r, message=FALSE, warning=FALSE, results='hide', fig.width=8.5, fig.height=7}
 ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) + 
@@ -489,11 +536,10 @@ ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) 
 ggsave('results/viviendas_salarios.pdf', width = 14, height = 10, dpi = 300)
 ```
 
-```{r, message=FALSE, warning=FALSE, results='hide', fig.width=8.5, fig.height=7}
-ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) + 
-  geom_line(aes(x = year, y = earn.prop.house, color = 'by house prices'), linewidth = 1, na.rm = TRUE) + 
-  geom_line(aes(x = year, y = earn.prop.rent, color = 'by rent'), linewidth = 1, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free_y') + labs(title = 'Evolución del salario real en proporción al precio de la vivienda y del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
-ggsave('results/proporcion_salario.pdf', width = 14, height = 10, dpi = 300)
+En la siguiente tabla vemos los aumentos totales de los 3 índices durante los últimos 15 años, así como las diferencias entre ellos (earn.m.house, earn.m.rent). Los resultados numéricos son coherentes con los gráficos: salvo en Polonia y Rumanía, en los demás países al menos 1 de las diferencias es negativa, lo que indica que el poder adquisitivo ha caído con respecto al precio de la vivienda, del alquiler o de ambos.
+
+```{r}
+jovenes.df %>% select(country, earn.diff, house.diff, rent.diff) %>% filter(complete.cases(.)) %>% group_by(country) %>% summarise(earn.total.dif = sum(earn.diff, na.rm = TRUE), house.total.dif = sum(house.diff, na.rm = TRUE), rent.total.dif = sum(rent.diff, na.rm = TRUE), .groups = 'drop') %>% as.data.frame() %>% mutate(earn.m.house = earn.total.dif-house.total.dif, earn.m.rent = earn.total.dif- rent.total.dif)
 ```
 
 # Conclusiones
