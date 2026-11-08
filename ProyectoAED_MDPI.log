@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.11.8)  8 NOV 2026 20:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.11.8)  8 NOV 2026 20:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -944,7 +944,7 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \c@nlinenum=\count415
 \TeXr@lab=\toks65
 )
-Package translations Info: No language package found. I am going to use `english' as default language. on input line 205.
+Package translations Info: No language package found. I am going to use `english' as default language. on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2026-11-03 v7.01t Hypertext links for LaTeX
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
@@ -1042,37 +1042,37 @@ Package cleveref Info: `amsthm' support loaded on input line 3026.
 ) (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/firstaid/latex-firstaid-pkg-cleveref.ltx
 ==> First Aid for cleveref.sty applied!
 )
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 205.
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 ) (./ProyectoAED_MDPI.aux)
 \openout1 = `ProyectoAED_MDPI.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 205.
-LaTeX Font Info:    ... okay on input line 205.
-LaTeX Info: Redefining \microtypecontext on input line 205.
-Package microtype Info: Applying patch `item' on input line 205.
-Package microtype Info: Applying patch `toc' on input line 205.
-Package microtype Info: Applying patch `eqnum' on input line 205.
-Package microtype Info: Applying patch `footnote' on input line 205.
-Package microtype Info: Applying patch `verbatim' on input line 205.
-LaTeX Info: Redefining \microtypesetup on input line 205.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Info: Redefining \microtypecontext on input line 206.
+Package microtype Info: Applying patch `item' on input line 206.
+Package microtype Info: Applying patch `toc' on input line 206.
+Package microtype Info: Applying patch `eqnum' on input line 206.
+Package microtype Info: Applying patch `footnote' on input line 206.
+Package microtype Info: Applying patch `verbatim' on input line 206.
+LaTeX Info: Redefining \microtypesetup on input line 206.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1088,7 +1088,7 @@ File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 ) (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl
 File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 205.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 206.
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
 * driver: pdftex
@@ -1133,74 +1133,74 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 Package caption Info: threeparttable package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 205.
+Package hyperref Info: Link coloring ON on input line 206.
 (./ProyectoAED_MDPI.out) (./ProyectoAED_MDPI.out)
 \@outlinefile=\write5
 \openout5 = `ProyectoAED_MDPI.out'.
 
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 205.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
-Underfull \hbox (badness 3590) in paragraph at lines 205--205
+Underfull \hbox (badness 3590) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) Submitted to \T1/ppl/m/it/7 (+20) Jour-nal Not Spec-i-fied
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) un-der the terms and con-di-tions
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) of the Cre-ative Com-mons Attri-
  []
 
 
-Underfull \hbox (badness 8019) in paragraph at lines 205--205
+Underfull \hbox (badness 8019) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) bu-tion (CC BY) li-cense ([][]https://[][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 [][]\T1/ppl/m/n/7 (+20) creativecommons.org/licenses/by/[][]
  []
 
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 205.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 205.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 205.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 205.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 205.
+(Font)              scaled to size 10.42007pt on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 205.
+(Font)              scaled to size 7.91925pt on input line 206.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 205.
+(Font)              scaled to size 6.25204pt on input line 206.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 205.
+(Font)              scaled to size 10.42007pt on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 205.
+(Font)              scaled to size 7.91925pt on input line 206.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 205.
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 205.
+(Font)              scaled to size 6.25204pt on input line 206.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 206.
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
@@ -1211,39 +1211,39 @@ Package microtype Info: Loading generic protrusion settings for font family
 (c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-eur.cfg
 File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 )
-LaTeX Font Info:    Redeclaring symbol font `AMSb' on input line 205.
+LaTeX Font Info:    Redeclaring symbol font `AMSb' on input line 206.
 LaTeX Font Info:    Overwriting symbol font `AMSb' in version `normal'
-(Font)                  U/msb/m/n --> U/msb/m/n on input line 205.
+(Font)                  U/msb/m/n --> U/msb/m/n on input line 206.
 LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
-(Font)                  U/msb/m/n --> U/msb/m/n on input line 205.
-Package marginnote Info: Margin note 1.1 is on absolute page 1 on input line 205.
-Package marginnote Info: right page because not two side mode on input line 205.
+(Font)                  U/msb/m/n --> U/msb/m/n on input line 206.
+Package marginnote Info: Margin note 1.1 is on absolute page 1 on input line 206.
+Package marginnote Info: right page because not two side mode on input line 206.
 
-Underfull \hbox (badness 3590) in paragraph at lines 205--205
+Underfull \hbox (badness 3590) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) Submitted to \T1/ppl/m/it/7 (+20) Jour-nal Not Spec-i-fied
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) un-der the terms and con-di-tions
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) of the Cre-ative Com-mons Attri-
  []
 
 
-Underfull \hbox (badness 8019) in paragraph at lines 205--205
+Underfull \hbox (badness 8019) in paragraph at lines 206--206
 \T1/ppl/m/n/7 (+20) bu-tion (CC BY) li-cense ([][]https://[][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 205--205
+Underfull \hbox (badness 10000) in paragraph at lines 206--206
 [][]\T1/ppl/m/n/7 (+20) creativecommons.org/licenses/by/[][]
  []
 
-Package marginnote Info: xpos seems to be 167.01753pt on input line 205.
+Package marginnote Info: xpos seems to be 167.01753pt on input line 206.
 Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
 (epstopdf)                    date: 2026-11-08 17:59:33
 (epstopdf)                    size: 736802 bytes
@@ -1251,35 +1251,25 @@ Package epstopdf Info: Source file: <Definitions/logo-mdpi.eps>
 (epstopdf)                    date: 2026-11-08 17:59:33
 (epstopdf)                    size: 44032 bytes
 (epstopdf)             Command: <repstopdf --outfile=Definitions/logo-mdpi-eps-converted-to.pdf Definitions/logo-mdpi.eps>
-(epstopdf)             \includegraphics on input line 205.
+(epstopdf)             \includegraphics on input line 206.
 Package epstopdf Info: Output file is already uptodate.
 <Definitions/logo-mdpi-eps-converted-to.pdf, id=58, 88.33pt x 58.2175pt>
 File: Definitions/logo-mdpi-eps-converted-to.pdf Graphic file (type pdf)
 <use Definitions/logo-mdpi-eps-converted-to.pdf>
-Package pdftex.def Info: Definitions/logo-mdpi-eps-converted-to.pdf  used on input line 205.
+Package pdftex.def Info: Definitions/logo-mdpi-eps-converted-to.pdf  used on input line 206.
 (pdftex.def)             Requested size: 43.16885pt x 28.45274pt.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 205.
+(Font)              scaled to size 8.33606pt on input line 206.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 205.
+(Font)              scaled to size 5.21004pt on input line 206.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 205.
+(Font)              scaled to size 8.33606pt on input line 206.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 205.
+(Font)              scaled to size 5.21004pt on input line 206.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmss' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf, id=61, 469.755pt x 252.945pt>
-File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
-<use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 261.
-(pdftex.def)             Requested size: 394.35522pt x 212.34499pt.
-
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 261--262
-[][] 
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 20.0pt, for example:
@@ -1290,19 +1280,26 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [1
 
 {c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc} <./Definitions/logo-mdpi-eps-converted-to.pdf>]
-Overfull \hbox (2.39151pt too wide) in paragraph at lines 273--279
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf, id=79, 469.755pt x 252.945pt>
+File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
+<use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf>
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 290.
+(pdftex.def)             Requested size: 394.35522pt x 212.34499pt.
+
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 290--291
+[][] 
+ []
+
+
+Overfull \hbox (2.39151pt too wide) in paragraph at lines 306--312
 []\T1/ppl/m/n/10 (-20) Como nue-stro es-tu-dio se cen-tra en la com-para-ción de los pre-cios de la vivienda/alquiler
  []
 
 
-Overfull \hbox (7.97302pt too wide) in paragraph at lines 286--292
+Overfull \hbox (7.97302pt too wide) in paragraph at lines 319--325
 []\T1/ppl/m/n/10 (-20) Para en-rique-cer nue-stro es-tu-dio, creamos 4 nuevas vari-ables age.diff, earn.diff, house.diff
  []
 
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1311,46 +1308,47 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
 [2 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf>]
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf, id=94, 469.755pt x 397.485pt>
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf, id=93, 469.755pt x 397.485pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf  used on input line 355.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf  used on input line 388.
 (pdftex.def)             Requested size: 394.35522pt x 333.68497pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 355--356
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 388--389
 [][] 
  []
 
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf, id=95, 469.755pt x 252.945pt>
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[3]
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf, id=101, 469.755pt x 252.945pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 357.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf  used on input line 390.
 (pdftex.def)             Requested size: 394.35522pt x 212.34499pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 357--358
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 390--391
 [][] 
  []
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 16.18796pt, for example:
-(fancyhdr)                \setlength{\headheight}{16.18796pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
-
-[3 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf>]
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf, id=107, 469.755pt x 252.945pt>
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf, id=102, 469.755pt x 252.945pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf  used on input line 365.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf  used on input line 398.
 (pdftex.def)             Requested size: 394.35522pt x 212.34499pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 365--366
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 398--399
 [][] 
  []
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1359,14 +1357,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[4 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf> <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf>]
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf, id=126, 469.755pt x 469.755pt>
+[4 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1.pdf> <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf>]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 16.18796pt, for example:
+(fancyhdr)                \setlength{\headheight}{16.18796pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
+
+[5 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1.pdf>]
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf, id=132, 469.755pt x 469.755pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf  used on input line 426.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf  used on input line 459.
 (pdftex.def)             Requested size: 394.35522pt x 394.35498pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 426--427
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 459--460
 [][] 
  []
 
@@ -1377,14 +1383,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[5 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf>]
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf, id=138, 469.755pt x 469.755pt>
+[6 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1.pdf>]
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf, id=142, 469.755pt x 469.755pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 492.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf  used on input line 525.
 (pdftex.def)             Requested size: 394.35522pt x 394.35498pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 492--493
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 525--526
 [][] 
  []
 
@@ -1395,10 +1401,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[6]
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
+[7]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 16.18796pt, for example:
@@ -1406,19 +1409,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[7 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf>]
-<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf, id=156, 614.295pt x 505.89pt>
+[8 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1.pdf>]
+<ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf, id=161, 614.295pt x 505.89pt>
 File: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf Graphic file (type pdf)
 <use ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf>
-Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 566.
+Package pdftex.def Info: ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf  used on input line 599.
 (pdftex.def)             Requested size: 394.35522pt x 324.76427pt.
 
-Overfull \hbox (21.33955pt too wide) in paragraph at lines 566--567
+Overfull \hbox (21.33955pt too wide) in paragraph at lines 599--600
 [][] 
  []
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1427,15 +1427,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[8 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf>]
+[9 <./ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf>]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 608.
+(Font)              scaled to size 9.37807pt on input line 641.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 608.
+(Font)              scaled to size 7.29405pt on input line 641.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 608.
+(Font)              scaled to size 9.37807pt on input line 641.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 608.
+(Font)              scaled to size 7.29405pt on input line 641.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
@@ -1447,8 +1447,8 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 702--702
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 735--735
 
  []
 
@@ -1461,7 +1461,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-4.18796pt}.
 
-[10] 
+[11] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./ProyectoAED_MDPI.aux)
  ***********
@@ -1472,18 +1472,18 @@ Package rerunfilecheck Info: File `ProyectoAED_MDPI.out' has not changed.
 (rerunfilecheck)             Checksum: CBBED35FED0C87872221E46B1EA207E1;2986.
  ) 
 Here is how much of TeX's memory you used:
- 35687 strings out of 468940
- 681130 string characters out of 5451852
+ 35703 strings out of 468940
+ 681263 string characters out of 5451852
  1171700 words of memory out of 5000000
  63885 multiletter control sequences out of 15000+600000
- 692560 words of font info for 342 fonts, out of 8000000 for 9000
+ 693355 words of font info for 352 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 123i,12n,121p,1489b,720s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 123i,12n,121p,1489b,666s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tctt0900.600pk> <c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt0900.600pk> <c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> <c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.375pk><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/Nico/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on ProyectoAED_MDPI.pdf (10 pages, 240671 bytes).
+Output written on ProyectoAED_MDPI.pdf (11 pages, 243409 bytes).
 PDF statistics:
- 298 PDF objects out of 1000 (max. 8388607)
- 188 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 302 PDF objects out of 1000 (max. 8388607)
+ 191 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
  92813 words of extra memory for PDF output out of 106986 (max. 10000000)
 

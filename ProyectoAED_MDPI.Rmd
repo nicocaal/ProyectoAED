@@ -117,6 +117,7 @@ appendix: appendix.tex
 endnotes: false
 header-includes:
   - \usepackage{fvextra}
+  - \usepackage{float}
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 output: 
   rticles::mdpi_article:
@@ -130,6 +131,10 @@ knitr::opts_chunk$set(fig.width = 6.5, fig.height = 3.5, out.width = '100%',
 ```
 
 # Introducción
+
+En los últimos meses, la situación de los jóvenes europeos ha vuelto al foco público. Las protestas en España y en Francia reflejan un malestar juvenil evidente que ha suscitado nuestro interés. En especial las protestas relacionadas con la emancipación de los jóvenes y la situación actual de la vivienda. En la misma localidad de Burjassot, donde estudiamos, fue desahuciado hace unas pocas semanas un investigador de la Universitat de València. Por esto hemos decidido conocer más sobre este tema.
+
+El foco de nuestra investigación será entonces el aumento de la dificultad de independizarse de los jóvenes. Nuestra pregunta principal será: ¿cómo ha empeorado la situación de la vivienda para los adultos jóvenes?. Así pues, emplearemos un conjunto de datos y aplicaremos una serie de métodos de análisis para poder responder con fundamentos y así entender mejor cuál es la situación real en la que se encuentran los jóvenes.
 
 # Metodología: preparación del conjunto de datos
 
@@ -256,6 +261,8 @@ tab.sumario <- knitr::kable(tab.df, format = 'latex', booktabs = TRUE, linesep =
 knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables del conjunto de datos.}\n\\centering\\footnotesize\\setlength{\\tabcolsep}{4pt}\n', paste(tab.sumario, collapse = '\n'), '\n\\end{table}\n'))
 ```
 
+En esta tabla podemos notar, por ejemplo, que los valores de 'Top Level' (valor más repetido) para las variables country y year son DE ("Deutschland", representa Alemania, el primer país que aparece) y 2000 (el primer año que se muestrea). Esto es debido a que como todos los países y años aparecen el mismo número de veces, la función empleada devuelve el primero para cada caso. Pero lo verdaderamente interesante viene analizando las dos columnas de valores perdidos (NA), Miss. freq y Miss. frac. En estas podemos ver como en especial para las variables relacionadas con el salario encontramos un gran porcentaje de estos valores. Vamos a investigar más a fondo.
+
 ```{r, results='hide'}
 dim(jovenes.df)
 # Numero de registros y de variables
@@ -272,8 +279,15 @@ por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
 cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num), ~ sum(!is.na(.x)))) %>% pivot_longer(-year, names_to = 'variable', values_to = 'n.paises') %>% mutate(variable = factor(variable, levels = rev(vars.num)))
 
 ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
+
+
+if (!dir.exists('results')){
+  dir.create('results')
+} 
 ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
+
+Así pues, gracias a esta gráfica podemos comprobar como en general las variables no estan muestreadas para los 10 países más poblados hasta 2010. Esto será importante para tratar nuestro conjunto.
 
 ## Transformación de variables
 
@@ -453,7 +467,7 @@ ggsave('results/edad_emancipacion.pdf', width = 14, height = 10, dpi = 300)
 En la siguiente tabla observamos por países la edad de emancipación media en estos 15 años, el aumento anual medio (en años) y la diferencia total en la edad de emancipación en todo este tiempo.
 
 ```{r}
-jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.diff = round(mean(age.diff, na.rm = TRUE),2), total.dif = sum(age.diff, na.rm = TRUE), .groups = 'drop') %>% as.data.frame() %>% kable(format = 'latex', booktabs = TRUE, caption = 'Edad de emancipación media y diferencias anuales', digits = 2) %>% kable_styling(latex_options = 'hold_position') 
+jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean(age.indep, na.rm = TRUE),2), media.diff = round(mean(age.diff, na.rm = TRUE),2), total.dif = sum(age.diff, na.rm = TRUE), .groups = 'drop') %>% as.data.frame() %>% kable(format = 'latex', booktabs = TRUE, caption = 'Edad de emancipación media y diferencias anuales', digits = 2) %>% kable_styling(latex_options = 'HOLD_position') 
 # Media anual de cada pais de la edad de emancipación
 ```
 
@@ -476,18 +490,19 @@ En la siguiente gráfica se muestra la relación entre los aumentos porcentuales
 ```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
    geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Housing price percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio de la vivienda', subtitle = 'En función de países')
+ggsave('results/salarios_vs_vivienda.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 A continuación calculamos las correlaciones de forma numérica para cada país, mediante los métodos de Pearson y Spearman. El caso de Polonia es aquel con la mayor correlación, mientras que en el caso de República Checa, es casi nula. En casi la totalidad de los casos, la correlación es muy baja, lo que indica que la conexión intrínseca entre subidas salariales y subidas en el precio de la vivienda es muy débil.
 
 ```{r}
-jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, house.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, house.diff, method = 'spearman', use = 'complete.obs')) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Correlaciones entre salario y precio de la vivienda', digits = 2) %>% kable_styling(latex_options = 'hold_position')
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, house.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, house.diff, method = 'spearman', use = 'complete.obs')) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Correlaciones entre salario y precio de la vivienda', digits = 2) %>% kable_styling(latex_options = 'HOLD_position')
 ```
 
-A continuación, calculamos el valor numérico de la pendiente de la regresión lineal mostrada en la figura: salvo en el caso de Rumanía y Polonia, donde los aumentos en el salario son en promedio superiores a los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la situación contraria, lo que muestra que los aumentos en el precio de la vivienda son en promedio más grandes.
+A continuación, calculamos el valor numérico de la pendiente de la regresión lineal mostrada en la figura: salvo en el caso de Rumanía y Polonia, donde los aumentos en el salario son en promedio superiores a los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la situación contraria, lo que muestra que la variabilidad del precio de la vivienda es mayor que la de los salarios.
 
 ```{r}
-jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ house.diff)[[1]][2]) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Pendientes de salario frente a precio de la vivienda', digits = 2) %>% kable_styling(latex_options = 'hold_position')
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ house.diff)[[1]][2]) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Pendientes de salario frente a precio de la vivienda', digits = 2) %>% kable_styling(latex_options = 'HOLD_position')
 ```
 
 Ahora repetimos el mismo análisis bivariante con los aumentos salariales frente a los aumentos del alquiler. Vemos que las tendencias son en general positivas, como en el caso de la vivienda, salvo para Italia, donde salarios y alquileres están ligeramente correlacionados de manera negativa.
@@ -495,18 +510,19 @@ Ahora repetimos el mismo análisis bivariante con los aumentos salariales frente
 ```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = rent.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Rent percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio del alquiler', subtitle = 'En función de países')
+ggsave('results/salarios_vs_alquiler.pdf', width = 14, height = 10, dpi = 300)
 ```
 
 Las correlaciones ahora son algo mayores que en el caso anterior, pero aun así no son significativas, por lo que no podemos deducir una relación intrínseca entre ambos aumentos.
 
 ```{r}
-jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, rent.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, rent.diff, method = 'spearman', use = 'complete.obs')) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Correlaciones entre salario y alquiler', digits = 2) %>% kable_styling(latex_options = 'hold_position')
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(cor.pearson = cor(earn.diff, rent.diff, method = 'pearson', use = 'complete.obs'), cor.spearman = cor(earn.diff, rent.diff, method = 'spearman', use = 'complete.obs')) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Correlaciones entre salario y alquiler', digits = 2) %>% kable_styling(latex_options = 'HOLD_position')
 ```
 
-En el estudio de las pendientes, como ya se ha comentado, hay valores positivos en la mayoría de casos y además son mayores que en el caso de la vivienda, luego los aumentos salariales han sido mayores que los del alquiler (salvo en Italia y Polonia).
+En el estudio de las pendientes, como ya se ha comentado, hay valores positivos en la mayoría de casos y además son mayores que en el caso de la vivienda, luego la variabilidad de los salarios es mayor que la del alquiler (salvo en Italia y Polonia).
 
 ```{r}
-jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ rent.diff)[[1]][2]) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Pendientes de salario frente a alquiler', digits = 2) %>% kable_styling(latex_options = 'hold_position')
+jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope = lm(earn.diff ~ rent.diff)[[1]][2]) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Pendientes de salario frente a alquiler', digits = 2) %>% kable_styling(latex_options = 'HOLD_position')
 ```
 
 En las siguientes gráficas se muestra, de forma superpuesta y para cada país, la evolución temporal de los salarios, el precio de la vivienda y los alquileres. Visualmente apreciamos diferentes casuísticas:
@@ -530,7 +546,7 @@ ggsave('results/viviendas_salarios.pdf', width = 14, height = 10, dpi = 300)
 En la siguiente tabla vemos los aumentos totales de los 3 índices durante los últimos 15 años, así como las diferencias entre ellos (earn.m.house, earn.m.rent). Los resultados numéricos son coherentes con los gráficos: salvo en Polonia y Rumanía, en los demás países al menos 1 de las diferencias es negativa, lo que indica que el poder adquisitivo ha caído con respecto al precio de la vivienda, del alquiler o de ambos.
 
 ```{r}
-jovenes.df %>% select(country, earn.diff, house.diff, rent.diff) %>% filter(complete.cases(.)) %>% group_by(country) %>% summarise(earn.total.dif = sum(earn.diff, na.rm = TRUE), house.total.dif = sum(house.diff, na.rm = TRUE), rent.total.dif = sum(rent.diff, na.rm = TRUE), .groups = 'drop') %>% as.data.frame() %>% mutate(earn.m.house = earn.total.dif-house.total.dif, earn.m.rent = earn.total.dif- rent.total.dif) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Diferencias totales y evolución del poder adquisitivo', digits = 2) %>% kable_styling(latex_options = 'hold_position')
+jovenes.df %>% select(country, earn.diff, house.diff, rent.diff) %>% filter(complete.cases(.)) %>% group_by(country) %>% summarise(earn.total.dif = sum(earn.diff, na.rm = TRUE), house.total.dif = sum(house.diff, na.rm = TRUE), rent.total.dif = sum(rent.diff, na.rm = TRUE), .groups = 'drop') %>% as.data.frame() %>% mutate(earn.m.house = earn.total.dif-house.total.dif, earn.m.rent = earn.total.dif- rent.total.dif) %>% kable(format = 'latex', booktabs = TRUE, caption = 'Diferencias totales y evolución del poder adquisitivo', digits = 2) %>% kable_styling(latex_options = 'HOLD_position')
 ```
 
 # Conclusiones

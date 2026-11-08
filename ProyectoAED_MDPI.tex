@@ -185,6 +185,7 @@ Tel.: +XX-000-00-0000.}
 
 
 \usepackage{fvextra}
+\usepackage{float}
 \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -209,6 +210,23 @@ Tel.: +XX-000-00-0000.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introducción}\label{introducciuxf3n}
+
+En los últimos meses, la situación de los jóvenes europeos ha vuelto al
+foco público. Las protestas en España y en Francia reflejan un malestar
+juvenil evidente que ha suscitado nuestro interés. En especial las
+protestas relacionadas con la emancipación de los jóvenes y la situación
+actual de la vivienda. En la misma localidad de Burjassot, donde
+estudiamos, fue desahuciado hace unas pocas semanas un investigador de
+la Universitat de València. Por esto hemos decidido conocer más sobre
+este tema.
+
+El foco de nuestra investigación será entonces el aumento de la
+dificultad de independizarse de los jóvenes. Nuestra pregunta principal
+será: ¿cómo ha empeorado la situación de la vivienda para los adultos
+jóvenes?. Así pues, emplearemos un conjunto de datos y aplicaremos una
+serie de métodos de análisis para poder responder con fundamentos y así
+entender mejor cuál es la situación real en la que se encuentran los
+jóvenes.
 
 \section{Metodología: preparación del conjunto de
 datos}\label{metodologuxeda-preparaciuxf3n-del-conjunto-de-datos}
@@ -258,7 +276,22 @@ rel.price2015.house & numeric & 177 & 95.2 & 2 & 0.007 & 89 & 0.331\\
 \end{tabular}
 \end{table}
 
+En esta tabla podemos notar, por ejemplo, que los valores de `Top Level'
+(valor más repetido) para las variables country y year son DE
+(``Deutschland'', representa Alemania, el primer país que aparece) y
+2000 (el primer año que se muestrea). Esto es debido a que como todos
+los países y años aparecen el mismo número de veces, la función empleada
+devuelve el primero para cada caso. Pero lo verdaderamente interesante
+viene analizando las dos columnas de valores perdidos (NA), Miss. freq y
+Miss. frac. En estas podemos ver como en especial para las variables
+relacionadas con el salario encontramos un gran porcentaje de estos
+valores. Vamos a investigar más a fondo.
+
 \includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1}
+
+Así pues, gracias a esta gráfica podemos comprobar como en general las
+variables no estan muestreadas para los 10 países más poblados hasta
+2010. Esto será importante para tratar nuestro conjunto.
 
 \subsection{Transformación de
 variables}\label{transformaciuxf3n-de-variables}
@@ -368,7 +401,7 @@ En la siguiente tabla observamos por países la edad de emancipación
 media en estos 15 años, el aumento anual medio (en años) y la diferencia
 total en la edad de emancipación en todo este tiempo.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-20}Edad de emancipación media y diferencias anuales}
 \centering
@@ -432,7 +465,7 @@ Checa, es casi nula. En casi la totalidad de los casos, la correlación
 es muy baja, lo que indica que la conexión intrínseca entre subidas
 salariales y subidas en el precio de la vivienda es muy débil.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-22}Correlaciones entre salario y precio de la vivienda}
 \centering
@@ -461,7 +494,7 @@ los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la
 situación contraria, lo que muestra que los aumentos en el precio de la
 vivienda son en promedio más grandes.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-23}Pendientes de salario frente a precio de la vivienda}
 \centering
@@ -495,7 +528,7 @@ Las correlaciones ahora son algo mayores que en el caso anterior, pero
 aun así no son significativas, por lo que no podemos deducir una
 relación intrínseca entre ambos aumentos.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-25}Correlaciones entre salario y alquiler}
 \centering
@@ -522,7 +555,7 @@ positivos en la mayoría de casos y además son mayores que en el caso de
 la vivienda, luego los aumentos salariales han sido mayores que los del
 alquiler (salvo en Italia y Polonia).
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-26}Pendientes de salario frente a alquiler}
 \centering
@@ -572,7 +605,7 @@ los gráficos: salvo en Polonia y Rumanía, en los demás países al menos 1
 de las diferencias es negativa, lo que indica que el poder adquisitivo
 ha caído con respecto al precio de la vivienda, del alquiler o de ambos.
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \caption{\label{tab:unnamed-chunk-28}Diferencias totales y evolución del poder adquisitivo}
 \centering
