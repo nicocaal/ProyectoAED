@@ -59,8 +59,9 @@
 \RequirePackage{pbox} % For biography environment
 \RequirePackage{ragged2e} % For command \justifying
 \RequirePackage[]{tocloft} % For dots in TOC. If subfigure package is loaded, the subfigure option needs to be added here to avoid clash: \RequirePackage[subfigure]{tocloft}
-% [modificado] Sin columna izquierda: marginnote/marginfix eliminados
-\newcommand{\clearmargin}{}
+\RequirePackage{marginnote} % For left column
+\reversemarginpar % To have the left column on the left side
+\RequirePackage{marginfix} % For command \clearmargin for manually moving the left column to the next page
 \RequirePackage{enotez} % For endnotes
 
 %% OPTIONS
@@ -610,47 +611,409 @@
 
 
 %%%% Header and footer on first page
-% [modificado] Primera pagina: sin cabecera ni pie (solo numero de pagina centrado)
-\fancypagestyle{plain}{%
-	\fancyhf{}
-	\renewcommand{\headrulewidth}{0pt}
-	\renewcommand{\footrulewidth}{0pt}
-	\fancyfoot[C]{\footnotesize\thepage}
-}
+%% The plain page style needs to be redefined because with \maketitle in the article class, LaTeX applies the the plain page style automatically to the first page.
+\ifthenelse{\equal{\@journal}{preprints} %
+		\OR \equal{\@arttype}{Book}}{%
+	\fancypagestyle{plain}{%
+		\fancyhf{}
+		\ifthenelse{\equal{\@arttype}{Book}}{
+        			\fancyfoot[C]{\footnotesize\thepage}
+     	   		}{%
+			}		
+		}
+	}{%
+	\ifthenelse{\equal{\@arttype}{Supfile}}{
+		\fancypagestyle{plain}{
+			\fancyhf{}
+			\fancyhead[R]{
+				\footnotesize %
+				S\thepage{} of S\pageref*{LastPage}%
+				\\\rule{\fulllength}{0.4pt}%
+				}%
+			\fancyhead[L]{
+				\footnotesize %
+				\ifthenelse{\equal{\@status}{submit}}{%
+					Version {\@ \today} submitted to {\em \journalname}%
+					}{%
+					{\em \journalname} %
+					{\bfseries \@pubyear}, %
+					{\em \@pubvolume}, %
+					\ifthenelse{\equal{\@continuouspages}{\@empty}}{%
+						\@articlenumber%
+						}{%
+						S\@firstpage\ifnumcomp{\totvalue{page}-1}{=}{\@firstpage}{}{--S\pageref*{LastPage}}%
+						}%
+					. {\changeurlcolor{black}%
+        					\url{https://doi.org/\@doinum}}%
+					}%
+					\\\vspace{-2pt}\rule{\fulllength}{0.4pt}%
+				}%
+			}%
+		}{
+		\fancypagestyle{plain}{
+		\renewcommand{\footrulewidth}{0.4pt}
+			\fancyhead{\null\vspace{8pt}}
+			\fancyfoot[L]{
+			\fontsize{8}{8}\selectfont
+			\ifthenelse{\equal{\@status}{submit}}{%
+				Version {\@ \today} submitted to {\em \journalname}%
+				}{%
+				{\em\journalname\ }{\bfseries\@pubyear}, {\em \@pubvolume}, %
+				\ifthenelse{\equal{\@continuouspages}{\@empty}}{%
+					\@articlenumber. %
+					}{%
+					\@firstpage\ifnumcomp{\totvalue{page}-1}{=}{\@firstpage}{}{--\pageref*{LastPage}}. %
+					}%
+					{\changeurlcolor{black}%
+					\url{https://doi.org/\@doinum}
+					}
+				}%
+			}
+			\fancyfoot[R]{
+			\fontsize{8}{8}\selectfont
+			{\changeurlcolor{black}%
+			\url{https://www.mdpi.com/journal/\@journal}}%
+			}
+			}
+		}%
+	}%	
 
 
 %%%% Maketitle part 1: Logo, Arttype, Title, Author
-% [modificado] Portada simplificada: solo titulo y autores (sin logos, tipo de articulo, columna izquierda)
-\renewcommand{\@maketitle}{%
+\renewcommand{\@maketitle}{
+	\ifthenelse{\equal{\@arttype}{Book}}{}{
+		\ifthenelse{\equal{\@leftcolumnsplit}{\@empty}}{% Default option for the left column
+			\marginnote[\contentleftcolumn]{}[\MyLen] % Bottom aligned
+			}{%
+		}
+		\begin{adjustwidth}{-\extralength}{}
+	}
 	\begin{flushleft}
-		\fontsize{18}{22}\selectfont
+	\ifthenelse{\equal{\@arttype}{Supfile}}{%
+		\fontsize{18}{18}\selectfont
+		\raggedright
 		\hyphenpenalty=10000
 		\tolerance=1000
-		\boldmath\bfseries{\@Title}
+		\noindent\textbf{Supplementary Materials: \@Title}%
 		\par
 		\vspace{12pt}
-		\fontsize{10}{12}\selectfont
-		\boldmath\bfseries{\@Author}
+		\fontsize{10}{10}\selectfont
+		\noindent\boldmath\bfseries{\@Author}
+		}{%
+		\ifthenelse{\equal{\@arttype}{Book}}{}{%
+			\vspace*{-1.75cm}
+		}
+		{%0
+		\ifthenelse{\equal{\@journal}{preprints}
+			\OR \equal{\@arttype}{Book}}{}{%
+				\ifthenelse{\equal{\@status}{submit}}{%	
+					\hfill \href{https://www.mdpi.com}{%
+					\includegraphics[height=1cm]{Definitions/logo-mdpi.eps}}%
+					}{
+					\href{https://www.mdpi.com/journal/\@journal}{
+					\includegraphics[height=1.2cm]{Definitions/\@journal-logo.eps}}%
+					\hfill
+					\ifthenelse{\equal{\@journal}{scipharm}}{%
+						\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi-scipharm.eps}}%
+						}{%
+						\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi.eps}}%
+						}%
+					}%
+					\par
+					\vspace{-8 pt}
+					\rule{\fulllength}{0.4pt}%
+			}%
 		\par
+		}%0
+		{%1
+    		\vspace{14pt}
+    		\fontsize{10}{10}\selectfont
+		\ifthenelse{\equal{\@arttype}{Book}}{}{
+			\textit{\@arttype}%
+			}%	
+ 	   	\par%
+    		}%1
+    		{%2
+  	  	\fontsize{18}{18}\selectfont
+		\hyphenpenalty=10000
+		\tolerance=1000
+   	 	\boldmath\bfseries{\@Title}
+   	 	\par
+   	 	\vspace{12pt}
+   	 	}%2
+		\ifthenelse{\equal{\@longauthorlist}{\@empty}}{%
+			}{%
+			\end{flushleft}%
+			\end{adjustwidth}%
+			\vspace{-2.5pt}
+		}
+   		{%3
+		\hyphenpenalty=10000
+		\tolerance=1000
+    		\boldmath\bfseries{\@Author}
+    		\par
 		\vspace{12pt}
-	\end{flushleft}
-}
+    		}%3
+		}%
+	\ifthenelse{\equal{\@longauthorlist}{\@empty}}{%
+		\end{flushleft}%
+		}{%
+	}%
+	\ifthenelse{\equal{\@arttype}{Book}}{}{%
+		\ifthenelse{\equal{\@longauthorlist}{\@empty}}{%
+			\end{adjustwidth}%
+			}{%
+		}
+	}
+		\ifthenelse{\equal{\@leftcolumnsplit}{\@empty}}{% Left column split
+			}{
+			\marginnote[\contentleftcolumn]{}% Alignment with the affiliations
+		}
+	}
 
 %%%% Commands for hanging indent
 \newcommand{\dist}{1.7em}
 \newcommand{\hang}{\hangafter=1\hangindent=\dist\noindent}
 
 
+%%% Left column on first page (= "left column" = "leftcol")
+
+% Split content into five parts
+\newcommand{\leftcolFont}{%
+	\linespread{1.71} 
+	\fontsize{7}{7}\selectfont
+	\justify
+	\hyphenpenalty=10000
+	\tolerance=1000
+}
+
+%% Part 1: Check-for-updates logo + citation
+\newcommand{\leftcolUpdateCitation}{
+	\leftcolFont
+	\ifthenelse{\equal{\@status}{submit}}{
+		}{%
+		\href{https://www.mdpi.com/article/\@doinum?type=check_update&version=1}{\includegraphics[height=.6cm]{Definitions/logo-updates.eps}}\\
+		}%
+	\raggedright
+	\textbf{Citation:}\papercitation
+}
+
+%% Part 2: External editor
+\newcommand{\leftcolExternalEditor}{
+	\ifthenelse{\equal{\@externaleditor}{\@empty}}{%
+		}{%
+		\leftcolFont
+		\raggedright
+		\@externaleditor
+		\ifthenelse{\equal{\@status}{submit}}{%
+			\vspace{-2pt}
+			}{%
+			\vspace{-1pt}
+			}
+	}
+}	
+
+% Part 3: Dates
+\newcommand{\leftcolDates}{
+\ifthenelse{\equal{\@journal}{preprints}}{%
+	}{%
+	\leftcolFont
+	\ifthenelse{\equal{\@journal}{proceedings}
+		\OR \equal{\@journal}{chemproc}
+		\OR \equal{\@journal}{engproc}
+		\OR \equal{\@journal}{environsciproc}
+		\OR \equal{\@journal}{materproc}
+		\OR \equal{\@journal}{blsf}
+		\OR \equal{\@journal}{msf}
+		\OR \equal{\@journal}{psf}
+		\OR \equal{\@journal}{csmf}}{%
+			Published: \@datepublished\\\vspace{-12pt}
+			}{%
+			Received: \@datereceived\\
+			\ifthenelse{\equal{\@daterevised}{\@empty}}{%
+				}{%
+				Revised: \@daterevised\\%
+				}
+			Accepted: \@dateaccepted\\
+			Published: \@datepublished
+			\ifthenelse{\equal{\@datecorrected}{\@empty}}{%
+				}{%
+			\newline Corrected: \@datecorrected
+			}
+			\ifthenelse{\equal{\@dateretracted}{\@empty}}{%
+				}{%
+			\newline Retracted: \@dateretracted
+			}
+		}
+	}
+}
+
+% Part 4: Copyright
+\newcommand{\leftcolumnCright}{
+	\leftcolFont
+	\cright
+}	
+
+% Content of the left column. The marginnote with this content will be placed it at the very top of the first page to have a fixed reference point
+\newcommand{\contentleftcolumn}{ 
+\ifthenelse{\equal{\@arttype}{Supfile}}{}{
+	\leftcolUpdateCitation\vspace{-2pt} %1
+	\leftcolExternalEditor %2
+	\leftcolDates\vspace{-2pt} %3
+	\ifthenelse{\equal{\@status}{submit}}{%
+		\vspace{-8pt}
+		}{}
+	\vspace{6pt}\leftcolumnCright %4
+}
+}
+
+% Placing on the left column
+\newlength{\MyLen} % For length of the left column content
+\newsavebox{\MyBox} % A box is needed to measure the length (= height) of the left column content
+
+\newcommand{\calculateMyLen}{ % The calculation needs to be done after begin document, therefore this command is executed at \AtBeginDocument
+	\savebox{\MyBox}{ % All this savebox and parbox is apparently needed to measure the length (= height) of the text
+		\parbox[l]{\leftcolumnlength}{ %This is the width of the left column, defined above at "Dimensions" and "Layout"
+			\contentleftcolumn
+		}
+	}
+	\settototalheight{\MyLen}{\usebox{\MyBox}} % Use the length (= height) of the box to assign this value to \MyLen (this can be queried in .tex by \the\MyLen)
+	\setlength{\MyLen}{\textheight-\MyLen-12pt} % Change \MyLen to be \textheight minus \MyLen so that the resulting value can be used to alig the left column to the bottom of \textheight. Then substract 12pt to make the bottom alignment
+}
+
+% Left column split options for long titles/author lists
+% Make new command for deciding for the split option
+\def\@leftcolumnsplit{}
+\newcommand{\leftcolumnsplit}[1]{\gdef\@leftcolumnsplit{#1}}
+
+% Split option 1	
+\newcommand{\OptionOneA}{
+	\leftcolUpdateCitation\vspace{-2pt} %1
+	\leftcolExternalEditor %2
+	\leftcolDates\vspace{-2pt} %3
+}
+		
+\newcommand{\OptionOneB}{
+	\leftcolumnCright %4
+}
+
+% Split option 2	
+\newcommand{\OptionTwoA}{
+	\leftcolUpdateCitation\vspace{-2pt} %1
+	\leftcolExternalEditor\vspace{-10pt} %2
+}
+
+\newcommand{\OptionTwoB}{
+	\leftcolDates\vspace{-2pt} %3
+	\vspace{6pt}\leftcolumnCright %4
+}
+
+% Split option 3
+\newcommand{\OptionThreeA}{
+	\leftcolUpdateCitation %1
+}
+
+\newcommand{\OptionThreeB}{
+	\leftcolExternalEditor %2
+	\leftcolDates\vspace{-2pt} %3
+	\vspace{6pt}\leftcolumnCright %4
+}
+
 %%%% Maketitle part 2
-% [modificado] Sin direcciones, correos, notas, fechas, copyright ni columna izquierda
-\newcommand{\maketitlen}{}
+\newcommand{\maketitlen}{ 
+	\ifthenelse{\equal{\@arttype}{Book}}{\vspace{12pt}}{%
+	\begin{flushleft}
+	\begin{spacing}{1.35}
+	\hyphenpenalty=10000
+	\tolerance=1000
+	\fontsize{8}{8}\selectfont
+	{%
+	\ifthenelse{\equal{\firstargument}{1}}{}{%
+	\hang}\@address
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@authornum}{author}}{}{%
+	\ifthenelse{\equal{\@corres}{\@empty}}{}{%
+	\hang\textbf{*} \tabto{\dist} \@corres}
+	\par
+	}
+	}%
+	{%
+	\ifthenelse{\equal{\@conference}{\@empty}}{}{%
+	\hang$\dagger$ \tabto{\dist} This paper is an extended version of our paper published in\space \@conference.}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@firstnote}{\@empty}}{}{%
+	\hang\ifthenelse{\equal{\@conference}{\@empty}}{$\dagger$}{$\ddagger$} \tabto{\dist} \@firstnote}	
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@secondnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{$\ddagger$}{\S} \tabto{\dist} \@secondnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@thirdnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{\S}{$\|$} \tabto{\dist} \@thirdnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@fourthnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{$\|$}{\P} \tabto{\dist} \@fourthnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@fifthnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{\P}{**} \tabto{\dist} \@fifthnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@sixthnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{**}{$\dagger\dagger$} \tabto{\dist} \@sixthnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@seventhnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{$\dagger\dagger$}{$\ddagger\ddagger$} \tabto{\dist} \@seventhnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@eighthnote}{\@empty}}{}{%
+	\hang \ifthenelse{\equal{\@conference}{\@empty}}{$\ddagger\ddagger$}{***} \tabto{\dist} \@eighthnote}
+	\par
+	}%
+	{%
+	\ifthenelse{\equal{\@LSID}{\@empty}}{}{%
+	\vskip12pt \@LSID}
+	\par
+	}%
+	\end{spacing}
+	\end{flushleft}
+}
+}
 
 %%%% Abstract, keywords, journal data, PACS, MSC, JEL
 \newcommand{\abstractkeywords}{
 \fontsize{9}{12.4}\selectfont
-% [modificado] Solo Simple Summary y Abstract (sin keywords, PACS, MSC, JEL, etc.)
+\vspace{-8pt}
+% For journal Applied Sciences:
+\ifthenelse{\equal{\@featuredapplication}{\@empty}}{
+	}{%
+	\noindent\textbf{Featured Application:\space\@featuredapplication}
+	\vspace{12pt}
+	\par
+}	
+%
+%10
 \ifthenelse{\equal{\@simplesumm}{\@empty}}{}{
 	\noindent\textbf{Simple Summary:\space}\@simplesumm
+	\vspace{12pt}
+	\par
+}
+\ifthenelse{\equal{\@addhighlights}{\@empty}}{}{
+	\noindent\textbf{Highlights:\\\vspace{-12pt}}\addhighlights % redefined in .tex to use itemize
 	\vspace{12pt}
 	\par
 }
@@ -659,7 +1022,63 @@
 	\vspace{12pt}
 	\par
 }
-\hrule
+\ifthenelse{\equal{\@encyclopediadef}{\@empty}}{}{
+	\noindent\textbf{Definition:\space}\@encyclopediadef
+	\vspace{12pt}
+	\par
+}
+%10
+% For journal Data:
+\ifthenelse{\equal{\@dataset}{\@empty}}{}{
+	\noindent\textbf{Dataset:\space}\@dataset
+	\vspace{12pt}
+	\par
+}
+%
+%For journal Data:
+\ifthenelse{\equal{\@datasetlicense}{\@empty}}{}{
+	\noindent\textbf{Dataset License:\space}\@datasetlicense
+	\vspace{12pt}
+	\par
+}
+%
+%11
+\ifthenelse{\equal{\@keyword}{\@empty}}{}{
+	\noindent\textbf{Keywords:\space}\@keyword
+	\vspace{12pt}
+	\par
+}
+%11
+%For journal Toxins:
+\ifthenelse{\equal{\@keycontribution}{\@empty}}{}{
+	\noindent\textbf{Key Contribution:\space}\@keycontribution
+	\vspace{12pt}
+	\par
+}
+%11
+%12
+\ifthenelse{\equal{\@pacs}{\@empty}}{}{
+	\noindent\textbf{PACS:\space}\@pacs
+	\vspace{12pt}
+	\par
+}
+%12
+%13
+\ifthenelse{\equal{\@msc}{\@empty}}{}{
+	\noindent\textbf{MSC:\space}\@msc
+	\vspace{12pt}
+	\par
+}
+%13
+%14
+\ifthenelse{\equal{\@jel}{\@empty}}{}{
+	\noindent\textbf{JEL Classification:\space}\@jel
+	\vspace{12pt}
+	\par
+}
+%14
+\vspace{4pt}
+\ifthenelse{\equal{\@arttype}{Book}}{}{\hrule}
 \vspace{12pt}
 \normalsize
 }
@@ -670,6 +1089,7 @@
 	\AfterEndPreamble{
 		\maketitle
 		\let\maketitle\relax
+		\ifthenelse{\equal{\@status}{submit}}{\linenumbers}{}
 		}%
 	}{
 	\AfterEndPreamble{
@@ -677,11 +1097,13 @@
 		\let\maketitle\relax
 		\maketitlen
 		\let\maketitlen\relax
+		\ifthenelse{\equal{\@status}{submit}}{\linenumbers}{}
 		\abstractkeywords
 	}%
 }
 	
 \AtBeginDocument{
+	\calculateMyLen
 	\DeclareSymbolFont{AMSb}{U}{msb}{m}{n}
 	\DeclareSymbolFontAlphabet{\mathbb}{AMSb}
 }
@@ -719,19 +1141,41 @@
 
 
 %%%% Special section title style for back matter
-% [modificado] Notas finales de MDPI desactivadas (no se imprimen)
-\newcommand{\supplementary}[1]{}
-\newcommand{\authorcontributions}[1]{}
-\newcommand{\funding}[1]{}
-\newcommand{\institutionalreview}[1]{}
-\newcommand{\informedconsent}[1]{}
-\newcommand{\dataavailability}[1]{}
-\newcommand{\acknowledgments}[1]{}
-\newcommand{\conflictsofinterest}[1]{}
-\newcommand{\sampleavailability}[1]{}
-\newcommand{\entrylink}[1]{}
-\newcommand{\reviewreports}[1]{}
-\newcommand{\abbreviations}[2]{}
+\newcommand{\supplementary}[1]{
+\par\vspace{6pt}\noindent{\fontsize{9}{11.5}\selectfont\textbf{Supplementary Materials:} {#1}\par}}
+
+\newcommand{\authorcontributions}[1]{%
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Author Contributions:} {#1}\par}}
+
+\newcommand{\funding}[1]{
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Funding:} {#1}\par}}
+
+\newcommand{\institutionalreview}[1]{
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Institutional Review Board Statement:} {#1}\par}}
+
+\newcommand{\informedconsent}[1]{
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Informed Consent Statement:} {#1}\par}}
+
+\newcommand{\dataavailability}[1]{
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Data Availability Statement:} {#1}\par}}
+
+\newcommand{\acknowledgments}[1]{
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Acknowledgments:} {#1}\par}}
+
+\newcommand{\conflictsofinterest}[1]{%
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Conflicts of Interest:} {#1}\par}}
+
+\newcommand{\sampleavailability}[1]{%
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Sample Availability:} {#1}\par}}
+
+\newcommand{\entrylink}[1]{% For journal Encyclopedia
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Entry Link:} {#1}\par}}
+
+\newcommand{\reviewreports}[1]{%
+\vspace{6pt}\noindent{\fontsize{9}{11.2}\selectfont\textbf{Review Reports:} {#1}\par}}
+
+\newcommand{\abbreviations}[2]{\vspace{12pt}\noindent{\selectfont\textbf{#1}}{%
+\par\vspace{3pt}\hspace{-0.85cm}{\fontsize{9}{11.2}\selectfont #2}\par}}
 
 % Standby command for adding paragraph in back matter part
 \newcommand{\specialsection}[2]{%
@@ -843,26 +1287,46 @@
 %%%% Dimensions
 %% Width of left column = marginparwidth
 \newlength{\leftcolumnlength}
-\setlength{\leftcolumnlength}{0pt}
+\setlength{\leftcolumnlength}{4.1cm}
 
 %% Width of left column plus marginsep
 \newlength{\extralength}
-\setlength{\extralength}{0pt} % = 0.51 cm + 4.1 cm (= marginparwidth + marginparsep)
+\setlength{\extralength}{4.61cm} % = 0.51 cm + 4.1 cm (= marginparwidth + marginparsep)
 
 %% Width of the page minus the margins
 \newlength{\fulllength}
 \setlength{\fulllength}{21 cm - 1.27 cm - 1.27 cm}
 
 %%%% Layout
-% [modificado] Margenes simetricos, sin margen izquierdo ampliado
-\RequirePackage[left=2.5cm,
-				right=2.5cm,
-				top=2.5cm,
-				bottom=2.5cm,
-				footskip=1cm,
-				headheight=14pt,
-				headsep=0.5cm]{geometry}
-\setlength{\fulllength}{\textwidth}
+\ifthenelse{\equal{\@arttype}{Book}}{%%
+	\RequirePackage[left=2.05cm,
+					right=2.05cm,
+					top=1.8cm,
+					bottom=2.05cm,
+					paperwidth=170mm,
+					paperheight=244mm,
+					footskip=20pt,
+					headsep=24pt,
+					includehead, 
+					includefoot]{geometry}
+	}{
+	\RequirePackage[left=5.87cm, %1.27 cm + 0.51 cm + 4.1 cm = 5.87 cm (= 1.27 cm + marginparwidth + marginparsep)
+				marginparwidth=4.1cm,
+				marginparsep=0.51cm,
+				right=1.27cm,
+				top=1.8cm,
+				bottom=0.75cm,
+				footskip=48pt,
+				headsep=24pt,
+				includehead,
+				includefoot]{geometry}
+}
+
+\fancyheadoffset[L]{\extralength} % Header into the margin
+\ifthenelse{\equal{\@arttype}{Book}}{%
+	}{%
+	\fancyfootoffset[L]{\extralength}%
+} % Footer into the margin
 
 \linespread{1.05} 
 \setlength{\parindent}{0.75cm}
@@ -876,7 +1340,7 @@
 	\pdfpagewidth=\paperwidth
 	\newgeometry{layoutwidth=297mm, layoutheight=210 mm, left=1.27cm, right=1.27cm, top=1.8cm, bottom=0.6cm, includehead, includefoot}
 	\fancyheadoffset{0pt}
-	\captionsetup{margin={0cm,0cm}}
+	\captionsetup{margin={4.6cm,0cm}}
 	}
 
 \newcommand{\finishlandscape}{
@@ -886,7 +1350,7 @@
 	\pdfpageheight=\paperheight
 	\pdfpagewidth=\paperwidth
 	\restoregeometry
-	\fancyheadoffset{0pt}
+	\fancyheadoffset[L]{\extralength}
 	\captionsetup{margin={0cm,0cm}}
 }
 
@@ -956,13 +1420,58 @@
 
 
 %%%% Header and footer (all pages except the first)
-% [modificado] Sin cabecera; pie solo con numero de pagina centrado
-\renewcommand\headrule{}
+\renewcommand\headrule{} %% set line (from fancyhdr) in header to nothing
+
 \pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-\cfoot{\footnotesize\thepage}
+\lhead{
+	\ifthenelse{\equal{\@journal}{preprints}%
+	\OR \equal{\@arttype}{Book}}{%
+		}{%
+		\fontsize{8}{8}\selectfont%
+		\ifthenelse{\equal{\@status}{submit}}{%
+			Version {\@ \today} submitted to {\em \journalname}%
+			}{%
+			\ifthenelse{\equal{\@arttype}{Supfile}}{%
+			{\em \journalname} {\bfseries \@pubyear}, {\em \@pubvolume}, %
+			\ifthenelse{\equal{\@continuouspages}{\@empty}}{%
+				\@articlenumber. %
+				}{%
+				S\@firstpage\ifnumcomp{\totvalue{page}-1}{=}{\@firstpage}{}{--S\pageref*{LastPage}}. %
+				}%
+			{\changeurlcolor{black}%
+        			\url{https://doi.org/\@doinum}}%
+			}{%
+			{\null\vspace{2pt}\em\journalname\ }{\bfseries\@pubyear}, {\em \@pubvolume}%
+			\ifthenelse{\equal{\@continuouspages}{\@empty}}{%
+				, \@articlenumber%
+				}{}%
+			}%
+			}\\%
+			\rule{\fulllength}{0.4pt}%
+		}%
+	}
+	
+\rhead{%
+\ifthenelse{\equal{\@arttype}{Book}}{}{%
+	\ifthenelse{\equal{\@arttype}{Supfile}}{%
+		\fontsize{8}{8}\selectfont S\thepage{} of S\pageref*{LastPage}%
+		}{%
+		\ifthenelse{\equal{\@continuouspages}{\@empty}}{%
+			\fontsize{8}{8}\selectfont\thepage{} of \pageref*{LastPage}%
+			}{%
+			\fontsize{8}{8}\selectfont\thepage%
+		}%
+		}\\%
+		\rule{\fulllength}{0.4pt}%
+	}%
+}
+
+\cfoot{
+	\ifthenelse{\equal{\@arttype}{Book}}{%
+		\fontsize{8}{8}\selectfont\thepage
+		}{%
+	}
+}
 
 
 %%%% Article type "Retraction"
@@ -1042,8 +1551,7 @@
 
 
 %%%% Publisher's note
-\newcommand{\PublishersNote}{}
-\newcommand{\PublishersNoteOriginal}{
+\newcommand{\PublishersNote}{
 \null\par\noindent\fontsize{9}{11}\selectfont\textbf{Disclaimer/Publisher's Note:} The statements, opinions and data contained in all publications are solely those of the individual author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to people or property resulting from any ideas, methods, instructions or products referred to in the content.
 }
 
