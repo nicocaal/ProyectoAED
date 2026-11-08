@@ -21,7 +21,11 @@ header-includes:
   - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 ---
 
-# Importación de los DataFrames
+# Introducción
+
+# Metodología: preparación del conjunto de datos
+
+## Importación de los DataFrames
 
 ```{r, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 library(readr)
@@ -109,7 +113,7 @@ major.source <- salarios2 %>% count(country, source) %>% group_by(country) %>% a
 salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == major.source, earnings, NA)) %>% select(c(-major.source, -source))
 ```
 
-# Datos ausentes
+## Exploración de variables
 
 Con todos los datos cargados, procederemos a crear el DataFrame
 
@@ -119,6 +123,19 @@ jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler
 ```
 
 Ahora estamos listos para proceder con la exploración de los datos.
+
+```{r}
+sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
+sumario.jovenes$type <- sapply(jovenes.df, function(x) class(x)[1])
+sumario.jovenes$levels <- sapply(jovenes.df, function(x) length(unique(x)))
+sumario.jovenes$topLevel <- sapply(jovenes.df, function(x) names(which.max(table(x))))
+sumario.jovenes$topCount <- sapply(jovenes.df, function(x) max(table(x)))
+sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
+sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
+sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
+
+sumario.jovenes
+```
 
 ```{r}
 dim(jovenes.df)
@@ -138,6 +155,8 @@ cobertura <- jovenes.df %>% group_by(year) %>% summarise(across(all_of(vars.num)
 ggplot(cobertura, aes(x = year, y = variable, fill = n.paises)) + geom_tile(color = 'white') + geom_text(aes(label = n.paises), size = 3) + scale_fill_gradient(low = 'white', high = 'steelblue', limits = c(0, length(unique(jovenes.df$country)))) + labs(title = 'Cobertura temporal de las variables', subtitle = 'Número de países con dato en cada año') + xlab('Year') + ylab('')
 ggsave('results/univ_cobertura.pdf', width = 14, height = 10, dpi = 300)
 ```
+
+## Transformación de variables
 
 ```{r}
 # Limitamos el estudio desde el 2010 hasta el 2025
@@ -174,33 +193,11 @@ vars.num <- setdiff(colnames(jovenes.df)[sapply(jovenes.df, is.numeric)], 'year'
 vars.num
 ```
 
-# Estudio de variables
+# Resultados
 
-```{r}
-sumario.jovenes <- data.frame(variable = colnames(jovenes.df))
-sumario.jovenes$type <- sapply(jovenes.df, function(x) class(x)[1])
-sumario.jovenes$levels <- sapply(jovenes.df, function(x) length(unique(x)))
-sumario.jovenes$topLevel <- sapply(jovenes.df, function(x) names(which.max(table(x))))
-sumario.jovenes$topCount <- sapply(jovenes.df, function(x) max(table(x)))
-sumario.jovenes$topFrac <- sumario.jovenes$topCount / nrow(jovenes.df)
-sumario.jovenes$missFreq <- sapply(jovenes.df, function(x) sum(is.na(x)))
-sumario.jovenes$missFrac <- sumario.jovenes$missFreq / nrow(jovenes.df)
+Con el conjunto de datos preparado, procederemos a analizarlo aplicando distintos métodos para poder obtener conclusiones respecto a nuestra pregunta. En este apartado se mostraran y discutiran los resultados de dichos análisis.
 
-sumario.jovenes
-```
-
-```{r}
-cobertura.var <- data.frame(variable = vars.num)
-cobertura.var$year.min <- unname(sapply(vars.num, function(v) min(jovenes.df$year[!is.na(jovenes.df[[v]])])))
-cobertura.var$year.max <- unname(sapply(vars.num, function(v) max(jovenes.df$year[!is.na(jovenes.df[[v]])])))
-cobertura.var$n.obs <- unname(sapply(vars.num, function(v) sum(!is.na(jovenes.df[[v]]))))
-cobertura.var$n.paises <- unname(sapply(vars.num, function(v) length(unique(jovenes.df$country[!is.na(jovenes.df[[v]])]))))
-cobertura.var
-```
-
-# Análisis univariante
-
-## Estadísticos descriptivos de las variables numéricas
+## Análisis univariante: estadísticos descriptivos de las variables numéricas
 
 ```{r}
 mystats <- function(x, na.omit = TRUE) {
@@ -297,7 +294,7 @@ ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variab
 ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
 ```
 
-# Análisis bivariante
+## Análisis bivariante: estudio de la correlación entre el aumento porcentual de los salarios y de los precios de alquiler y vivienda
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
@@ -339,3 +336,5 @@ ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) 
   geom_line(aes(x = year, y = earn.prop.rent, color = 'by rent'), linewidth = 1, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free_y') + labs(title = 'Evolución del salario real en proporción al precio de la vivienda y del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
 ggsave('results/proporcion_salario.pdf', width = 14, height = 10, dpi = 300)
 ```
+
+# Conclusiones
