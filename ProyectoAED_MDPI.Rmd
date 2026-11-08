@@ -1,133 +1,21 @@
 ---
-title: Evolución del Estado de bienestar de los jóvenes europeos
+title: "Evolución del Estado de bienestar de los jóvenes europeos"
 author:
   - name: Ignacio Lacruz Mascarós
-    affil: 1,*
   - name: Nicolás Camacho Albiñana
-    affil: 1
-affiliation:
-  - num: 1
-    address: |
-      Your department
-      Street, City, Country
-    email: mail@mail.com
-# author citation list in chicago format
-authorcitation: |
-  Lacruz Mascarós, I.; Camacho Albiñana, N.
-# firstnote to eighthnote
-# firstnote: |
-#   Current address: Updated affiliation
-# secondnote: |
-#   These authors contributed equally to this work.
-correspondence: |
-  mail@mail.com; Tel.: +XX-000-00-0000.
-# document options
-journal: notspecified
-type: article
-status: submit
-# front matter
-simplesummary: |
-  Resumen sencillo para un público no especializado.
-abstract: |
-  Resumen técnico del trabajo.
-keywords: |
-  keyword 1; keyword 2; keyword 3
-# back matter
-acknowledgement: |
-  All sources of funding of the study should be disclosed. Please clearly 
-  indicate grants that you have received in support of your research work. 
-  Clearly state if you received funds for covering the costs to publish in open 
-  access.
-authorcontributions: |
-  For research articles with several authors, a short paragraph specifying their 
-  individual contributions must be provided. The following statements should be 
-  used ``X.X. and Y.Y. conceive and designed the experiments; X.X. performed the 
-  experiments; X.X. and Y.Y. analyzed the data; W.W. contributed 
-  reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be
-  limited to those who have contributed substantially to the work reported.
-funding: |
-  Please add: ``This research received no external funding'' or ``This research 
-  was funded by NAME OF FUNDER grant number XXX.'' and  and ``The APC was funded 
-  by XXX''. Check carefully that the details given are accurate and use the 
-  standard spelling of funding agency names at 
-  \url{https://search.crossref.org/funding}, any errors may affect your future 
-  funding.
-institutionalreview: |
-  In this section, you should add the Institutional Review Board Statement and 
-  approval number, if relevant to your study. You might choose to exclude 
-  this statement if the study did not require ethical approval. Please note 
-  that the Editorial Office might ask you for further information. Please add 
-  “The study was conducted in accordance with the Declaration of Helsinki, 
-  and approved by the Institutional Review Board (or Ethics Committee) of 
-  NAME OF INSTITUTE (protocol code XXX and date of approval).” for studies 
-  involving humans. OR “The animal study protocol was approved by the 
-  Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE 
-  (protocol code XXX and date of approval).” for studies involving animals. 
-  OR “Ethical review and approval were waived for this study due to REASON 
-  (please provide a detailed justification).” OR “Not applicable” for
-   studies not involving humans or animals.
-informedconsent: |
-  Any research article describing a study involving humans should contain this 
-  statement. Please add ``Informed consent was obtained from all subjects 
-  involved in the study.'' OR ``Patient consent was waived due to REASON 
-  (please provide a detailed justification).'' OR ``Not applicable'' for 
-  studies not involving humans. You might also choose to exclude this statement 
-  if the study did not involve humans.
-  
-  Written informed consent for publication must be obtained from participating 
-  patients who can be identified (including by the patients themselves). Please 
-  state ``Written informed consent has been obtained from the patient(s) to 
-  publish this paper'' if applicable.
-dataavailability: |
-  We encourage all authors of articles published in MDPI journals to share 
-  their research data. In this section, please provide details regarding where 
-  data supporting reported results can be found, including links to publicly 
-  archived datasets analyzed or generated during the study. Where no new data 
-  were created, or where data is unavailable due to privacy or ethical 
-  re-strictions, a statement is still required. Suggested Data Availability 
-  Statements are available in section “MDPI Research Data Policies” at 
-  \url{https://www.mdpi.com/ethics}.
-conflictsofinterest: |
-  Declare conflicts of interest or state 'The authors declare no conflict of 
-  interest.' Authors must identify and declare any personal circumstances or
-  interest that may be perceived as inappropriately influencing the
-  representation or interpretation of reported research results. Any role of the
-  funding sponsors in the design of the study; in the collection, analyses or 
-  interpretation of data in the writing of the manuscript, or in the decision to 
-  publish the results must be declared in this section. If there is no role, 
-  please state 'The founding sponsors had no role in the design of the study; 
-  in the collection, analyses, or interpretation of data; in the writing of the 
-  manuscript, an in the decision to publish the results'.
-sampleavailability: |
-  Samples of the compounds ...... are available from the authors.
-supplementary: |
- The following supporting information can be downloaded at:  
- \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title.
-abbreviations:
-  - short: MDPI
-    long: Multidisciplinary Digital Publishing Institute
-  - short: DOAJ
-    long: Directory of open access journals
-  - short: TLA
-    long: Three letter acronym
-  - short: LD 
-    long: linear dichroism
+journal: "water"
 bibliography: mybibfile.bib
-appendix: appendix.tex
-endnotes: false
-header-includes:
-  - \usepackage{fvextra}
-  - \usepackage{float}
-  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
-output: 
-  rticles::mdpi_article:
-    extra_dependencies: longtable
+output:
+  pdf_document:
+    template: template.tex
+    latex_engine: pdflatex
+    citation_package: natbib
+    keep_tex: true
+    number_sections: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 6.5, fig.height = 3.5, out.width = '100%',
-                      echo = FALSE, message = FALSE, warning = FALSE)
-# Tamaño por defecto de las figuras: 6.5 x 4.5 pulgadas, ajustadas al ancho del texto de la plantilla MDPI
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 # Introducción
@@ -263,7 +151,7 @@ knitr::asis_output(paste0('\\begin{table}[H]\n\\caption{Resumen de las variables
 
 En esta tabla podemos notar, por ejemplo, que los valores de 'Top Level' (valor más repetido) para las variables country y year son DE ("Deutschland", representa Alemania, el primer país que aparece) y 2000 (el primer año que se muestrea). Esto es debido a que como todos los países y años aparecen el mismo número de veces, la función empleada devuelve el primero para cada caso. Pero lo verdaderamente interesante viene analizando las dos columnas de valores perdidos (NA), Miss. freq y Miss. frac. En estas podemos ver como en especial para las variables relacionadas con el salario encontramos un gran porcentaje de estos valores. Vamos a investigar más a fondo.
 
-```{r, results='hide'}
+```{r, results='hide', out.width="70%"}
 dim(jovenes.df)
 # Numero de registros y de variables
 
@@ -444,7 +332,7 @@ Fijémonos en que hay 4 países para los cuales ambas diferencias son negativas,
 
 Podemos estudiar la distribución de estos aumentos anuales en forma de histogramas. En este caso para poder visualizarlo nos quedamos con un subconjunto de los países: España y Francia por estar más presentes en la actualidad y Polonia como caso diferente para poder comparar.
 
-```{r, fig.height=5.5}
+```{r, fig.height=5.5, out.width="80%"}
 # Histogramas de los incrementos anuales (los mismos de antes, bins = 30) de salarios, vivienda y alquiler en tres paises
 paises.hist <- c('ES', 'FR', 'PL')
 
@@ -478,7 +366,7 @@ Destacan aquí los puntos referentes a Rumania, como casos aislados que no repre
 
 A continuación se muestra la evolución temporal de la edad de emancipación por países, así como la evolución de la media de todos ellos:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, out.width="80%"}
 age.mean <- jovenes.df %>% group_by(year) %>% summarise(age.mean = mean(age.indep, na.rm = TRUE), .groups = "drop")
 ggplot() + geom_line(data = jovenes.df, mapping = aes(x = year, y = age.indep, color = country), linewidth = 1.15, na.rm = TRUE) + geom_line(data = age.mean, mapping = aes(x = year, y = age.mean, color = 'mean'), linewidth = 1.15, na.rm = TRUE) +
   scale_color_manual(values = c(setNames(scales::hue_pal()(length(unique(jovenes.df$country))), unique(jovenes.df$country)), "mean" = "black")) +
@@ -493,7 +381,7 @@ jovenes.df %>% group_by(country) %>% summarise(n.years = n(), media = round(mean
 # Media anual de cada pais de la edad de emancipación
 ```
 
-Comprobamos que, concordantemente con la gráfica, hay diferentes comportamientos:
+Comprobamos que, concordantemente con la gráfica, hay diferentes patrones de comportamiento:
 
 1.  En España, Italia y Grecia, las edades de emancipación promedio son las más altas y no han hecho sino aumentar, ya que observamos diferencias totales positivas (de 2.6 años en Grecia por ejemplo) y aumentos anuales positivos (0.12 años en España al año).
 
@@ -501,15 +389,11 @@ Comprobamos que, concordantemente con la gráfica, hay diferentes comportamiento
 
 3.  En Países Bajos, Francia y Alemania, la situación se ha mantenido constante, con valores próximos a 0.
 
-4.  En República Checa la edad de emancipación ha caído 1.2 años.
-
-5.  En Bélgica ha subido 0.8 años.
-
 ## Análisis bivariante: estudio de la correlación entre el aumento porcentual de los salarios y de los precios de alquiler y vivienda
 
 En la siguiente gráfica se muestra la relación entre los aumentos porcentuales anuales de los salarios y del precio de la vivienda. Visualmente se aprecia que la tendencia es positiva:
 
-```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
+```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5, out.width="80%"}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = house.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
    geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Housing price percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio de la vivienda', subtitle = 'En función de países')
 ggsave('results/salarios_vs_vivienda.pdf', width = 14, height = 10, dpi = 300)
@@ -529,7 +413,7 @@ jovenes.df %>% filter(country != 'EL') %>% group_by(country) %>% summarise(slope
 
 Ahora repetimos el mismo análisis bivariante con los aumentos salariales frente a los aumentos del alquiler. Vemos que las tendencias son en general positivas, como en el caso de la vivienda, salvo para Italia, donde salarios y alquileres están ligeramente correlacionados de manera negativa.
 
-```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5}
+```{r, message=FALSE, warning=FALSE, results='hide', fig.height=6.5, out.width="80%"}
 jovenes.df %>% filter(country != 'EL') %>% ggplot(aes(x = rent.diff, y = earn.diff)) + geom_point(na.rm = TRUE) + 
   geom_smooth(method = "lm", se = FALSE, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free') + ylab('Earnings percentage increase (%)') + xlab('Rent percentage increase (%)') + labs(title = 'Salario de los jóvenes frente a precio del alquiler', subtitle = 'En función de países')
 ggsave('results/salarios_vs_alquiler.pdf', width = 14, height = 10, dpi = 300)
@@ -573,4 +457,16 @@ jovenes.df %>% select(country, earn.diff, house.diff, rent.diff) %>% filter(comp
 
 # Conclusiones
 
-<!-- Seccion sin texto: este comentario evita que pandoc elimine la ultima seccion cuando esta vacia. Se puede borrar al escribir el texto -->
+Inicialmente, a partir de la evolución de la edad de emancipación podemos concluir que países como España, Italia, Grecia y Bélgica han empeorado su situación, mientras que Polonia, Rumanía y República Checa la han mejorado. Francia, Alemania y Países Bajos, por su parte, se mantienen en un escenario similar. Por tanto, vemos que en general, los países occidentales (salvo Alemania y Francia) viven una peor situación, mientras que los orientales la han mejorado.
+
+A partir de los incrementos anuales, concluimos que, cada año de media, los ciudadanos españoles e italianos ven mermado su poder adquisitivo respecto al aquiler, los franceses y checos respecto a la vivienda y los neerlandeses y belgas respecto a ambos. Se aprecia de nuevo el buen desempeño de alemanes, rumanos y polacos, por lo que la situación de los países orientales resulta ser mejor que la de los occidentales en este aspecto también.
+
+El análisis bivariante empeora todavía más el diagnóstico, ya que nos muestra que los aumentos anuales salariales no solo se han quedado rezagados con respecto a la vivienda/alquiler, sino que además sus evoluciones no están correlacionadas, es decir, el aumento de precio de la vivienda no implica necesariamente un aumento salarial para la gente joven. Esto puede deberse al hecho de que los propietarios de vivienda son por lo general gente de mediana y avanzada edad, por lo que un aumento del precio de los alquileres le es económicamente rentable a este grupo de edad, mientras que reduce el poder adquisitivo de la juventud.
+
+El caso particular de Polonia destaca de nuevo por ser aquel en el que más correlación existe entre estas variables, al igual que en el caso de Rumanía principalmente en los alquileres. Destacamos, por el contrario, la situación de los alquileres italianos, que además de estar poco correlacionados con los salarios, lo hacen de forma ligeramente negativa, lo cual debería ser un síntoma de alarma.
+
+Finalmente, en el análisis de las diferencias totales en salarios, alquileres y viviendas, vemos que por lo general los sueldos han aumentado en estos 15 años, pero los precios se han incrementado con más fuerza, lo que provoca un balance final negativo en el caso de Francia, España, Países Bajos y Bélgica con respecto tanto al alquiler como a la vivienda.
+
+En el caso de Alemania y República Checa, el balance es negativo exclusivamente en relación a la vivienda, no al alquiler, mientras que la situación de Italia es la opuesta, destacando en este último país que es el único en que el salario se ha reducido de forma absoluta, lo que lo convierte en el caso más preocupante.
+
+Todos estos países son los que podemos englobar como occidentales, precisamente aquellos donde se ha hecho oír el descontento social en forma de manifestaciones y altercados, mientras que en el caso de los orientales, como Polonia y Rumanía, vemos que la situación es la contraria y, por tanto, esto es coherente con la ausencia de protestas públicas en estos países.

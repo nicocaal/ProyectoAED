@@ -1,194 +1,16 @@
-%  LaTeX support: latex@mdpi.com
-%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+%% Plantilla pandoc simplificada para mdpi.cls (portada: titulo, autores, simple summary, abstract)
+\documentclass[water,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 
-%=================================================================
-% pandoc conditionals added to preserve backwards compatibility with previous versions of rticles
-
-\documentclass[notspecified,article,submit,moreauthors,pdftex]{Definitions/mdpi}
-
-
-%% Some pieces required from the pandoc template
-\setlist[itemize]{leftmargin=*,labelsep=5.8mm}
-\setlist[enumerate]{leftmargin=*,labelsep=4.9mm}
-
-
-%--------------------
-% Class Options:
-%--------------------
-
-%---------
-% article
-%---------
-% The default type of manuscript is "article", but can be replaced by:
-% abstract, addendum, article, book, bookreview, briefreport, casereport, comment, commentary, communication, conferenceproceedings, correction, conferencereport, entry, expressionofconcern, extendedabstract, datadescriptor, editorial, essay, erratum, hypothesis, interestingimage, obituary, opinion, projectreport, reply, retraction, review, perspective, protocol, shortnote, studyprotocol, systematicreview, supfile, technicalnote, viewpoint, guidelines, registeredreport, tutorial
-% supfile = supplementary materials
-
-%----------
-% submit
-%----------
-% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g., the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
-
-%------------------
-% moreauthors
-%------------------
-% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
-
-%---------
-% pdftex
-%---------
-% The option pdftex is for use with pdfLaTeX. Remove "pdftex" for (1) compiling with LaTeX & dvi2pdf (if eps figures are used) or for (2) compiling with XeLaTeX.
-
-%=================================================================
-% MDPI internal commands - do not modify
-\firstpage{1}
+% --- Compatibilidad con el codigo que genera pandoc/knitr ---
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\pandocbounded}[1]{#1}
 \makeatletter
-\setcounter{page}{\@firstpage}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>.9\textheight.9\textheight\else\Gin@nat@height\fi}
 \makeatother
-\pubvolume{1}
-\issuenum{1}
-\articlenumber{0}
-\pubyear{2023}
-\copyrightyear{2023}
-%\externaleditor{Academic Editor: Firstname Lastname}
-\datereceived{ }
-\daterevised{ } % Comment out if no revised date
-\dateaccepted{ }
-\datepublished{ }
-%\datecorrected{} % For corrected papers: "Corrected: XXX" date in the original paper.
-%\dateretracted{} % For corrected papers: "Retracted: XXX" date in the original paper.
-\hreflink{https://doi.org/} % If needed use \linebreak
-%\doinum{}
-%\pdfoutput=1 % Uncommented for upload to arXiv.org
-
-%=================================================================
-% Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, float, amsmath, amssymb, lineno, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, colortbl, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, array, tabularx, pbox, ragged2e, tocloft, marginnote, marginfix, enotez, amsthm, natbib, hyperref, cleveref, scrextend, url, geometry, newfloat, caption, draftwatermark, seqsplit
-% cleveref: load \crefname definitions after \begin{document}
-
-%=================================================================
-% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
-%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
-
-%=================================================================
-% Full title of the paper (Capitalized)
-\Title{Evolución del Estado de bienestar de los jóvenes europeos}
-
-% MDPI internal command: Title for citation in the left column
-\TitleCitation{Evolución del Estado de bienestar de los jóvenes
-europeos}
-
-% Author Orchid ID: enter ID or remove command
-%\newcommand{\orcidauthorA}{0000-0000-0000-000X} % Add \orcidA{} behind the author's name
-%\newcommand{\orcidauthorB}{0000-0000-0000-000X} % Add \orcidB{} behind the author's name
-
-
-% Authors, for the paper (add full first names)
-\Author{Ignacio Lacruz Mascarós$^{1,*}$, Nicolás Camacho Albiñana$^{1}$}
-
-
-%\longauthorlist{yes}
-
-
-% MDPI internal command: Authors, for metadata in PDF
-\AuthorNames{Ignacio Lacruz Mascarós, Nicolás Camacho Albiñana}
-
-% MDPI internal command: Authors, for citation in the left column
-%\AuthorCitation{Lastname, F.; Lastname, F.; Lastname, F.}
-% If this is a Chicago style journal: Lastname, Firstname, Firstname Lastname, and Firstname Lastname.
-\AuthorCitation{Lacruz Mascarós, I.; Camacho Albiñana, N.}
-
-% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
-\address{%
-$^{1}$ \quad Your department Street, City,
-Country; \href{mailto:mail@mail.com}{\nolinkurl{mail@mail.com}}\\
-}
-
-% Contact information of the corresponding author
-\corres{Correspondence: \href{mailto:mail@mail.com}{\nolinkurl{mail@mail.com}};
-Tel.: +XX-000-00-0000.}
-
-% Current address and/or shared authorship
-
-
-
-
-
-
-
-
-% The commands \thirdnote{} till \eighthnote{} are available for further notes
-
-% Simple summary
-\simplesumm{Resumen sencillo para un público no especializado.}
-
-%\conference{} % An extended version of a conference paper
-
-% Abstract (Do not insert blank lines, i.e. \\)
-\abstract{Resumen técnico del trabajo.}
-
-
-% Keywords
-\keyword{keyword 1; keyword 2; keyword 3}
-
-% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
-%\PACS{J0101}
-%\MSC{}
-%\JEL{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Diversity
-%\LSID{\url{http://}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Applied Sciences
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Data
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Toxins
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Encyclopedia
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Only for the journal Advances in Respiratory Medicine
-%\addhighlights{yes}
-%\renewcommand{\addhighlights}{%
-
-%\noindent This is an obligatory section in “Advances in Respiratory Medicine”, whose goal is to increase the discoverability and readability of the article via search engines and other scholars. Highlights should not be a copy of the abstract, but a simple text allowing the reader to quickly and simplified find out what the article is about and what can be cited from it. Each of these parts should be devoted up to 2~bullet points.\vspace{3pt}\\
-%\textbf{What are the main findings?}
-% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
-% \item First bullet.
-% \item Second bullet.
-% \end{itemize}\vspace{3pt}
-%\textbf{What is the implication of the main finding?}
-% \begin{itemize}[labelsep=2.5mm,topsep=-3pt]
-% \item First bullet.
-% \item Second bullet.
-% \end{itemize}
-%}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% tightlist command for lists without linebreak
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
-\usepackage{fvextra}
-\usepackage{float}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
-\usepackage{longtable}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{wrapfig}
@@ -203,11 +25,18 @@ Tel.: +XX-000-00-0000.}
 \usepackage{makecell}
 \usepackage{xcolor}
 
+%% Titulo y autores
+\Title{Evolución del Estado de bienestar de los jóvenes europeos}
+\Author{Ignacio Lacruz Mascarós, Nicolás Camacho Albiñana}
+
+%% Simple summary y abstract
+
+%% Referencias
+\reftitle{References}
+\externalbibliography{yes}
+
 \begin{document}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introducción}\label{introducciuxf3n}
 
@@ -287,7 +116,7 @@ Miss. frac. En estas podemos ver como en especial para las variables
 relacionadas con el salario encontramos un gran porcentaje de estos
 valores. Vamos a investigar más a fondo.
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1}
+\pandocbounded{\includegraphics[keepaspectratio]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-10-1.pdf}}
 
 Así pues, gracias a esta gráfica podemos comprobar como en general las
 variables no estan muestreadas para los 10 países más poblados hasta
@@ -339,6 +168,20 @@ dichos análisis.
 variables
 numéricas}\label{anuxe1lisis-univariante-estaduxedsticos-descriptivos-de-las-variables-numuxe9ricas}
 
+Lo primero que uno piensa en hacer para sacar conclusiones es calcular
+una serie de estadísticos básicos para todas las variables númericas
+(sin contar obviamente los años). Sin embargo, para nuestro conjunto de
+datos hay que tener en cuenta también un matiz importante.
+
+Si intentáramos calcular por ejemplo la media y la desviación típica
+para cada variable del conjunto de datos en formato tidy, llegaríamos a
+resultados que carecen de sentido. Esto es porque estaríamos agrupando
+todos los valores muestreados para cada país. Lo que se debería hacer es
+calcular una media y una desviación estándar para todos los valores de
+cada país de forma separada, y compararlas entre sí. En la siguiente
+tabla recogemos estos resultados para los 5 países más poblados del
+conjunto.
+
 \begin{table}[H]
 \caption{Media y desviación típica (SD) por país de las variables numéricas (5 países más poblados).}
 \centering\footnotesize\setlength{\tabcolsep}{3pt}
@@ -361,8 +204,29 @@ rent.diff & 1.71 & 0.48 & 1.10 & 0.89 & 1.22 & 1.41 & 0.87 & 1.11 & 6.06 & 5.68\
 \end{tabular}}
 \end{table}
 
+En este caso es interesante notar la gran diferencia en las edades
+medias de emancipación para los distintos países. En Francia y Alemania
+esta es mucho menor que en España y en Italia, por ejemplo. Esto también
+se alinea con las recientes manifestaciones a lo largo del país español,
+todas relacionadas con la situación actual de la vivienda.
+
+También podemos destacar unas altas desviaciones estándar en general
+para los salarios y para los precios de la vivienda. Aquí hay mucha más
+variabilidad incluso dentro de los mismos países.
+
+Para completar nuestro análisis y poder contestar a nuestra hemos
+decidido a continuación estudiar con más profundidad el aumento
+porcentual de los salarios, el precio del alquiler y de la vivienda,
+muestreado por las variables acabadas en .diff. Así, podremos comparar
+las medias de cada uno de estos aumentos y así poder ver cuál es mayor.
+
 \subsection{Media del aumento anual por país: salarios, alquiler y
 vivienda}\label{media-del-aumento-anual-por-pauxeds-salarios-alquiler-y-vivienda}
+
+Mostramos primero en la siguiente tabla las medias de los aumentos
+comentados para los 10 países más poblados, así como la diferencia entre
+la media del aumento de los salarios y la media de los aumentos de los
+precios de la vivienda y el alquiler.
 
 \begin{table}[H]
 \caption{Media anual del aumento (\%) de los precios de la vivienda, del alquiler y de los salarios en 2010-2020, y diferencia entre salarios y precios (p.p.). Los salarios crecen más que la vivienda en 4 de 9 países y más que el alquiler en 4 de 9.}
@@ -385,9 +249,35 @@ IT & -1.49 & 0.65 & -0.34 & 1.15 & -0.99\\
 \end{tabular}
 \end{table}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1}
+Fijémonos en que hay 4 países para los cuales ambas diferencias son
+negativas, y que entre estos podemos encontrar a España y Francia. De
+hecho, todos estos países (Países Bajos, Bélgica, España y Francia) los
+podemos encontrar al oesta/la parte central de Europa, mientras que los
+países que presentan ambas diferencias positivas se situan más hacia el
+este.
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1}
+Podemos estudiar la distribución de estos aumentos anuales en forma de
+histogramas. En este caso para poder visualizarlo nos quedamos con un
+subconjunto de los países: España y Francia por estar más presentes en
+la actualidad y Polonia como caso diferente para poder comparar.
+
+\includegraphics[width=0.8\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-17-1}
+
+En general podemos identificar como las distribuciones son bastante
+similares en España y Francia, pero en Polonia encontramos valores muy
+separados.
+
+Para finalizar con este análisis en la siguiente gráfica podemos
+visualizar los aumentos medios para cada uno de los 10 países más
+poblados, así como las diferencias previamente discutidas.
+
+\pandocbounded{\includegraphics[keepaspectratio]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-18-1.pdf}}
+
+Destacan aquí los puntos referentes a Rumania, como casos aislados que
+no representan fielmente la media europea. En general, podemos entender
+el descontento general de los jóvenes europeos viendo como la mayoría de
+estas diferencias entre salarios y precio del alquiler y la vivienda
+quedan en la parte negativa.
 
 \subsection{Edad de emancipación}\label{edad-de-emancipaciuxf3n}
 
@@ -395,7 +285,7 @@ A continuación se muestra la evolución temporal de la edad de
 emancipación por países, así como la evolución de la media de todos
 ellos:
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1}
+\includegraphics[width=0.8\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-19-1}
 
 En la siguiente tabla observamos por países la edad de emancipación
 media en estos 15 años, el aumento anual medio (en años) y la diferencia
@@ -425,7 +315,7 @@ CZ & 16 & 26.29 & -0.08 & -1.2\\
 \end{table}
 
 Comprobamos que, concordantemente con la gráfica, hay diferentes
-comportamientos:
+patrones de comportamiento:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -442,10 +332,6 @@ comportamientos:
 \item
   En Países Bajos, Francia y Alemania, la situación se ha mantenido
   constante, con valores próximos a 0.
-\item
-  En República Checa la edad de emancipación ha caído 1.2 años.
-\item
-  En Bélgica ha subido 0.8 años.
 \end{enumerate}
 
 \subsection{Análisis bivariante: estudio de la correlación entre el
@@ -456,7 +342,7 @@ En la siguiente gráfica se muestra la relación entre los aumentos
 porcentuales anuales de los salarios y del precio de la vivienda.
 Visualmente se aprecia que la tendencia es positiva:
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1}
+\includegraphics[width=0.8\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-21-1}
 
 A continuación calculamos las correlaciones de forma numérica para cada
 país, mediante los métodos de Pearson y Spearman. El caso de Polonia es
@@ -491,8 +377,8 @@ A continuación, calculamos el valor numérico de la pendiente de la
 regresión lineal mostrada en la figura: salvo en el caso de Rumanía y
 Polonia, donde los aumentos en el salario son en promedio superiores a
 los de la vivienda (pendiente mayor a 1), en los demás casos tenemos la
-situación contraria, lo que muestra que los aumentos en el precio de la
-vivienda son en promedio más grandes.
+situación contraria, lo que muestra que la variabilidad del precio de la
+vivienda es mayor que la de los salarios.
 
 \begin{table}[H]
 \centering
@@ -522,7 +408,7 @@ general positivas, como en el caso de la vivienda, salvo para Italia,
 donde salarios y alquileres están ligeramente correlacionados de manera
 negativa.
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1}
+\includegraphics[width=0.8\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-24-1}
 
 Las correlaciones ahora son algo mayores que en el caso anterior, pero
 aun así no son significativas, por lo que no podemos deducir una
@@ -552,7 +438,7 @@ CZ & 0.47 & 0.48\\
 
 En el estudio de las pendientes, como ya se ha comentado, hay valores
 positivos en la mayoría de casos y además son mayores que en el caso de
-la vivienda, luego los aumentos salariales han sido mayores que los del
+la vivienda, luego la variabilidad de los salarios es mayor que la del
 alquiler (salvo en Italia y Polonia).
 
 \begin{table}[H]
@@ -596,7 +482,7 @@ los alquileres. Visualmente apreciamos diferentes casuísticas:
   En el resto de países, los salarios están por debajo de ambos precios.
 \end{enumerate}
 
-\includegraphics[width=1\linewidth]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1}
+\pandocbounded{\includegraphics[keepaspectratio]{ProyectoAED_MDPI_files/figure-latex/unnamed-chunk-27-1.pdf}}
 
 En la siguiente tabla vemos los aumentos totales de los 3 índices
 durante los últimos 15 años, así como las diferencias entre ellos
@@ -629,143 +515,62 @@ CZ & 85.80 & 147.48 & 64.96 & -61.68 & 20.84\\
 
 \section{Conclusiones}\label{conclusiones}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Inicialmente, a partir de la evolución de la edad de emancipación
+podemos concluir que países como España, Italia, Grecia y Bélgica han
+empeorado su situación, mientras que Polonia, Rumanía y República Checa
+la han mejorado. Francia, Alemania y Países Bajos, por su parte, se
+mantienen en un escenario similar. Por tanto, vemos que en general, los
+países occidentales (salvo Alemania y Francia) viven una peor situación,
+mientras que los orientales la han mejorado.
 
-\vspace{6pt}
+A partir de los incrementos anuales, concluimos que, cada año de media,
+los ciudadanos españoles e italianos ven mermado su poder adquisitivo
+respecto al aquiler, los franceses y checos respecto a la vivienda y los
+neerlandeses y belgas respecto a ambos. Se aprecia de nuevo el buen
+desempeño de alemanes, rumanos y polacos, por lo que la situación de los
+países orientales resulta ser mejor que la de los occidentales en este
+aspecto también.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% optional
-\supplementary{The following supporting information can be downloaded
-at:\\
-\linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1:
-title.}
+El análisis bivariante empeora todavía más el diagnóstico, ya que nos
+muestra que los aumentos anuales salariales no solo se han quedado
+rezagados con respecto a la vivienda/alquiler, sino que además sus
+evoluciones no están correlacionadas, es decir, el aumento de precio de
+la vivienda no implica necesariamente un aumento salarial para la gente
+joven. Esto puede deberse al hecho de que los propietarios de vivienda
+son por lo general gente de mediana y avanzada edad, por lo que un
+aumento del precio de los alquileres le es económicamente rentable a
+este grupo de edad, mientras que reduce el poder adquisitivo de la
+juventud.
 
-% Only for the journal Methods and Protocols:
-% If you wish to submit a video article, please do so with any other supplementary material.
-% \supplementary{The following supporting information can be downloaded at: \linksupplementary{s1}, Figure S1: title; Table S1: title; Video S1: title. A supporting video article is available at doi: link.}
+El caso particular de Polonia destaca de nuevo por ser aquel en el que
+más correlación existe entre estas variables, al igual que en el caso de
+Rumanía principalmente en los alquileres. Destacamos, por el contrario,
+la situación de los alquileres italianos, que además de estar poco
+correlacionados con los salarios, lo hacen de forma ligeramente
+negativa, lo cual debería ser un síntoma de alarma.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short
-paragraph specifying their individual contributions must be provided.
-The following statements should be used ``X.X. and Y.Y. conceive and
-designed the experiments; X.X. performed the experiments; X.X. and Y.Y.
-analyzed the data; W.W. contributed reagents/materials/analysis tools;
-Y.Y. wrote the paper.'\,' Authorship must be limited to those who have
-contributed substantially to the work reported.}
+Finalmente, en el análisis de las diferencias totales en salarios,
+alquileres y viviendas, vemos que por lo general los sueldos han
+aumentado en estos 15 años, pero los precios se han incrementado con más
+fuerza, lo que provoca un balance final negativo en el caso de Francia,
+España, Países Bajos y Bélgica con respecto tanto al alquiler como a la
+vivienda.
 
-\funding{Please add:
-\texttt{This\ research\ received\ no\ external\ funding\textquotesingle{}\textquotesingle{}\ or}This
-research was funded by NAME OF FUNDER grant number XXX.'\,' and and
-``The APC was funded by XXX'\,'. Check carefully that the details given
-are accurate and use the standard spelling of funding agency names at
-\url{https://search.crossref.org/funding}, any errors may affect your
-future funding.}
+En el caso de Alemania y República Checa, el balance es negativo
+exclusivamente en relación a la vivienda, no al alquiler, mientras que
+la situación de Italia es la opuesta, destacando en este último país que
+es el único en que el salario se ha reducido de forma absoluta, lo que
+lo convierte en el caso más preocupante.
 
-\institutionalreview{In this section, you should add the Institutional
-Review Board Statement and approval number, if relevant to your study.
-You might choose to exclude this statement if the study did not require
-ethical approval. Please note that the Editorial Office might ask you
-for further information. Please add ``The study was conducted in
-accordance with the Declaration of Helsinki, and approved by the
-Institutional Review Board (or Ethics Committee) of NAME OF INSTITUTE
-(protocol code XXX and date of approval).'' for studies involving
-humans. OR ``The animal study protocol was approved by the Institutional
-Review Board (or Ethics Committee) of NAME OF INSTITUTE (protocol code
-XXX and date of approval).'' for studies involving animals. OR ``Ethical
-review and approval were waived for this study due to REASON (please
-provide a detailed justification).'' OR ``Not applicable'' for studies
-not involving humans or animals.}
+Todos estos países son los que podemos englobar como occidentales,
+precisamente aquellos donde se ha hecho oír el descontento social en
+forma de manifestaciones y altercados, mientras que en el caso de los
+orientales, como Polonia y Rumanía, vemos que la situación es la
+contraria y, por tanto, esto es coherente con la ausencia de protestas
+públicas en estos países.
 
-\informedconsent{Any research article describing a study involving
-humans should contain this statement. Please add
-\texttt{Informed\ consent\ was\ obtained\ from\ all\ subjects\ \ involved\ in\ the\ study.\textquotesingle{}\textquotesingle{}\ OR}Patient
-consent was waived due to REASON (please provide a detailed
-justification).'\,' OR ``Not applicable'\,' for studies not involving
-humans. You might also choose to exclude this statement if the study did
-not involve humans.
-
-Written informed consent for publication must be obtained from
-participating patients who can be identified (including by the patients
-themselves). Please state ``Written informed consent has been obtained
-from the patient(s) to publish this paper'\,' if applicable.}
-
-\dataavailability{We encourage all authors of articles published in MDPI
-journals to share their research data. In this section, please provide
-details regarding where data supporting reported results can be found,
-including links to publicly archived datasets analyzed or generated
-during the study. Where no new data were created, or where data is
-unavailable due to privacy or ethical re-strictions, a statement is
-still required. Suggested Data Availability Statements are available in
-section ``MDPI Research Data Policies'' at
-\url{https://www.mdpi.com/ethics}.}
-
-\acknowledgments{All sources of funding of the study should be
-disclosed. Please clearly indicate grants that you have received in
-support of your research work. Clearly state if you received funds for
-covering the costs to publish in open access.}
-
-\conflictsofinterest{Declare conflicts of interest or state `The authors
-declare no conflict of interest.' Authors must identify and declare any
-personal circumstances or interest that may be perceived as
-inappropriately influencing the representation or interpretation of
-reported research results. Any role of the funding sponsors in the
-design of the study; in the collection, analyses or interpretation of
-data in the writing of the manuscript, or in the decision to publish the
-results must be declared in this section. If there is no role, please
-state `The founding sponsors had no role in the design of the study; in
-the collection, analyses, or interpretation of data; in the writing of
-the manuscript, an in the decision to publish the results'.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional
-\sampleavailability{Samples of the compounds \ldots\ldots{} are
-available from the authors.}
-
-%% Only for journal Encyclopedia
-
-\abbreviations{Abbreviations}{
-The following abbreviations are used in this manuscript:\\
-
-\noindent
-\begin{tabular}{@{}ll}
-MDPI & Multidisciplinary Digital Publishing Institute \\
-DOAJ & Directory of open access journals \\
-TLA & Three letter acronym \\
-LD & linear dichroism \\
-\end{tabular}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Optional
-\input{"appendix.tex"}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{adjustwidth}{-\extralength}{0cm}
-
-%\printendnotes[custom] % Un-comment to print a list of endnotes
-
-
-\reftitle{References}
 \bibliography{mybibfile.bib}
 
-% If authors have biography, please use the format below
-%\section*{Short Biography of Authors}
-%\bio
-%{\raisebox{-0.35cm}{\includegraphics[width=3.5cm,height=5.3cm,clip,keepaspectratio]{Definitions/author1.pdf}}}
-%{\textbf{Firstname Lastname} Biography of first author}
-%
-%\bio
-%{\raisebox{-0.35cm}{\includegraphics[width=3.5cm,height=5.3cm,clip,keepaspectratio]{Definitions/author2.jpg}}}
-%{\textbf{Firstname Lastname} Biography of second author}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% for journal Sci
-%\reviewreports{\\
-%Reviewer 1 comments and authors’ response\\
-%Reviewer 2 comments and authors’ response\\
-%Reviewer 3 comments and authors’ response
-%}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\PublishersNote{}
-\end{adjustwidth}
 
 
 \end{document}

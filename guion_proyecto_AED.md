@@ -14,9 +14,7 @@ Cargamos los demás DataFrames asociados a cada variable de estudio, los limpiam
 
 - Edad media de salida del hogar parental 
 
-- Coste de la vivienda en proporción al salario real
-
-- Dificultades para pagar el alquiler
+- Coste de la vivienda en proporción al salario
 
 - Porcentaje de jóvenes que viven con sus padres
 
@@ -29,8 +27,6 @@ Organizaremos todo en un único DataFrame.
 - Análisis univariante Nacho
 
 - Análisis bivariante: correlación de la edad media de la salida del hogar con el precio de la vivienda. Nacho
-
-- Análisis bivariante: correlación de la diferencia entre el coste de la vivienda y los salarios reales con las dificultades de pagar el alquiler. Nico
 
 - Visualización de los datos a partir de uno o más gráficos. Obtener conclusiones. Nico
 
