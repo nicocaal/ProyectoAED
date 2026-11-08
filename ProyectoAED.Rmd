@@ -111,6 +111,8 @@ salarios2 %<>% full_join(major.source) %>% mutate(earnings = ifelse(source == ma
 
 # Datos ausentes
 
+Con todos los datos cargados, procederemos a crear el DataFrame
+
 ```{r}
 # Juntamos todas las variables en un dataframe por paises y años
 jovenes.df <- indep.resid %>% full_join(salarios2) %>% full_join(precio.alquiler) %>% full_join(precio.vivienda) 
@@ -126,7 +128,6 @@ vars.num
 
 por.var <- function(f) unname(sapply(jovenes.df[vars.num], f))
 # Aplica una funcion a cada variable numerica y devuelve un vector sin nombres
-
 ```
 
 ```{r}
@@ -287,6 +288,13 @@ data.frame(par = sapply(pares, paste, collapse = ' vs '), paises.mayor = sapply(
 # paises.mayor: numero de paises en los que la media de la primera variable es mayor que la de la segunda
 ```
 
+```{r}
+medias.long <- medias.pais %>% pivot_longer(all_of(vars.pct), names_to = 'variable', values_to = 'media') %>% mutate(country = factor(country, levels = as.character(medias.pais$country[order(medias.pais$house.pct)])), variable = factor(variable, levels = vars.pct))
+
+ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variable)) + geom_point(size = 3) + geom_hline(yintercept = 0, linetype = 2) + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda')) + xlab('Country') + ylab('Mean annual increase (%)')
+ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
+```
+
 # Análisis bivariante
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
@@ -328,11 +336,4 @@ ggplot(data = filter(jovenes.df, country != 'EL', year >= 2005 & year <= 2025)) 
   geom_line(aes(x = year, y = earn.prop.house, color = 'by house prices'), linewidth = 1, na.rm = TRUE) + 
   geom_line(aes(x = year, y = earn.prop.rent, color = 'by rent'), linewidth = 1, na.rm = TRUE) + facet_wrap(.~country, nrow = 4, scales = 'free_y') + labs(title = 'Evolución del salario real en proporción al precio de la vivienda y del alquiler', subtitle = 'En función de países') + xlab('Year') + ylab('Percentage increase (%)')
 ggsave('results/proporcion_salario.pdf', width = 14, height = 10, dpi = 300)
-```
-
-```{r}
-medias.long <- medias.pais %>% pivot_longer(all_of(vars.pct), names_to = 'variable', values_to = 'media') %>% mutate(country = factor(country, levels = as.character(medias.pais$country[order(medias.pais$house.pct)])), variable = factor(variable, levels = vars.pct))
-
-ggplot(medias.long, aes(x = country, y = media, color = variable, shape = variable)) + geom_point(size = 3) + geom_hline(yintercept = 0, linetype = 2) + labs(title = 'Media del aumento anual por país', subtitle = paste0('Ventana común ', year.ini, '-', year.fin, '; países ordenados por el aumento de la vivienda')) + xlab('Country') + ylab('Mean annual increase (%)')
-ggsave('results/univ_aumentos_medias.pdf', width = 14, height = 10, dpi = 300)
 ```
